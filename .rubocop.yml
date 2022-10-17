@@ -1,0 +1,28 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - bin/*
+
+Style/FormatString:
+  EnforcedStyle: sprintf
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+Style/StringConcatenation:
+  Mode: conservative
+Style/Documentation:
+  Exclude:
+    - app/helpers/*_helper.rb
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+Layout/HashAlignment:
+  EnforcedColonStyle: table
+
+Metrics/BlockLength:
+  Exclude:
+    - config/environments/development.rb
