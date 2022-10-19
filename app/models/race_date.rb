@@ -1,0 +1,2 @@
+class RaceDate < ApplicationRecord
+end
