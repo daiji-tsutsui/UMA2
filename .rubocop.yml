@@ -3,6 +3,7 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - bin/*
+    - db/schema.rb
 
 Style/FormatString:
   EnforcedStyle: sprintf
@@ -17,6 +18,7 @@ Style/StringConcatenation:
 Style/Documentation:
   Exclude:
     - app/helpers/*_helper.rb
+    - db/migrate/*
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
