@@ -31,6 +31,6 @@ class ServiceStatusController < ApplicationController
   end
 
   def check_db
-    # Do nothing now
+    RaceClass.first
   end
 end

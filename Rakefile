@@ -8,11 +8,11 @@ require_relative 'config/application'
 Rails.application.load_tasks
 
 task :runp do
-  sh %(bundle exec foreman start web &)
+  sh %(foreman start web >> log/stdout.log 2>&1 &)
 end
 
 task :run do
-  sh %(bundle exec foreman start dev &)
+  sh %(foreman start dev >> log/stdout_dev.log 2>&1 &)
 end
 
 task :stop do
