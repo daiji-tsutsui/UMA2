@@ -21,6 +21,10 @@ module UMA2
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.active_job.queue_adapter = :sidekiq
+
+    config.active_record.default_timezone = :local
+    config.time_zone = 'Tokyo'
 
     config.colorize_logging = false
   end

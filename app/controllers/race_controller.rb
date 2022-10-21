@@ -5,6 +5,7 @@ class RaceController < ApplicationController
   before_action :make_caches, only: %i[index show]
 
   def index
+    TestJob.perform_later('This is a test.')
     @races = Race.all.map { |race| format(race) }
   end
 

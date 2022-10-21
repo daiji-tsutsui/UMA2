@@ -9,15 +9,18 @@ Rails.application.load_tasks
 
 task :runp do
   sh %(foreman start web >> log/stdout.log 2>&1 &)
+  sh %(foreman start worker >> log/sidekiq.log 2>&1 &)
 end
 
 task :run do
   sh %(foreman start dev >> log/stdout_dev.log 2>&1 &)
+  sh %(foreman start worker >> log/sidekiq_dev.log 2>&1 &)
 end
 
 task :stop do
   pid = `cat tmp/pids/server.pid`
   sh %(kill #{pid})
+  puts 'Stop Sidekiq server manually, please...'
 end
 
 desc 'Run rubocop'

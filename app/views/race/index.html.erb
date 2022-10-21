@@ -1,22 +1,24 @@
-<thead>
-  <tr>
-    <td>レース名</td>
-    <td>出走日</td>
-    <td>競馬場</td>
-    <td>レース番号</td>
-    <td>格付</td>
-  </tr>
-</thead>
-<tbody>
-  <% @races.each do |race| %>
+<table>
+  <thead>
     <tr>
-      <td><%= race[:name] %></td>
-      <td><%= race[:date] %></td>
-      <td><%= race[:course] %></td>
-      <td><%= race[:number] %>R</td>
-      <td><%= race[:class] %></td>
+      <td>レース名</td>
+      <td>出走日</td>
+      <td>競馬場</td>
+      <td>レース番号</td>
+      <td>格付</td>
     </tr>
-  <% end %>
-</tbody>
+  </thead>
+  <tbody>
+    <% @races.each do |race| %>
+      <tr>
+        <td><%= race[:name] %></td>
+        <td><%= race[:date] %></td>
+        <td><%= race[:course] %></td>
+        <td><%= race[:number] %>R</td>
+        <td><%= race[:class] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <%= debug(@races) if Rails.env.development? %>
