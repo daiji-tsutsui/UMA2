@@ -12,5 +12,6 @@
 
   <body>
     <%= yield %>
+    <%= debug(params.to_yaml) if Rails.env.development? %>
   </body>
 </html>
