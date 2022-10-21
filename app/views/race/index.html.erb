@@ -11,10 +11,10 @@
   <% @races.each do |race| %>
     <tr>
       <td><%= race[:name] %></td>
-      <td><%= race[:race_date_id] %></td>
-      <td><%= race[:course_id] %></td>
+      <td><%= race[:date] %></td>
+      <td><%= race[:course] %></td>
       <td><%= race[:number] %>R</td>
-      <td><%= race[:race_class_id] %></td>
+      <td><%= race[:class] %></td>
     </tr>
   <% end %>
 </tbody>
