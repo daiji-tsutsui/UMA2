@@ -5,5 +5,6 @@ class TestJob < ApplicationJob
 
   def perform(str)
     puts "Hello, world! #{str}"
+    'OK'
   end
 end

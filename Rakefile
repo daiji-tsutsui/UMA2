@@ -21,6 +21,7 @@ task :stop do
   pid = `cat tmp/pids/server.pid`
   sh %(kill #{pid})
   puts 'Stop Sidekiq server manually, please...'
+  puts '  See log/sidekiq_dev.log or log/sidekiq.log for getting pid.'
 end
 
 desc 'Run rubocop'

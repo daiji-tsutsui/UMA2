@@ -31,3 +31,5 @@ Layout/HashAlignment:
 Metrics/BlockLength:
   Exclude:
     - config/environments/development.rb
+Metrics/MethodLength:
+  Max: 15
