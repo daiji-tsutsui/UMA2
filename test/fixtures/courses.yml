@@ -4,8 +4,13 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one:   { id: 1,  name: '札幌' }
+two:   { id: 2,  name: '函館' }
+three: { id: 3,  name: '福島' }
+four:  { id: 4,  name: '中山' }
+five:  { id: 5,  name: '東京' }
+six:   { id: 6,  name: '新潟' }
+seven: { id: 7,  name: '中京' }
+eight: { id: 8,  name: '京都' }
+nine:  { id: 9,  name: '阪神' }
+ten:   { id: 10, name: '小倉' }

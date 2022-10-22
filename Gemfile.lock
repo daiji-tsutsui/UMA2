@@ -166,6 +166,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitest (5.16.3)
+    mocha (1.16.0)
     msgpack (1.6.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
@@ -314,6 +315,7 @@ DEPENDENCIES
   foreman
   importmap-rails
   jbuilder
+  mocha
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.4)

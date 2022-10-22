@@ -4,8 +4,5 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one: { id: 1, name: 'Test1', race_date_id: 1, course_id: 1, number: 11, race_class_id: 1 }
+two: { id: 2, name: 'Test2', race_date_id: 2, course_id: 4, number: 3,  race_class_id: 2 }
