@@ -54,10 +54,18 @@ gem 'sassc-rails'
 gem 'config'
 gem 'dotenv-rails'
 gem 'foreman'
+
+# For Redis and Sidekiq
 gem 'redis-namespace'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'sinatra', require: false
+
+# For scraping
+gem 'capybara'
+gem 'httpclient', '~> 2.8'
+gem 'selenium-webdriver'
+gem 'site_prism'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -79,7 +87,5 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem 'capybara'
-  gem 'selenium-webdriver'
   gem 'webdrivers'
 end
