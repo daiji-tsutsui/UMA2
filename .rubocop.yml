@@ -20,6 +20,7 @@ Style/Documentation:
   Exclude:
     - app/helpers/*_helper.rb
     - db/migrate/*
+    - test/**/*
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
