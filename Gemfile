@@ -56,6 +56,7 @@ gem 'dotenv-rails'
 gem 'foreman'
 gem 'redis-namespace'
 gem 'sidekiq'
+gem 'sidekiq-cron'
 gem 'sinatra', require: false
 
 group :development, :test do

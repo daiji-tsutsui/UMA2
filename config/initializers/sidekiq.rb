@@ -7,3 +7,12 @@ end
 Sidekiq.configure_client do |config|
   config.redis = Settings.redis.to_h
 end
+
+scheduled_jobs = {
+  'cron_test' => {
+    class: 'TestJob',
+    cron:  '*/2 * * * *',
+    args:  ['cron_test'],
+  },
+}
+Sidekiq::Cron::Job.load_from_hash!(scheduled_jobs)
