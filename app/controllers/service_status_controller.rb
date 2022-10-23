@@ -13,9 +13,9 @@ class ServiceStatusController < ApplicationController
     check_status('sidekiq') { check_sidekiq }
 
     res = if @errors.empty?
-            { app_name: 'UMA2', status: 'OK', details: @details }
+            { app_name: Settings.app_name, status: 'OK', details: @details }
           else
-            { app_name: 'UMA2', status: 'NG', details: @details, errors: @errors }
+            { app_name: Settings.app_name, status: 'NG', details: @details, errors: @errors }
           end
     Rails.logger.info "service status: #{res}"
     render json: res

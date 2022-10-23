@@ -1,5 +1,6 @@
 <% Dotenv::Railtie.load %>
 ---
+app_name: <%= ENV.fetch('APP_NAME'){ 'APP_NAME' } %>
 redis:
   url: <%= ENV.fetch('REDIS_URL'){ 'redis://localhost:6379' } %>
   namespace: <%= ENV.fetch('REDIS_NAMESPACE'){ 'general' } %>
