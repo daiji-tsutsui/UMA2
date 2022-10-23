@@ -11,7 +11,7 @@ end
 scheduled_jobs = {
   'cron_test' => {
     class: 'TestJob',
-    cron:  '*/2 * * * *',
+    cron:  '*/5 * * * *',
     args:  ['cron_test'],
   },
 }
