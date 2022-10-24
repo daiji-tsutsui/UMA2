@@ -3,7 +3,5 @@
 require 'test_helper'
 
 class RaceControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+  # Moved to spec/requests/racs_spec.rb
 end
