@@ -15,4 +15,4 @@ scheduled_jobs = {
     args:  ['cron_test'],
   },
 }
-Sidekiq::Cron::Job.load_from_hash!(scheduled_jobs)
+Sidekiq::Cron::Job.load_from_hash!(scheduled_jobs) unless Rails.env.test?

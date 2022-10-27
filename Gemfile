@@ -88,5 +88,5 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem 'webdrivers'
+  # gem 'webdrivers' # DO NOT USE in raspberry pi (with chromium-driver)
 end
