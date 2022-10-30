@@ -3,6 +3,8 @@
 require 'rails_helper'
 require 'netkeiba'
 
+COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
+
 Capybara.default_driver = :selenium_chrome_headless
 
 RSpec.describe 'Races' do
@@ -12,9 +14,40 @@ RSpec.describe 'Races' do
   end
 
   describe 'top page' do
-    it 'accepts GET' do
+    it 'is displayed' do
       expect(@top_page).to be_displayed
       expect(@top_page).to have_race_list
+      expect(@top_page).to have_date_list
+    end
+
+    it 'can select date' do
+      dates = (-3..3).map { |diff| Date.today + diff }
+      selectable = []
+      dates.each do |date|
+        select_data_page = @top_page.select_date(date)
+        next if select_data_page.nil?
+
+        expect(select_data_page).to be_displayed
+        selectable.push date.strftime('%Y%m%d')
+      end
+      expect(selectable.size).to be > 0
+    end
+  end
+
+  describe 'race page' do
+    before do
+      @race_page = nil
+      (-3..3).map { |diff| Date.today + diff }.each do |date|
+        break unless @top_page.select_date(date).nil?
+      end
+      COURSE_NAMES.each do |course_name|
+        @race_page = @top_page.go_race_page(course_name, 11)
+        break unless @race_page.nil?
+      end
+    end
+
+    it 'is displayed' do
+      expect(@race_page).to be_displayed
     end
   end
 end

@@ -3,8 +3,9 @@
 require 'rails_helper'
 require 'jra'
 
-Capybara.default_driver = :selenium_chrome_headless
 COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
+
+Capybara.default_driver = :selenium_chrome_headless
 
 RSpec.describe 'Races' do
   before do
