@@ -24,11 +24,14 @@ RSpec.describe 'Races' do
       dates = (-3..3).map { |diff| Date.today + diff }
       selectable = []
       dates.each do |date|
+        date_str = date.strftime('%m月%d日')
         select_data_page = @top_page.select_date(date)
-        next if select_data_page.nil?
-
-        expect(select_data_page).to be_displayed
-        selectable.push date.strftime('%Y%m%d')
+        if @top_page.has_content?(date_str)
+          expect(select_data_page).to be_displayed
+          selectable.push date_str
+        else
+          expect(select_data_page).to be nil
+        end
       end
       expect(selectable.size).to be > 0
     end
