@@ -11,7 +11,7 @@ module Netkeiba
     element :race_list, 'div#race_list'
     element :date_list, 'ul#date_list_sub'
 
-    def choose_date(date)
+    def select_date(date)
       date_str = date.is_a?(Date) ? date.strftime('%Y%m%d') : date
       date_link = date_list.first("li[date='#{date_str}']")
       @date_id = date_link['aria-controls']
@@ -20,7 +20,7 @@ module Netkeiba
     end
 
     def go_race_page(course, number)
-      course_table = choose_course(course)
+      course_table = select_course(course)
       # TODO: 不正なコース名処理
       return nil if course_table.nil?
 
@@ -32,7 +32,7 @@ module Netkeiba
 
     private
 
-    def choose_course(name)
+    def select_course(name)
       table = race_list.first("div#{@date_id}")
       courses = table.find('div.RaceList_DataList')
       courses.each do |course_table|
