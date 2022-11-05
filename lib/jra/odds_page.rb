@@ -38,7 +38,7 @@ module Jra
     end
 
     def get_date_id(date)
-      date_str = date.is_a?(Date) ? date.strftime('%m月%d日') : date
+      date_str = date.is_a?(Date) ? date.strftime('%-m月%-d日') : date
       dates.each_with_index do |elem, idx|
         return idx if elem.has_text?(date_str)
       end

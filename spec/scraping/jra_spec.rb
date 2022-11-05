@@ -30,7 +30,7 @@ RSpec.describe 'Races' do
       dates = (-3..3).map { |diff| Date.today + diff }
       selectable = []
       dates.each do |date|
-        date_str = date.strftime('%m月%d日')
+        date_str = date.strftime('%-m月%-d日')
         course_table = @odds_page.select_date(date)
         if @odds_page.this_week.has_content?(date_str)
           expect(course_table).not_to be nil
@@ -50,7 +50,7 @@ RSpec.describe 'Races' do
       dates = (-3..3).map { |diff| Date.today + diff }
       race_odds_page = nil
       dates.each do |date|
-        date_str = date.strftime('%m月%d日')
+        date_str = date.strftime('%-m月%-d日')
         next unless @odds_page.this_week.has_content?(date_str)
 
         COURSE_NAMES.each do |course_name|
