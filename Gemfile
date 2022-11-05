@@ -70,24 +70,18 @@ gem 'site_prism'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
-  gem 'pry-rails'
-  gem 'mocha'
   gem 'rspec-rails'
-  gem 'rubocop'
 end
 
 group :development do
+  gem 'rubocop'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
-
-  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  # gem "rack-mini-profiler"
-
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   # gem 'webdrivers' # DO NOT USE in raspberry pi (with chromium-driver)
+  gem 'mocha'
+  gem 'pry-rails'
 end

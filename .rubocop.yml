@@ -21,6 +21,8 @@ Style/Documentation:
     - app/helpers/*_helper.rb
     - db/migrate/*
     - test/**/*
+Style/HashSyntax:
+  EnforcedShorthandSyntax: never
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent

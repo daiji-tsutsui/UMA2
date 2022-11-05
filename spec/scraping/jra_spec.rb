@@ -24,7 +24,7 @@ RSpec.describe 'Races' do
 
     it 'is displayed' do
       expect(@odds_page).to be_displayed
-      if @odds_page.has_no_races?
+      if @odds_page.no_races?
         expect(@odds_page.msg_absent).to have_content ODDS_PAGE_MESSAGE_NO_RACE
       else
         expect(@odds_page).to have_this_week
@@ -32,7 +32,7 @@ RSpec.describe 'Races' do
     end
 
     it 'can select date' do
-      skip if @odds_page.has_no_races?
+      skip if @odds_page.no_races?
 
       dates = (-3..3).map { |diff| Date.today + diff }
       selectable = []
@@ -54,7 +54,7 @@ RSpec.describe 'Races' do
     before { @odds_page = @top_page.go_odds_page }
 
     it 'is displayed' do
-      skip if @odds_page.has_no_races?
+      skip if @odds_page.no_races?
 
       dates = (-3..3).map { |diff| Date.today + diff }
       race_odds_page = nil

@@ -27,7 +27,7 @@ module Netkeiba
       return nil if course_table.nil?
 
       race = course_table.all('li.RaceList_DataItem')[number.to_i - 1]
-      @is_finished = is_finished(race)
+      @is_finished = finished?(race)
       race.first('a').hover.click
       (@is_finished ? Netkeiba::ResultPage.new : Netkeiba::RacePage.new)
     end
@@ -46,7 +46,7 @@ module Netkeiba
       nil
     end
 
-    def is_finished(race)
+    def finished?(race)
       race.first('a')['href'].match?(/result\.html/)
     end
   end

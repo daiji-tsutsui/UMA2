@@ -25,8 +25,8 @@ module Jra
       (date_id.nil? ? nil : course_tables[date_id])
     end
 
-    def has_no_races?
-      self.has_msg_absent?
+    def no_races?
+      has_msg_absent?
     end
 
     private
