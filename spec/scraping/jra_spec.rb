@@ -4,6 +4,7 @@ require 'rails_helper'
 require 'jra'
 
 COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
+ODDS_PAGE_MESSAGE_NO_RACE = '今週のオッズは未発表です'
 
 RSpec.describe 'Races' do
   before do
@@ -23,10 +24,16 @@ RSpec.describe 'Races' do
 
     it 'is displayed' do
       expect(@odds_page).to be_displayed
-      expect(@odds_page).to have_this_week
+      if @odds_page.has_no_races?
+        expect(@odds_page.msg_absent).to have_content ODDS_PAGE_MESSAGE_NO_RACE
+      else
+        expect(@odds_page).to have_this_week
+      end
     end
 
     it 'can select date' do
+      skip if @odds_page.has_no_races?
+
       dates = (-3..3).map { |diff| Date.today + diff }
       selectable = []
       dates.each do |date|
@@ -47,6 +54,8 @@ RSpec.describe 'Races' do
     before { @odds_page = @top_page.go_odds_page }
 
     it 'is displayed' do
+      skip if @odds_page.has_no_races?
+
       dates = (-3..3).map { |diff| Date.today + diff }
       race_odds_page = nil
       dates.each do |date|

@@ -11,6 +11,7 @@ module Jra
     element  :this_week,     'div#ThisWkOdds'
     elements :course_tables, 'div#ThisWkOdds>div.joSelectArea'
     elements :dates,         'div#ThisWkOdds>div.kaisaibi'
+    element  :msg_absent,    'div.oddsKaisaiBlankComment'
 
     def go_race_odds_page(date, course_name)
       course_table = select_date(date)
@@ -22,6 +23,10 @@ module Jra
     def select_date(date)
       date_id = get_date_id(date)
       (date_id.nil? ? nil : course_tables[date_id])
+    end
+
+    def has_no_races?
+      self.has_msg_absent?
     end
 
     private
