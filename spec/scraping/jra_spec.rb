@@ -6,7 +6,7 @@ require 'jra'
 COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
 ODDS_PAGE_MESSAGE_NO_RACE = '今週のオッズは未発表です'
 
-RSpec.describe 'Races' do
+RSpec.describe 'Jra' do
   before do
     @top_page = Jra::TopPage.new
     @top_page.load

@@ -11,18 +11,10 @@ module Netkeiba
     element :race_list, 'div#race_list'
     element :date_list, 'ul#date_list_sub'
 
-    def select_date(date)
-      date_str = date.is_a?(Date) ? date.strftime('%Y%m%d') : date
-      selector = "li[date='#{date_str}']"
-      return nil unless date_list.has_selector?(selector)
+    def go_race_page(date, course, number)
+      res = select_date(date)
+      return nil if res.nil?
 
-      date_link = date_list.first(selector)
-      @date_id = date_link['aria-controls']
-      date_link.hover.click
-      self
-    end
-
-    def go_race_page(course, number)
       course_table = select_course(course)
       return nil if course_table.nil?
 
@@ -32,7 +24,32 @@ module Netkeiba
       (@is_finished ? Netkeiba::ResultPage.new : Netkeiba::RacePage.new)
     end
 
+    def race_names(date, course)
+      res = select_date(date)
+      return [] if res.nil?
+
+      table = select_course(course)
+      return [] if table.nil?
+
+      races = table.all('li.RaceList_DataItem', visible: false)
+      races.map { |race| race.first('span.ItemTitle').text }
+    end
+
     private
+
+    def select_date(date)
+      selector = "li[date='#{date.strftime('%Y%m%d')}']"
+      date_link = nil
+      begin
+        date_link = date_list.first(selector)
+      rescue Capybara::ExpectationNotMet => _e
+        Rails.logger.debug("There are no selectors #{selector} in ul#date_list_sub")
+        return nil
+      end
+      @date_id = date_link['aria-controls']
+      date_link.hover.click
+      self
+    end
 
     def select_course(name)
       return nil if @date_id.blank?
@@ -43,6 +60,7 @@ module Netkeiba
         course_title = course_table.first('div.RaceList_DataHeader_Top')
         return course_table if course_title.has_text?(name)
       end
+      Rails.logger.debug("There are no course tables for #{name} in div##{@date_id}")
       nil
     end
 

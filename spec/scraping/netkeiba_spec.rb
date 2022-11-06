@@ -5,7 +5,7 @@ require 'netkeiba'
 
 COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
 
-RSpec.describe 'Races' do
+RSpec.describe 'Netkeiba' do
   before do
     @top_page = Netkeiba::TopPage.new
     @top_page.load
@@ -18,31 +18,45 @@ RSpec.describe 'Races' do
       expect(@top_page).to have_date_list
     end
 
-    it 'can select date' do
+    it 'can get race names for dates displayed' do
       dates = (-3..3).map { |diff| Date.today + diff }
-      selectable = []
+      can_get = []
       dates.each do |date|
         date_str = date.strftime('%-m月%-d日')
-        select_data_page = @top_page.select_date(date)
-        if @top_page.has_content?(date_str)
-          expect(select_data_page).to be_displayed
-          selectable.push date_str
-        else
-          expect(select_data_page).to be nil
+        next unless @top_page.has_content?(date_str)
+
+        race_names = []
+        COURSE_NAMES.each do |course_name|
+          race_names = @top_page.race_names(date, course_name)
+          unless race_names.empty?
+            can_get.push date_str
+            break
+          end
         end
       end
-      expect(selectable.size).to be > 0
+      expect(can_get.size).to be > 0
+    end
+
+    it 'cannot get race names for dates not displayed' do
+      dates = (-3..3).map { |diff| Date.today + diff }
+      dates.each do |date|
+        date_str = date.strftime('%-m月%-d日')
+        next if @top_page.has_content?(date_str)
+
+        COURSE_NAMES.each do |course_name|
+          expect(@top_page.race_names(date, course_name)).to be_empty
+        end
+      end
     end
   end
 
   describe 'race page' do
     before do
       @race_page = nil
-      (-3..3).map { |diff| Date.today + diff }.each do |date|
-        break unless @top_page.select_date(date).nil?
-      end
+      dates = (-3..3).map { |diff| Date.today + diff }
+      dates.select! { |date| @top_page.has_content? date.strftime('%-m月%-d日') }
       COURSE_NAMES.each do |course_name|
-        @race_page = @top_page.go_race_page(course_name, 11)
+        @race_page = @top_page.go_race_page(dates[0], course_name, 11)
         break unless @race_page.nil?
       end
     end
