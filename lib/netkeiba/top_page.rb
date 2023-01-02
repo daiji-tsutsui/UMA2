@@ -35,6 +35,14 @@ module Netkeiba
       races.map { |race| race.first('span.ItemTitle').text }
     end
 
+    def course_names(date)
+      res = select_date(date)
+      return [] if res.nil?
+
+      table = race_list.first("div##{@date_id}")
+      table.all('p.RaceList_DataTitle').map.(&:text)
+    end
+
     private
 
     def select_date(date)

@@ -10,9 +10,9 @@ Sidekiq.configure_client do |config|
 end
 
 scheduled_jobs = {
-  'cron_test' => {
-    class: 'TestJob',
-    cron:  '*/5 * * * *',
+  'fetch_course_names' => {
+    class: 'FetchCourseNamesJob',
+    cron:  'H 2 * * *',
     # args:  ['cron_test'],
   },
 }
