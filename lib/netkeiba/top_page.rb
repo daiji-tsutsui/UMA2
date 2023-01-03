@@ -40,7 +40,7 @@ module Netkeiba
       return [] if res.nil?
 
       table = race_list.first("div##{@date_id}")
-      table.all('p.RaceList_DataTitle').map.(&:text)
+      table.all('p.RaceList_DataTitle').map(&:text)
     end
 
     private
