@@ -61,3 +61,5 @@ end
 
 Capybara.javascript_driver = :chrome_headless
 Capybara.default_driver = :chrome_headless
+
+Rails.logger = Logger.new(STDOUT) if ENV.fetch('RSPEC_LOG_STDOUT') { false }
