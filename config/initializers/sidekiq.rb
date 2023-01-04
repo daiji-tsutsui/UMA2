@@ -10,8 +10,8 @@ Sidekiq.configure_client do |config|
 end
 
 scheduled_jobs = {
-  'fetch_race_info_and_schedule_uma' => {
-    class: 'FetchRaceInfoAndScheduleUmaJob',
+  'schedule_uma' => {
+    class: 'ScheduleUmaJob',
     cron:  '15 21 * * *',
     # args:  ['2022-01-05'],
   },

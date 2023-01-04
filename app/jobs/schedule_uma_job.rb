@@ -5,7 +5,7 @@ require 'selenium-webdriver'
 require 'netkeiba'
 
 # 開催レースの情報を取得し，オッズ追跡をスケジュールするジョブ
-class FetchRaceInfoAndScheduleUmaJob < ApplicationJob
+class ScheduleUmaJob < ApplicationJob
   queue_as :default
 
   def perform
@@ -13,7 +13,7 @@ class FetchRaceInfoAndScheduleUmaJob < ApplicationJob
     # date = Date.parse('2023-01-05')  # For debug
     Rails.logger.debug("Date: #{date.strftime('%Y%m%d')}")
 
-    Capybara.default_driver = :selenium_chrome_headless
+    # Capybara.default_driver = :selenium_chrome_headless
     course_names = []
     Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
       top_page = Netkeiba::TopPage.new
@@ -23,9 +23,9 @@ class FetchRaceInfoAndScheduleUmaJob < ApplicationJob
       # TODO: 結果が空の場合の処理
     end
 
-    course_names.each do |name|
-      name = formal_course_name(name)
-      FetchRaceInfoJob.perform_async(name) unless name.nil?
+    course_names.each do |course_name|
+      course_name = formal_course_name(course_name)
+      ScheduleUmaByCourseJob.perform_later(date, course_name) unless course_name.nil?
     end
   end
 
