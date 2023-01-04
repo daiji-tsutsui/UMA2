@@ -50,3 +50,8 @@ task :ruboA, [:filename] do |_task, args|
     sh %(bundle exec rubocop -A #{args[:filename]})
   end
 end
+
+desc 'Run tests except for web scraping'
+task :t do
+  sh %(rspec --exclude-pattern "spec/scraping/*_spec.rb")
+end
