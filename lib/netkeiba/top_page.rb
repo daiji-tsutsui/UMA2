@@ -11,14 +11,16 @@ module Netkeiba
     element :race_list, 'div#race_list'
     element :date_list, 'ul#date_list_sub'
 
-    def go_race_page(date, course, number)
+    def go_race_page(date, course, race_num)
       res = select_date(date)
       return nil if res.nil?
 
       course_table = select_course(course)
       return nil if course_table.nil?
 
-      race = course_table.all('li.RaceList_DataItem')[number.to_i - 1]
+      race = select_race(course_table, race_num)
+      return nil if race.nil?
+
       @is_finished = finished?(race)
       race.first('a').hover.click
       (@is_finished ? Netkeiba::ResultPage.new : Netkeiba::RacePage.new)
@@ -70,6 +72,18 @@ module Netkeiba
       end
       Rails.logger.debug("There are no course tables for #{name} in div##{@date_id}")
       nil
+    end
+
+    def select_race(course_table, race_num)
+      races = course_table.all('li.RaceList_DataItem')
+      races.each.with_index(1) do |race, i|
+        # race_num を超えたら終わり
+        # '１R'が'11R'にマッチするのを防ぐため
+        return nil if i > race_num.to_i
+
+        # 10R, 11Rだけ公開されていることがあるため，textで判断する
+        return race if race.first('div.Race_Num').has_text?(race_num)
+      end
     end
 
     def finished?(race)
