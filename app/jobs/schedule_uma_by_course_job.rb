@@ -9,16 +9,23 @@ class ScheduleUmaByCourseJob < ApplicationJob
   queue_as :default
 
   def perform(date, course_name)
-    Capybara.default_driver = :selenium_chrome_headless
-    course_names = []
+    existing_race_nums = []
     Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
       top_page = Netkeiba::TopPage.new
       top_page.load
-      course_names = top_page.course_names(date)
-      Rails.logger.debug("Couses fetched: \n#{course_names.join("\n")}")
+      existing_race_nums = top_page.race_nums(date, course_name)
+      Rails.logger.debug("Race numbers at #{course_name}: #{existing_race_nums.join(', ')}")
+    end
+
+    if existing_race_nums.empty?
+      Rails.logger.error("Cannot fetch race numbers at #{course_name}. Something went wrong.")
+      return
+    end
+
+    existing_race_nums.each do |race_num|
+      next unless race_num.is_a?(Integer)
+
+      ScheduleUmaByRaceJob.perform_later(date, course_name, race_num)
     end
   end
-
-  private
-
 end
