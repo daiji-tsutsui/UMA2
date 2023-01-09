@@ -29,11 +29,11 @@ RSpec.describe 'Netkeiba' do
         race_names = []
         NETKEIBA_COURSE_NAMES.each do |course_name|
           race_names = @top_page.race_names(date, course_name)
-          unless race_names.empty?
-            expect(@top_page.race_nums(date, course_name).size).to be > 0
-            can_get.push date_str
-            break
-          end
+          next if race_names.empty?
+
+          expect(@top_page.race_nums(date, course_name).size).to be > 0
+          can_get.push date_str
+          break
         end
       end
       expect(can_get.size).to be > 0

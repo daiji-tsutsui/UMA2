@@ -39,10 +39,7 @@ RSpec.describe 'ScheduleUmaByCourseJob' do
 
   describe 'when non-integer race_nums is obtained' do
     before do
-      allow(@top_page).to receive(:race_nums).and_return([
-        'FirstRace',
-        '12R',
-      ])
+      allow(@top_page).to receive(:race_nums).and_return(%w[FirstRace 12R])
     end
 
     it '#perform does NOT call ScheduleUmaByRaceJob' do
