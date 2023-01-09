@@ -16,10 +16,10 @@ module Netkeiba
       res = select_date(date)
       return nil if res.nil?
 
-      course_table = select_course(course)
+      course_table = fetch_course_table(course)
       return nil if course_table.nil?
 
-      race = select_race(course_table, race_num)
+      race = fetch_race(course_table, race_num)
       return nil if race.nil?
 
       @is_finished = finished?(race)
@@ -32,11 +32,23 @@ module Netkeiba
       res = select_date(date)
       return [] if res.nil?
 
-      table = select_course(course)
+      table = fetch_course_table(course)
       return [] if table.nil?
 
       races = table.all('li.RaceList_DataItem', visible: false)
       races.map { |race| race.first('span.ItemTitle').text }
+    end
+
+    # 日付とコース名に対するレース番号の一覧
+    def race_nums(date, course)
+      res = select_date(date)
+      return [] if res.nil?
+
+      table = fetch_course_table(course)
+      return [] if table.nil?
+
+      races = table.all('li.RaceList_DataItem', visible: false)
+      races.map { |race| race.first('div.Race_Num').text.to_i }
     end
 
     # 日付に対するコース名の一覧
@@ -68,7 +80,7 @@ module Netkeiba
 
     # コース名で指定し，レース一覧を返す．失敗すればnilを返す
     # select_dateされていることが前提
-    def select_course(name)
+    def fetch_course_table(name)
       return nil if @date_id.blank?
 
       table = race_list.first("div##{@date_id}")
@@ -82,7 +94,7 @@ module Netkeiba
     end
 
     # レース一個の要素を返す．失敗したらnilを返す
-    def select_race(course_table, race_num)
+    def fetch_race(course_table, race_num)
       races = course_table.all('li.RaceList_DataItem')
       races.each do |race|
         # 10R, 11Rだけ公開されていることがあるため，textで判断する

@@ -19,7 +19,7 @@ RSpec.describe 'Netkeiba' do
       expect(@top_page).to have_date_list
     end
 
-    it 'can get race names for dates displayed' do
+    it 'can get race names and numbers for dates displayed' do
       dates = (-3..3).map { |diff| Date.today + diff }
       can_get = []
       dates.each do |date|
@@ -30,6 +30,7 @@ RSpec.describe 'Netkeiba' do
         NETKEIBA_COURSE_NAMES.each do |course_name|
           race_names = @top_page.race_names(date, course_name)
           unless race_names.empty?
+            expect(@top_page.race_nums(date, course_name).size).to be > 0
             can_get.push date_str
             break
           end
@@ -38,7 +39,7 @@ RSpec.describe 'Netkeiba' do
       expect(can_get.size).to be > 0
     end
 
-    it 'cannot get race names for dates not displayed' do
+    it 'cannot get race names and numbers for dates not displayed' do
       dates = (-3..3).map { |diff| Date.today + diff }
       dates.each do |date|
         date_str = date.strftime(DATE_PATTERN)
@@ -46,6 +47,7 @@ RSpec.describe 'Netkeiba' do
 
         NETKEIBA_COURSE_NAMES.each do |course_name|
           expect(@top_page.race_names(date, course_name)).to be_empty
+          expect(@top_page.race_nums(date, course_name)).to be_empty
         end
       end
     end
