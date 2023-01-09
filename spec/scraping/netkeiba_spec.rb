@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'netkeiba'
 
-COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
+NETKEIBA_COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
 DATE_PATTERN = '%-m/%-d'
 
 RSpec.describe 'Netkeiba' do
@@ -27,7 +27,7 @@ RSpec.describe 'Netkeiba' do
         next unless @top_page.date_list.has_content?(date_str)
 
         race_names = []
-        COURSE_NAMES.each do |course_name|
+        NETKEIBA_COURSE_NAMES.each do |course_name|
           race_names = @top_page.race_names(date, course_name)
           unless race_names.empty?
             can_get.push date_str
@@ -44,7 +44,7 @@ RSpec.describe 'Netkeiba' do
         date_str = date.strftime(DATE_PATTERN)
         next if @top_page.date_list.has_content?(date_str)
 
-        COURSE_NAMES.each do |course_name|
+        NETKEIBA_COURSE_NAMES.each do |course_name|
           expect(@top_page.race_names(date, course_name)).to be_empty
         end
       end
@@ -56,7 +56,7 @@ RSpec.describe 'Netkeiba' do
       @race_page = nil
       dates = (-3..3).map { |diff| Date.today + diff }
       dates.select! { |date| @top_page.date_list.has_content? date.strftime(DATE_PATTERN) }
-      COURSE_NAMES.each do |course_name|
+      NETKEIBA_COURSE_NAMES.each do |course_name|
         # R11のみ公開される場合があるため
         @race_page = @top_page.go_race_page(dates[0], course_name, 11)
         break unless @race_page.nil?

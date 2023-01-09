@@ -84,14 +84,13 @@ module Netkeiba
     # レース一個の要素を返す．失敗したらnilを返す
     def select_race(course_table, race_num)
       races = course_table.all('li.RaceList_DataItem')
-      races.each.with_index(1) do |race, i|
-        # race_num を超えたら終わり
-        # '１R'が'11R'にマッチするのを防ぐため
-        return nil if i > race_num.to_i
-
+      races.each do |race|
         # 10R, 11Rだけ公開されていることがあるため，textで判断する
-        return race if race.first('div.Race_Num').has_text?(race_num)
+        # Rails.logger.debug("'#{race.first('div.Race_Num').text}'")
+        return race if race.first('div.Race_Num').has_text?(/\A#{race_num}R\z/)
       end
+      Rails.logger.debug("There are no races with race number #{race_num}R")
+      nil
     end
 
     # レース要素が確定済みか否か判定

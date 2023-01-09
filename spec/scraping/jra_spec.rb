@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'jra'
 
-COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
+JRA_COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
 ODDS_PAGE_MESSAGE_NO_RACE = '今週のオッズは未発表です'
 
 RSpec.describe 'Jra' do
@@ -62,7 +62,7 @@ RSpec.describe 'Jra' do
         date_str = date.strftime('%-m月%-d日')
         next unless @odds_page.this_week.has_content?(date_str)
 
-        COURSE_NAMES.each do |course_name|
+        JRA_COURSE_NAMES.each do |course_name|
           next unless @odds_page.this_week.has_content?(course_name)
 
           race_odds_page = @odds_page.go_race_odds_page(date, course_name)
