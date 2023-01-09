@@ -11,6 +11,7 @@ module Netkeiba
     element :race_list, 'div#race_list'
     element :date_list, 'ul#date_list_sub'
 
+    # 各レース情報ページへ遷移
     def go_race_page(date, course, race_num)
       res = select_date(date)
       return nil if res.nil?
@@ -26,6 +27,7 @@ module Netkeiba
       (@is_finished ? Netkeiba::ResultPage.new : Netkeiba::RacePage.new)
     end
 
+    # 日付とコース名に対するレース名の一覧
     def race_names(date, course)
       res = select_date(date)
       return [] if res.nil?
@@ -37,6 +39,7 @@ module Netkeiba
       races.map { |race| race.first('span.ItemTitle').text }
     end
 
+    # 日付に対するコース名の一覧
     def course_names(date)
       res = select_date(date)
       return [] if res.nil?
@@ -47,6 +50,8 @@ module Netkeiba
 
     private
 
+    # 指定された日付をクリックし，その日のレース一覧を表示
+    # 成功すればselfを，失敗すればnilを返す
     def select_date(date)
       selector = "li[date='#{date.strftime('%Y%m%d')}']"
       date_link = nil
@@ -61,6 +66,8 @@ module Netkeiba
       self
     end
 
+    # コース名で指定し，レース一覧を返す．失敗すればnilを返す
+    # select_dateされていることが前提
     def select_course(name)
       return nil if @date_id.blank?
 
@@ -74,6 +81,7 @@ module Netkeiba
       nil
     end
 
+    # レース一個の要素を返す．失敗したらnilを返す
     def select_race(course_table, race_num)
       races = course_table.all('li.RaceList_DataItem')
       races.each.with_index(1) do |race, i|
@@ -86,6 +94,7 @@ module Netkeiba
       end
     end
 
+    # レース要素が確定済みか否か判定
     def finished?(race)
       race.first('a')['href'].match?(/result\.html/)
     end
