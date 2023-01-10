@@ -31,15 +31,17 @@ RSpec.describe 'ScheduleUmaByCourseJob' do
       allow(@top_page).to receive(:race_nums).and_return([])
     end
 
-    it '#perform does NOT call ScheduleUmaByRaceJob' do
-      ScheduleUmaByCourseJob.perform_now(JOB_TEST_DATE, JOB_TEST_COURSE)
-      expect(ScheduleUmaByRaceJob).not_to have_received(:perform_later)
+    it '#perform raises RuntimeError' do
+      exception_expected = "Cannot fetch race numbers at #{JOB_TEST_COURSE}"
+      expect do
+        ScheduleUmaByCourseJob.perform_now(JOB_TEST_DATE, JOB_TEST_COURSE)
+      end.to raise_error(exception_expected)
     end
   end
 
   describe 'when non-integer race_nums is obtained' do
     before do
-      allow(@top_page).to receive(:race_nums).and_return(%w[FirstRace 12R])
+      allow(@top_page).to receive(:race_nums).and_return(%w[first_race 12R])
     end
 
     it '#perform does NOT call ScheduleUmaByRaceJob' do

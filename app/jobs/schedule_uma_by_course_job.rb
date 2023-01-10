@@ -4,7 +4,7 @@ require 'capybara'
 require 'selenium-webdriver'
 require 'netkeiba'
 
-# コースごとにレース情報を取得するジョブ
+# コースごとのレース番号一覧を取得し，それぞれのレース情報を取得するジョブ
 class ScheduleUmaByCourseJob < ApplicationJob
   queue_as :default
 
@@ -17,10 +17,8 @@ class ScheduleUmaByCourseJob < ApplicationJob
       Rails.logger.debug("Race numbers at #{course_name}: #{existing_race_nums.join(', ')}")
     end
 
-    if existing_race_nums.empty?
-      Rails.logger.error("Cannot fetch race numbers at #{course_name}. Something went wrong.")
-      return
-    end
+    # コースが表示されているのにレース番号が取れないのはおかしい
+    raise "Cannot fetch race numbers at #{course_name}" if existing_race_nums.empty?
 
     existing_race_nums.each do |race_num|
       next unless race_num.is_a?(Integer)
