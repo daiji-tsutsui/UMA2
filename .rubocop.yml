@@ -23,6 +23,9 @@ Style/Documentation:
     - test/**/*
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
+Style/PerlBackrefs:
+  Exclude:
+    - lib/netkeiba/race_page.rb
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent

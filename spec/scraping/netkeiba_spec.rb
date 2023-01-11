@@ -67,6 +67,9 @@ RSpec.describe 'Netkeiba' do
 
     it 'is displayed' do
       expect(@race_page).to be_displayed
+      expect(@race_page).to have_race_name
+      expect(@race_page).to have_race_num
+      expect(@race_page).to have_race_data
     end
   end
 end
