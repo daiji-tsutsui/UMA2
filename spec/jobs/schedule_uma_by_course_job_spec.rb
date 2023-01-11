@@ -17,7 +17,7 @@ RSpec.describe 'ScheduleUmaByCourseJob' do
 
   describe 'when race_nums is obtained' do
     before do
-      allow(@top_page).to receive(:race_nums).and_return([1, 2])
+      allow(@top_page).to receive(:race_nums).and_return([9, 10])
     end
 
     it '#perform calls ScheduleUmaByRaceJob twice' do

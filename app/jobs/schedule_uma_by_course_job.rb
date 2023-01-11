@@ -22,8 +22,17 @@ class ScheduleUmaByCourseJob < ApplicationJob
 
     existing_race_nums.each do |race_num|
       next unless race_num.is_a?(Integer)
+      next if skip_this_num?(race_num)
 
       ScheduleUmaByRaceJob.perform_later(date, course_name, race_num)
     end
+  end
+
+  private
+
+  # パフォーマンス等の様子見も兼ねて，いくつかのレース以外はスキップする
+  def skip_this_num?(num)
+    valid_race_num = [9, 10, 11]
+    !valid_race_num.include?(num)
   end
 end
