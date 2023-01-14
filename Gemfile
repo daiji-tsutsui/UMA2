@@ -55,6 +55,8 @@ gem 'config'
 gem 'dotenv-rails'
 gem 'foreman'
 
+gem 'retryable'
+
 # For Redis and Sidekiq
 gem 'redis-namespace'
 gem 'sidekiq'
@@ -85,4 +87,5 @@ group :test do
   # gem 'webdrivers' # DO NOT USE in raspberry pi (with chromium-driver)
   gem 'mocha'
   gem 'pry-rails'
+  gem 'database_cleaner-active_record'
 end

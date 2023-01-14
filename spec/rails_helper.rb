@@ -45,6 +45,12 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.before(:suite) do
+    # db/seeds.rbでblog_categoriesテーブルのデータを設定
+    DatabaseCleaner.clean_with(:truncation, except: ['courses', 'race_classes'])
+    load Rails.root.join('db', 'seeds.rb')
+  end
 end
 
 Capybara.register_driver :chrome_headless do |app|
