@@ -4,7 +4,7 @@ require 'rails_helper'
 require 'schedule_uma_job'
 require 'netkeiba'
 
-SCHEDULE_UMA_BY_RACE_JOB_COURSE_NAKAYAMA = 4
+SCHEDULE_UMA_BY_RACE_JOB_COURSE_TOKYO = 5
 SCHEDULE_UMA_BY_RACE_JOB_RACE_CLASS_G1 = 1
 
 RSpec.describe 'ScheduleUmaByRaceJob' do
@@ -17,7 +17,7 @@ RSpec.describe 'ScheduleUmaByRaceJob' do
     allow(FetchOddsAndDoUmaJob).to receive(:perform_later).and_return(true)
   end
 
-  describe 'perform' do
+  describe 'when race_info is obtained' do
     before do
       allow(@race_page).to receive(:race_info).and_return({
         name:          'テスト大賞典',
@@ -29,15 +29,17 @@ RSpec.describe 'ScheduleUmaByRaceJob' do
         starting_time: '15:35',
       })
     end
+    let(:date) { Date.parse('2023/01/14') }
+    let(:course) { '東京' }
+    let(:race_num) { 11 }
 
     it '#inserts a Race record' do
-      date = Date.parse('2023/01/14')
-      ScheduleUmaByRaceJob.perform_now(date, '中山', 11)
+      ScheduleUmaByRaceJob.perform_now(date, course, race_num)
       race = Race.find_by(name: 'テスト大賞典')
       expect(race[:name]).to          eq 'テスト大賞典'
-      expect(race[:number]).to        eq 11
+      expect(race[:number]).to        eq race_num
       expect(race[:race_date_id]).to  eq 2
-      expect(race[:course_id]).to     eq SCHEDULE_UMA_BY_RACE_JOB_COURSE_NAKAYAMA
+      expect(race[:course_id]).to     eq SCHEDULE_UMA_BY_RACE_JOB_COURSE_TOKYO
       expect(race[:race_class_id]).to eq SCHEDULE_UMA_BY_RACE_JOB_RACE_CLASS_G1
       expect(race[:distance]).to      eq 2000
       expect(race[:course_type]).to   eq '芝'
@@ -45,18 +47,21 @@ RSpec.describe 'ScheduleUmaByRaceJob' do
     end
   end
 
-  # describe 'when race_nums is NOT obtained' do
-  #   before do
-  #     allow(@top_page).to receive(:race_nums).and_return([])
-  #   end
+  describe 'when race_info is NOT obtained' do
+    before do
+      allow(@race_page).to receive(:race_info).and_return({})
+    end
+    let(:date) { Date.parse('2023/01/15') }
+    let(:course) { '中山' }
+    let(:race_num) { 9 }
 
-  #   it '#perform raises RuntimeError' do
-  #     exception_expected = "Cannot fetch race numbers at #{JOB_TEST_COURSE}"
-  #     expect {
-  #       ScheduleUmaByCourseJob.perform_now(JOB_TEST_DATE, JOB_TEST_COURSE)
-  #     }.to raise_error(exception_expected)
-  #   end
-  # end
+    it '#perform raises RuntimeError' do
+      exception_expected = 'Cannot fetch info at 中山 9R'
+      expect {
+        ScheduleUmaByRaceJob.perform_now(date, course, race_num)
+      }.to raise_error(exception_expected)
+    end
+  end
 
   # describe 'when non-integer race_nums is obtained' do
   #   before do
