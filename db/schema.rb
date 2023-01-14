@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_21_044032) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_14_171059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_044032) do
     t.text "weather"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "distance"
+    t.string "course_type"
+    t.string "starting_time"
     t.index ["course_id"], name: "index_races_on_course_id"
     t.index ["race_class_id"], name: "index_races_on_race_class_id"
     t.index ["race_date_id"], name: "index_races_on_race_date_id"
