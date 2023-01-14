@@ -3,25 +3,72 @@
 require 'capybara'
 require 'selenium-webdriver'
 require 'netkeiba'
+require 'retryable'
 
 # レースごとの情報を取得するジョブ
+# UMAのスケジュールもする
 class ScheduleUmaByRaceJob < ApplicationJob
   queue_as :default
 
   def perform(date, course_name, race_num)
-    # Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
-    #   top_page = Netkeiba::TopPage.new
-    #   top_page.load
-    #   existing_race_nums = top_page.race_nums(date)
-    #   if existing_race_nums.empty?
-    #     Rails.logger.error("Cannot fetch race numbers at #{course_name}. Something went wrong.")
-    #     return
-    #   end
-    #   Rails.logger.debug("Race numbers at #{course_name}: #{existing_race_nums.join(', ')}")
-    # end
+    race_info = { date: date, course_name: course_name }
+    Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
+      top_page = Netkeiba::TopPage.new
+      top_page.load
+      race_page = top_page.go_race_page(date, course_name, race_num)
 
-    # existing_race_nums.each do |race_num|
-    #   ScheduleUmaByRaceJob.perform_later(date, course_name, race_num)
-    # end
+      raise "Cannot go to Netkeiba race page: #{course_name} - #{race_num}R" if race_page.nil?
+
+      race_info.merge!(race_page.race_info)
+    end
+
+    # レース名前が取れていないのはおかしい
+    raise "Cannot fetch info at #{course_name} #{race_num}R" unless race_info.key?(:name)
+
+    # TODO: 馬情報のUPSERT
+    # Horse.create(race_info['horses'])
+
+    # レース情報のINSERT
+    race_record = format_for_insert(race_info)
+    Race.create(race_record)
+
+    # UMAのスケジュール
+    FetchOddsAndDoUmaJob.perform_later(date, course_name, race_num)
+  end
+
+  private
+
+  def format_for_insert(race_info)
+    {
+      name:          race_info[:name],
+      number:        race_info[:number],
+      weather:       race_info[:weather],
+      distance:      race_info[:distance],
+      course_type:   race_info[:course_type],
+      starting_time: race_info[:starting_time],
+      race_date_id:  race_date_id(race_info[:date]),
+      course_id:     course_id(race_info[:course_name]),
+      race_class_id: race_class_id(race_info[:race_class]),
+    }
+  end
+
+  def race_date_id(date)
+    race_date = nil
+    Retryable.retryable(:on => [ActiveRecord::RecordNotUnique], :tries => 5) do
+      ActiveRecord::Base.transaction do
+        race_date = RaceDate.find_or_create_by(value: date)
+      end
+    end
+    race_date[:id]
+  end
+
+  def course_id(name)
+    course = Course.find_by(name: name)
+    course[:id]
+  end
+
+  def race_class_id(name)
+    race_class = RaceClass.find_by(name: name)
+    race_class[:id]
   end
 end
