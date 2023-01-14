@@ -15,10 +15,10 @@ module Netkeiba
   class RacePage < SitePrism::Page
     set_url 'https://race.netkeiba.com/race/shutuba.html{?query*}'
 
-    element :race_name,   'div.RaceName'
-    element :race_num,    'span.RaceNum'
-    element :race_data,   'div.RaceData01'
-    element :course_info, 'div.RaceData01 > span'
+    element  :race_name,   'div.RaceName'
+    element  :race_num,    'span.RaceNum'
+    element  :race_data,   'div.RaceData01'
+    elements :course_info, 'div.RaceData01 > span'
 
     # レース情報
     # TODO: 出馬表もまとめる
@@ -48,13 +48,19 @@ module Netkeiba
     end
 
     def course_type
-      # e.g. "芝2000m"
-      RACE_PAGE_COURSE_TYPE_PATTERN =~ course_info.text ? $1 : nil
+      course_info.each do |info|
+        # e.g. "芝2000m"
+        return $1 if RACE_PAGE_COURSE_TYPE_PATTERN =~ info.text
+      end
+      nil
     end
 
     def distance
-      # e.g. "芝2000m"
-      RACE_PAGE_DISTANCE_PATTERN =~ course_info.text ? $1 : nil
+      course_info.each do |info|
+        # e.g. "芝2000m"
+        return $1 if RACE_PAGE_DISTANCE_PATTERN =~ info.text
+      end
+      nil
     end
   end
 end
