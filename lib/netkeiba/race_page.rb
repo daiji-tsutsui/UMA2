@@ -3,13 +3,6 @@
 require 'site_prism'
 require 'capybara/dsl'
 
-RACE_PAGE_CLASS_CSS_G1 = 'Icon_GradeType1'
-RACE_PAGE_CLASS_CSS_G2 = 'Icon_GradeType2'
-RACE_PAGE_CLASS_CSS_G3 = 'Icon_GradeType3'
-RACE_PAGE_STARTING_TIME_PATTERN = /\A(.*)発走/
-RACE_PAGE_COURSE_TYPE_PATTERN   = /\A([^\d]+)\d/
-RACE_PAGE_DISTANCE_PATTERN      = /(\d+)m/
-
 module Netkeiba
   # netkeibaのレース情報ページ
   class RacePage < SitePrism::Page
@@ -19,6 +12,13 @@ module Netkeiba
     element  :race_num,    'span.RaceNum'
     element  :race_data,   'div.RaceData01'
     elements :course_info, 'div.RaceData01 > span'
+
+    RACE_PAGE_CLASS_CSS_G1 = 'Icon_GradeType1'
+    RACE_PAGE_CLASS_CSS_G2 = 'Icon_GradeType2'
+    RACE_PAGE_CLASS_CSS_G3 = 'Icon_GradeType3'
+    RACE_PAGE_STARTING_TIME_PATTERN = /\A(.*)発走/
+    RACE_PAGE_COURSE_TYPE_PATTERN   = /\A([^\d]+)\d/
+    RACE_PAGE_DISTANCE_PATTERN      = /(\d+)m/
 
     # レース情報
     # TODO: 出馬表もまとめる

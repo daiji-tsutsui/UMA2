@@ -9,12 +9,18 @@ Rails.application.load_tasks
 
 task :runp do
   sh %(foreman start web >> log/stdout.log 2>&1 &)
-  sh %(foreman start worker >> log/sidekiq.log 2>&1 &)
+  sh %(foreman start worker1 >> log/sidekiq.log 2>&1 &)
+  sh %(foreman start worker2 >> log/sidekiq.log 2>&1 &)
+  sh %(foreman start worker3 >> log/sidekiq.log 2>&1 &)
+  sh %(foreman start worker4 >> log/sidekiq.log 2>&1 &)
 end
 
 task :run do
   sh %(foreman start dev >> log/stdout_dev.log 2>&1 &)
-  sh %(foreman start worker >> log/sidekiq_dev.log 2>&1 &)
+  sh %(foreman start worker1 >> log/sidekiq_dev.log 2>&1 &)
+  sh %(foreman start worker2 >> log/sidekiq_dev.log 2>&1 &)
+  sh %(foreman start worker3 >> log/sidekiq_dev.log 2>&1 &)
+  sh %(foreman start worker4 >> log/sidekiq_dev.log 2>&1 &)
 end
 
 task :stop do

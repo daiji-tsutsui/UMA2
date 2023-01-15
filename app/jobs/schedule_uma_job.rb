@@ -11,7 +11,7 @@ class ScheduleUmaJob < ApplicationJob
   def perform
     date = Date.today
     # date = Date.parse('2023-01-05')  # For debug
-    # Rails.logger.debug("Date: #{date.strftime('%Y%m%d')}")
+    Rails.logger.debug("ScheduleUma: #{date.strftime('%Y%m%d')}")
 
     course_names = []
     Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
@@ -31,11 +31,11 @@ class ScheduleUmaJob < ApplicationJob
 
   def formal_course_name(text)
     @courses_all ||= Course.all
-    names = @courses_all.select { |course| text.include? course.name }
-    if names.empty?
+    course = @courses_all.find { |course| text.include? course.name }
+    if course.nil?
       Rails.logger.warn("Cannot pick course name from original text: #{text}")
       return nil
     end
-    names[0]
+    course.name
   end
 end
