@@ -5,62 +5,38 @@ require 'capybara/dsl'
 
 module Netkeiba
   # netkeibaのレース情報ページ
-  class RacePage < SitePrism::Page
+  class RacePage < RaceBasePage
     set_url 'https://race.netkeiba.com/race/shutuba.html{?query*}'
 
-    element  :race_name,   'div.RaceName'
-    element  :race_num,    'span.RaceNum'
-    element  :race_data,   'div.RaceData01'
-    elements :course_info, 'div.RaceData01 > span'
+    element :horse_table, 'table.Shutuba_Table'
 
-    RACE_PAGE_CLASS_CSS_G1 = 'Icon_GradeType1'
-    RACE_PAGE_CLASS_CSS_G2 = 'Icon_GradeType2'
-    RACE_PAGE_CLASS_CSS_G3 = 'Icon_GradeType3'
-    RACE_PAGE_STARTING_TIME_PATTERN = /\A(.*)発走/
-    RACE_PAGE_COURSE_TYPE_PATTERN   = /\A([^\d]+)\d/
-    RACE_PAGE_DISTANCE_PATTERN      = /(\d+)m/
+    RACE_PAGE_CURRENT_WEIGHT_PATTERN = /\A(\d+)\(.*\)/
 
     # レース情報
     # TODO: 出馬表もまとめる
     def race_info
-      {
-        name:          race_name.text,
-        number:        race_num.text.to_i,
-        race_class:    race_class,
-        weather:       '', # TODO: 結果が出てから取るか，DBから消すか
-        distance:      distance,
-        course_type:   course_type,
-        starting_time: starting_time,
-      }
+      result = super
+      result[:horses] = horse_info
+      result
     end
 
     private
 
-    def race_class
-      return 'G1' if race_name.has_css?("span.#{RACE_PAGE_CLASS_CSS_G1}")
-      return 'G2' if race_name.has_css?("span.#{RACE_PAGE_CLASS_CSS_G2}")
-      return 'G3' if race_name.has_css?("span.#{RACE_PAGE_CLASS_CSS_G3}")
-    end
-
-    def starting_time
-      # e.g. "15:35発走 / 芝2000m (左)"
-      RACE_PAGE_STARTING_TIME_PATTERN =~ race_data.text ? $1 : nil
-    end
-
-    def course_type
-      course_info.each do |info|
-        # e.g. "芝2000m"
-        return $1 if RACE_PAGE_COURSE_TYPE_PATTERN =~ info.text
+    def horse_info
+      horse_table.find_all('tbody > tr.HorseList').map do |horse|
+        {
+          frame:  horse.first('td', class: /\AWaku/).text,
+          number: horse.first('td', class: /\AUmaban/).text,
+          name:   horse.first('td', class: 'HorseInfo').text,
+          sexage: horse.first('td', class: 'Barei').text,
+          jockey: horse.first('td', class: 'Jockey').text,
+          weight: current_weight(horse.first('td', class: 'Weight').text),
+        }
       end
-      nil
     end
 
-    def distance
-      course_info.each do |info|
-        # e.g. "芝2000m"
-        return $1 if RACE_PAGE_DISTANCE_PATTERN =~ info.text
-      end
-      nil
+    def current_weight(weight_str)
+      return (RACE_PAGE_CURRENT_WEIGHT_PATTERN =~ weight_str ? $1 : weight_str)
     end
   end
 end

@@ -22,14 +22,16 @@ class ScheduleUmaByRaceJob < ApplicationJob
 
       raise "Cannot go to Netkeiba race page: #{course_name} - #{race_num}R" if race_page.nil?
 
+      # horse_table_page = race_page.show_horse_table
+      # race_info.merge!(horse_table_page.race_info)
       race_info.merge!(race_page.race_info)
     end
 
-    # レース名前が取れていないのはおかしい
+    # レース名が取れていないのはおかしい
     raise "Cannot fetch info at #{course_name} #{race_num}R" unless race_info.key?(:name)
 
     # TODO: 馬情報のUPSERT
-    # Horse.create(race_info['horses'])
+    # Horse.create(race_info[:horses])
 
     # レース情報のINSERT
     race_record = format_for_insert(race_info)

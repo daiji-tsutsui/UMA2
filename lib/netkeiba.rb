@@ -3,6 +3,7 @@
 require 'site_prism'
 require 'capybara/dsl'
 require 'netkeiba/top_page'
+require 'netkeiba/race_base_page'
 require 'netkeiba/race_page'
 require 'netkeiba/result_page'
 
