@@ -11,6 +11,7 @@ class ScheduleUmaByRaceJob < ApplicationJob
   queue_as :default
 
   RACE_CLASS_OTHERS = 4
+  RACE_CLASS_NONE   = 5
 
   def perform(date, course_name, race_num)
     race_info = { date: date, course_name: course_name }
@@ -75,6 +76,6 @@ class ScheduleUmaByRaceJob < ApplicationJob
 
   def race_class_id(name)
     race_class = RaceClass.find_by(name: name)
-    race_class.nil? ? RACE_CLASS_OTHERS : race_class[:id]
+    race_class.nil? ? RACE_CLASS_NONE : race_class[:id]
   end
 end

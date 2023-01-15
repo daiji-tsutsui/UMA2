@@ -12,8 +12,7 @@ end
 scheduled_jobs = {
   'schedule_uma' => {
     class: 'ScheduleUmaJob',
-    cron:  '15 21 * * *',
-    # args:  ['2022-01-05'],
+    cron:  '0 2 * * *',
   },
 }
 Sidekiq::Cron::Job.load_from_hash!(scheduled_jobs) unless Rails.env.test?
