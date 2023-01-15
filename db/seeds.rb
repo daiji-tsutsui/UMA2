@@ -13,7 +13,7 @@ COURSE_ID_NAKAYAMA = 4
 RACE_CLASS_ID_G1     = 1
 RACE_CLASS_ID_G2     = 2
 
-if ['development', 'test'].include? Rails.env
+if %w[development test].include? Rails.env
   RaceDate.find_or_create_by(value: '2022/10/22')
   Race.create([
     {

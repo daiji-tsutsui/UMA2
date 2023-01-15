@@ -57,7 +57,7 @@ class ScheduleUmaByRaceJob < ApplicationJob
 
   def race_date_id(date)
     race_date = nil
-    Retryable.retryable(:on => [ActiveRecord::RecordNotUnique], :tries => 5) do
+    Retryable.retryable(on: [ActiveRecord::RecordNotUnique], tries: 5) do
       ActiveRecord::Base.transaction do
         race_date = RaceDate.find_or_create_by(value: date)
       end
@@ -67,7 +67,7 @@ class ScheduleUmaByRaceJob < ApplicationJob
 
   def course_id(name)
     course = Course.find_by(name: name)
-    if (course.nil?)
+    if course.nil?
       Rails.logger.debug("There are no such course #{name}")
       return nil
     end

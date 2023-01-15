@@ -57,9 +57,9 @@ RSpec.describe 'ScheduleUmaByRaceJob' do
 
     it '#perform raises RuntimeError' do
       exception_expected = 'Cannot fetch info at 中山 9R'
-      expect {
+      expect do
         ScheduleUmaByRaceJob.perform_now(date, course, race_num)
-      }.to raise_error(exception_expected)
+      end.to raise_error(exception_expected)
     end
   end
 

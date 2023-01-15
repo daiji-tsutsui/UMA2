@@ -85,7 +85,7 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   # gem 'webdrivers' # DO NOT USE in raspberry pi (with chromium-driver)
+  gem 'database_cleaner-active_record'
   gem 'mocha'
   gem 'pry-rails'
-  gem 'database_cleaner-active_record'
 end

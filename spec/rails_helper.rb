@@ -48,7 +48,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     # db/seeds.rbでblog_categoriesテーブルのデータを設定
-    DatabaseCleaner.clean_with(:truncation, except: ['courses', 'race_classes'])
+    DatabaseCleaner.clean_with(:truncation, except: %w[courses race_classes])
     load Rails.root.join('db', 'seeds.rb')
   end
 end
