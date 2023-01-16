@@ -25,6 +25,7 @@ Style/HashSyntax:
   EnforcedShorthandSyntax: never
 Style/PerlBackrefs:
   Exclude:
+    - lib/netkeiba/race_base_page.rb
     - lib/netkeiba/race_page.rb
 
 Layout/FirstHashElementIndentation:
@@ -33,6 +34,8 @@ Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 Layout/HashAlignment:
   EnforcedColonStyle: table
+  Exclude:
+    - lib/netkeiba/race_page.rb
 
 Metrics/BlockLength:
   Exclude:

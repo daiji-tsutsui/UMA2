@@ -31,7 +31,7 @@ module Netkeiba
     private
 
     def current_weight(weight_str)
-      return (RACE_PAGE_CURRENT_WEIGHT_PATTERN =~ weight_str ? $1 : weight_str)
+      RACE_PAGE_CURRENT_WEIGHT_PATTERN =~ weight_str ? $1 : weight_str
     end
   end
 end

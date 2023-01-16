@@ -36,7 +36,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
 
   private
 
-  def add_info(base_info, race_id, horse_id)
+  def format_for_insert(base_info, race_id, horse_id)
     {
       race_id:  race_id,
       horse_id: horse_id,
