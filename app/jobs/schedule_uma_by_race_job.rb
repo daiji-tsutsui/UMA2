@@ -22,23 +22,18 @@ class ScheduleUmaByRaceJob < ApplicationJob
 
       raise "Cannot go to Netkeiba race page: #{course_name} - #{race_num}R" if race_page.nil?
 
-      # horse_table_page = race_page.show_horse_table
-      # race_info.merge!(horse_table_page.race_info)
       race_info.merge!(race_page.race_info)
     end
 
     # レース名が取れていないのはおかしい
     raise "Cannot fetch info at #{course_name} #{race_num}R" unless race_info.key?(:name)
 
-    # TODO: 馬情報のUPSERT
-    # Horse.create(race_info[:horses])
-
     # レース情報のINSERT
-    race_record = format_for_insert(race_info)
-    Race.create(race_record)
+    race_hash = format_for_insert(race_info)
+    race = Race.create(race_hash)
 
     # UMAのスケジュール
-    FetchOddsAndDoUmaJob.perform_later(date, course_name, race_num)
+    ScheduleUmaWithRegisteringHorsesJob.perform_later(date, course_name, race_num, race.id)
   end
 
   private
@@ -64,7 +59,7 @@ class ScheduleUmaByRaceJob < ApplicationJob
         race_date = RaceDate.find_or_create_by(value: date)
       end
     end
-    race_date[:id]
+    race_date.id
   end
 
   def course_id(name)
@@ -73,11 +68,11 @@ class ScheduleUmaByRaceJob < ApplicationJob
       Rails.logger.debug("There are no such course #{name}")
       return nil
     end
-    course[:id]
+    course.id
   end
 
   def race_class_id(name)
     race_class = RaceClass.find_by(name: name)
-    race_class.nil? ? RACE_CLASS_NONE : race_class[:id]
+    race_class.nil? ? RACE_CLASS_NONE : race_class.id
   end
 end

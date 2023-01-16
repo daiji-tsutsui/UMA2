@@ -8,7 +8,7 @@ require 'netkeiba'
 class FetchOddsAndDoUmaJob < ApplicationJob
   queue_as :default
 
-  def perform(date, course_name, race_num)
+  def perform(date, race_horse_id)
     # Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
     #   top_page = Netkeiba::TopPage.new
     #   top_page.load

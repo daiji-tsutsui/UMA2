@@ -12,28 +12,23 @@ module Netkeiba
 
     RACE_PAGE_CURRENT_WEIGHT_PATTERN = /\A(\d+)\(.*\)/
 
-    # レース情報
-    # TODO: 出馬表もまとめる
-    def race_info
-      result = super
-      result[:horses] = horse_info
-      result
-    end
-
-    private
-
+    # 出馬情報
     def horse_info
       horse_table.find_all('tbody > tr.HorseList').map do |horse|
         {
-          frame:  horse.first('td', class: /\AWaku/).text.to_i,
-          number: horse.first('td', class: /\AUmaban/).text.to_i,
-          name:   horse.first('td', class: 'HorseInfo').text,
-          sexage: horse.first('td', class: 'Barei').text,
-          jockey: horse.first('td', class: 'Jockey').text,
-          weight: current_weight(horse.first('td', class: 'Weight').text),
+          name: horse.first('td', class: 'HorseInfo').text,
+          race_horse: {
+            frame:  horse.first('td', class: /\AWaku/).text.to_i,
+            number: horse.first('td', class: /\AUmaban/).text.to_i,
+            sexage: horse.first('td', class: 'Barei').text,
+            jockey: horse.first('td', class: 'Jockey').text,
+            weight: current_weight(horse.first('td', class: 'Weight').text),
+          },
         }
       end
     end
+
+    private
 
     def current_weight(weight_str)
       return (RACE_PAGE_CURRENT_WEIGHT_PATTERN =~ weight_str ? $1 : weight_str)
