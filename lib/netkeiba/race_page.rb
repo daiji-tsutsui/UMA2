@@ -25,8 +25,8 @@ module Netkeiba
     def horse_info
       horse_table.find_all('tbody > tr.HorseList').map do |horse|
         {
-          frame:  horse.first('td', class: /\AWaku/).text,
-          number: horse.first('td', class: /\AUmaban/).text,
+          frame:  horse.first('td', class: /\AWaku/).text.to_i,
+          number: horse.first('td', class: /\AUmaban/).text.to_i,
           name:   horse.first('td', class: 'HorseInfo').text,
           sexage: horse.first('td', class: 'Barei').text,
           jockey: horse.first('td', class: 'Jockey').text,
