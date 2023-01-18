@@ -36,6 +36,7 @@ Layout/HashAlignment:
   EnforcedColonStyle: table
   Exclude:
     - lib/netkeiba/race_page.rb
+    - spec/jobs/*_spec.rb
 
 Metrics/BlockLength:
   Exclude:
@@ -43,3 +44,5 @@ Metrics/BlockLength:
     - spec/**/*_spec.rb
 Metrics/MethodLength:
   Max: 15
+  Exclude:
+    - spec/jobs/*_spec.rb

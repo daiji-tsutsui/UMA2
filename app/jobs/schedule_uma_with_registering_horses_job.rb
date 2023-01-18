@@ -23,7 +23,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
       horses = horse_table_page.horses_info
     end
 
-    race_horse_ids = register(horses, race_id)
+    race_horse_ids = register_or_fetch_ids(horses, race_id)
 
     # UMAのスケジュール
     FetchOddsAndDoUmaJob.perform_later(date, race_horse_ids)
@@ -31,15 +31,15 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
 
   private
 
-  def register(horses, race_id)
+  def register_or_fetch_ids(horses, race_id)
     race_horse_ids = []
     horses.each do |horse_info|
       # 馬情報のINSERT
-      horse = register_horse(horse_info[:name])
+      horse_id = register_horse(horse_info[:name])
 
       # 出馬情報のINSERT
-      race_horse = register_race_horse(horse_info[:race_horse], race_id, horse.id)
-      race_horse_ids.push(race_horse.id)
+      race_horse_id = register_race_horse(horse_info[:race_horse], race_id, horse_id)
+      race_horse_ids.push(race_horse_id)
     end
     race_horse_ids
   end
@@ -51,14 +51,16 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
         horse = Horse.find_or_create_by(name: horse_name)
       end
     end
-    horse
+    horse.id
   end
 
   def register_race_horse(race_horse_info, race_id, horse_id)
+    # TODO: (race_id, horse_id)でUNIQUEにせんと
     race_horse_hash = race_horse_info.merge({
       race_id:  race_id,
       horse_id: horse_id,
     })
-    RaceHorse.create(race_horse_hash)
+    race_horse = RaceHorse.create(race_horse_hash)
+    race_horse.id
   end
 end
