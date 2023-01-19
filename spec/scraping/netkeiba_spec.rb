@@ -4,7 +4,8 @@ require 'rails_helper'
 require 'netkeiba'
 
 NETKEIBA_COURSE_NAMES = %w[札幌 函館 福島 中山 東京 新潟 中京 京都 阪神 小倉].freeze
-DATE_PATTERN = '%-m/%-d'
+# DATE_PATTERN = '%-m/%-d'
+DATE_PATTERN = '%-m月%-d日'
 
 RSpec.describe 'Netkeiba' do
   before do
