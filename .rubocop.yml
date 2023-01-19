@@ -4,6 +4,7 @@ AllCops:
   Exclude:
     - bin/*
     - db/schema.rb
+    - db/migrate/*
   TargetRubyVersion: 3.1
 
 Style/FormatString:

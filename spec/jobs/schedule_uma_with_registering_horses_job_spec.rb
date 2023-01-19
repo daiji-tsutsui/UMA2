@@ -50,7 +50,7 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
       ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
       expect do
         ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
-      end.not_to change { Horse.count }
+      end.not_to(change { Horse.count })
     end
 
     it '#perform calls FetchOddsAndDoUmaJob once' do
