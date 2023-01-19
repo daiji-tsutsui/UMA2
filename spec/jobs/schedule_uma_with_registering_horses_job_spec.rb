@@ -57,6 +57,12 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
       ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
       expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).once
     end
+
+    it '#perform AGAIN does NOT call FetchOddsAndDoUmaJob' do
+      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id) # Do again
+      expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).once
+    end
   end
 
   describe 'when horses_info is NOT obtained' do

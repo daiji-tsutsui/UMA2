@@ -29,7 +29,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     race_horse_ids = register_or_fetch_ids(horses, race_id)
 
     # UMAのスケジュール
-    FetchOddsAndDoUmaJob.perform_later(date, race_horse_ids)
+    FetchOddsAndDoUmaJob.perform_later(date, race_horse_ids) unless race_horse_ids.empty?
   end
 
   private
@@ -42,7 +42,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
 
       # 出馬情報のINSERT
       race_horse_id = register_race_horse(horse_info[:race_horse], race_id, horse_id)
-      race_horse_ids.push(race_horse_id)
+      race_horse_ids.push(race_horse_id) unless race_horse_id.nil?
     end
     race_horse_ids
   end
@@ -50,7 +50,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
   def register_horse(horse_name)
     horse = nil
     Retryable.retryable(on: [ActiveRecord::RecordNotUnique], tries: 5) do
-      ActiveRecord::Base.transaction do
+      Horse.transaction do
         horse = Horse.find_or_create_by(name: horse_name)
       end
     end
@@ -58,12 +58,17 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
   end
 
   def register_race_horse(race_horse_info, race_id, horse_id)
-    # TODO: (race_id, horse_id)でUNIQUEにせんと
     race_horse_hash = race_horse_info.merge({
       race_id:  race_id,
       horse_id: horse_id,
     })
-    race_horse = RaceHorse.create(race_horse_hash)
+    race_horse = nil
+    begin
+      race_horse = RaceHorse.create(race_horse_hash)
+    rescue ActiveRecord::RecordNotUnique
+      Rails.logger.debug("RaceHorse has already been registered: #{race_horse_hash}")
+      return nil
+    end
     race_horse.id
   end
 end
