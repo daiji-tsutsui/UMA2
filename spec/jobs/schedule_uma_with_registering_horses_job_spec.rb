@@ -28,16 +28,22 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
     let(:race_num) { 11 }
 
     it '#perform inserts 3 Horse records' do
-      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
-      horse = Horse.find_by(name: 'セブンマジシャン')
+      expect do
+        ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+      end.to change { Horse.count }.by(3)
+      horse = Horse.find_by(name: 'ソールオリエンス')
       expect(horse).not_to be nil
+    end
+
+    it '#perform inserts 3 RaceHorse records' do
+      expect do
+        ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+      end.to change { RaceHorse.count }.by(3)
+      horse = Horse.find_by(name: 'セブンマジシャン')
       race_horse = RaceHorse.find_by(race_id: @race_id, horse_id: horse.id)
       expect(race_horse.number).to eq 7
       expect(race_horse.sexage).to eq '牡3'
       expect(race_horse.jockey).to eq 'ルメール'
-
-      expect(Horse.count).to     eq 3
-      expect(RaceHorse.count).to eq 3
     end
 
     it '#perform AGAIN does NOT change Horse records' do
@@ -63,15 +69,11 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
     let(:course) { '函館' }
     let(:race_num) { 9 }
 
-    it '#perform does NOT change Horse records' do
+    it '#perform raises RuntimeError' do
+      exception_expected = 'Cannot fetch horses at 函館 9R'
       expect do
         ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
-      end.not_to change { Horse.count }
-    end
-
-    xit '#perform does NOT call FetchOddsAndDoUmaJob' do
-      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
-      expect(FetchOddsAndDoUmaJob).not_to have_received(:perform_later)
+      end.to raise_error(exception_expected)
     end
   end
 

@@ -33,8 +33,9 @@ RSpec.describe 'ScheduleUmaByRaceJob' do
     let(:race_num) { 11 }
 
     it '#perform inserts a Race record' do
-      expect(Race.count).to eq 2
-      ScheduleUmaByRaceJob.perform_now(date, course, race_num)
+      expect do
+        ScheduleUmaByRaceJob.perform_now(date, course, race_num)
+      end.to change { Race.count }.by(1)
       race = Race.find_by(name: 'テスト大賞典')
       expect(race[:name]).to          eq 'テスト大賞典'
       expect(race[:number]).to        eq race_num

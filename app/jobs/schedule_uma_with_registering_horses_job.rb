@@ -23,6 +23,9 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
       horses = horse_table_page.horses_info
     end
 
+    # 出馬情報が取れていないのはおかしい
+    raise "Cannot fetch horses at #{course_name} #{race_num}R" if horses.blank?
+
     race_horse_ids = register_or_fetch_ids(horses, race_id)
 
     # UMAのスケジュール
