@@ -90,6 +90,9 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  # ログファイルを10MB，5個まで保持する．
+  config.logger = Logger.new("log/production.log", 5, 10 * 1024 * 1024)
+
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end

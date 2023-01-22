@@ -8,11 +8,11 @@ require_relative 'config/application'
 Rails.application.load_tasks
 
 task :runp do
-  sh %(foreman start web >> log/stdout.log 2>&1 &)
-  sh %(foreman start worker1 >> log/sidekiq.log 2>&1 &)
-  sh %(foreman start worker2 >> log/sidekiq.log 2>&1 &)
-  sh %(foreman start worker3 >> log/sidekiq.log 2>&1 &)
-  sh %(foreman start worker4 >> log/sidekiq.log 2>&1 &)
+  sh %(foreman start web &)
+  sh %(foreman start worker1 &)
+  sh %(foreman start worker2 &)
+  sh %(foreman start worker3 &)
+  sh %(foreman start worker4 &)
 end
 
 task :run do

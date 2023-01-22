@@ -60,4 +60,7 @@ Rails.application.configure do
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
   config.active_record.maintain_test_schema = false
+
+  # ログファイルを1MB，2個まで保持する．
+  config.logger = Logger.new("log/test.log", 2, 1 * 1024 * 1024)
 end
