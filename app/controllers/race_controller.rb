@@ -2,7 +2,7 @@
 
 # Race information Controller
 class RaceController < ApplicationController
-  before_action :load_static_record, only: %i[index show]
+  before_action :load_static_record
 
   ERROR_MESSAGE_NO_SUCH_RACE = 'No such a race...'
 
