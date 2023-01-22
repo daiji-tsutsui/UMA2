@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class Horse < ApplicationRecord
-  has_many :rase_horses
+  has_many :race_horses
 end

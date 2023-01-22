@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <td>馬名</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @horses.each do |horse| %>
+      <tr>
+        <td><%= link_to horse.name, horse %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= debug(@horses[0..4].map { |horse| horse.attributes }) if Rails.env.development? %>

@@ -1,0 +1,24 @@
+<table>
+  <thead>
+    <tr>
+      <td>出走レース</td>
+      <td>馬番</td>
+      <td>年齢</td>
+      <td>騎手</td>
+      <td>馬体重</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @horse.race_horses.each do |race_horse| %>
+      <tr>
+        <td><%= link_to race_horse.race.name, race_horse.race %></td>
+        <td><%= race_horse.number %></td>
+        <td><%= race_horse.sexage %></td>
+        <td><%= race_horse.jockey %></td>
+        <td><%= race_horse.weight %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= debug(@horse.attributes) if Rails.env.development? %>
