@@ -14,7 +14,7 @@
   <tbody>
     <% @races.each do |race| %>
       <tr>
-        <td><%= race.name %></td>
+        <td><%= link_to race.name, race %></td>
         <td><%= @classes[race.race_class_id] %></td>
         <td><%= race.date %></td>
         <td><%= race.starting_time %></td>
@@ -27,4 +27,4 @@
   </tbody>
 </table>
 
-<%= debug(@races) if Rails.env.development? %>
+<%= debug(@races[0..4].map { |race| race.attributes }) if Rails.env.development? %>
