@@ -2,7 +2,8 @@
   <%= render 'info_table', race: @race %>
 </div>
 <div>
-  <%= render 'horse_table' %>
+  <%= render 'horse_table', race_horses: @race.race_horses %>
 </div>
 
 <%= debug(@race.attributes) if Rails.env.development? %>
+<%= debug(@race.race_horses.map { |race_horse| race_horse.attributes }) if Rails.env.development? %>

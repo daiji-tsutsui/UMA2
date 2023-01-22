@@ -10,5 +10,15 @@
     </tr>
   </thead>
   <tbody>
+    <% race_horses.each do |race_horse| %>
+      <tr>
+        <td><%= race_horse.frame %></td>
+        <td><%= race_horse.number %></td>
+        <td><%= race_horse.horse.name %></td>
+        <td><%= race_horse.sexage %></td>
+        <td><%= race_horse.jockey %></td>
+        <td><%= race_horse.weight %></td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
