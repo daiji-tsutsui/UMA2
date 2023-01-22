@@ -15,10 +15,10 @@
     <% @races.each do |race| %>
       <tr>
         <td><%= link_to race.name, race %></td>
-        <td><%= @classes[race.race_class_id] %></td>
-        <td><%= race.date %></td>
+        <td><%= race.race_class.name %></td>
+        <td><%= race.race_date.value %></td>
         <td><%= race.starting_time %></td>
-        <td><%= @courses[race.course_id] %></td>
+        <td><%= race.course.name %></td>
         <td><%= race.number %>R</td>
         <td><%= race.distance %></td>
         <td><%= race.course_type %></td>

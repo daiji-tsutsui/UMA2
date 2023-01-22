@@ -2,30 +2,16 @@
 
 # Race information Controller
 class RaceController < ApplicationController
-  before_action :load_static_record
-
   ERROR_MESSAGE_NO_SUCH_RACE = 'No such a race...'
 
   def index
-    @races = Race.where.associated(:race_date)
-                 .select('races.*, race_dates.value AS date')
-                 .all
+    @races = Race.all.preload(:race_date, :race_class, :course)
   end
 
   def show
-    @race = Race.where.associated(:race_date)
-                .select('races.*, race_dates.value AS date')
-                .find_by(id: params[:id])
-    return unless @race.nil?
+    @race = Race.find_by(id: params[:id]) and return
 
     flash[:danger] = ERROR_MESSAGE_NO_SUCH_RACE
     redirect_to races_path and return
-  end
-
-  private
-
-  def load_static_record
-    @courses = Course.all.to_h { |course| [course.id, course.name] }
-    @classes = RaceClass.all.to_h { |elem| [elem.id, elem.name] }
   end
 end
