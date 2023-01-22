@@ -74,5 +74,5 @@ Rails.application.configure do
   config.hosts << 'dev1'
 
   # ログファイルを1MB，2個まで保持する．
-  config.logger = Logger.new("log/development.log", 2, 1 * 1024 * 1024)
+  config.logger = Logger.new('log/development.log', 2, 1 * 1024 * 1024)
 end
