@@ -11,7 +11,10 @@
   </head>
 
   <body>
-    <%= yield %>
+    <%= render 'layouts/error_messages' %>
+    <article class="container">
+      <%= yield %>
+    </article>
     <%= debug(params.to_yaml) if Rails.env.development? %>
   </body>
 </html>

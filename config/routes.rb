@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   get '/service_status', to: 'service_status#status'
 
   root 'race#index'
-  get '/races', to: 'race#index'
-  get '/races/:id', to: 'race#show', as: 'race'
+  get '/races',     to: 'race#index', as: :races
+  get '/races/:id', to: 'race#show',  as: :race
 
   mount Sidekiq::Web, at: '/sidekiq'
 end

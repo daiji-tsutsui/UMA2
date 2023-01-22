@@ -1,0 +1,18 @@
+<% flash.each do |type, message| %>
+  <% if message.present? %>
+    <div class="alert alert-<%= type %>">
+      <% if message.instance_of?(Array) %>
+        <%= message.shift %>
+        <% if message.length %>
+          <ul>
+            <% message.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% else %>
+        <%= message %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
