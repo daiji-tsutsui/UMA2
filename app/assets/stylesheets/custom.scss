@@ -1,6 +1,85 @@
-@import "bootstrap-sprockets";
+// @import "bootstrap-sprockets";
 @import "bootstrap";
 
+// 全体の共通CSS
+
+// application.html.erb
+body{
+  background-color: white;
+  font-family: "Gill Sans", helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 20px;
+}
+.container-fluid{
+  padding: 0;
+}
+
+article{
+  color: #444;
+  strong{
+    color: #222;
+  }
+  a{
+    color: #A6A0A0;
+    &:visited{
+      color: #844;
+    }
+  }
+  .btn-dark:visited{
+    color: white;
+  }
+}
+
+// _header.html.erb
+nav{
+  background-color: black;
+}
+.navbar{
+  .navbar-brand{
+    margin-left: 8px;
+    margin-right: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 24px;
+    color: #01900d;
+    &:hover{
+      color: #9aff1f;
+    }
+  }
+  ul.navbar-nav{
+    font-size: 16px;
+    li.nav-item{
+      padding-top: 3px;
+      a.nav-link{
+        color: white;
+        &:hover{
+          color: yellow;
+        }
+      }
+    }
+  }
+}
+
+// _footer.html.erb
+footer{
+  padding: 15px;
+  margin-top: 20px;
+  color: white;
+  text-decoration: underline green;
+  &.footer{
+    background-color: black;
+  }
+}
+
+// Util
+.break{
+  word-break : break-word;
+}
+.no_break{
+  white-space: nowrap;
+}
+
+// debug
 @mixin box_sizing {
     -moz-box-sizing:    border-box;
     -webkit-box-sizing: border-box;
