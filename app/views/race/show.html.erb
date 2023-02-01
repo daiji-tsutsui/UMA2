@@ -1,9 +1,14 @@
-<div>
-  <%= render 'info_table', race: @race %>
-</div>
-<div>
-  <%= render 'horse_table', race_horses: @race.race_horses %>
+<div class="col-md-3">
+  <div class="container race_info">
+    <%= render 'info_table', race: @race %>
+  </div>
 </div>
 
-<%= debug(@race.attributes) if Rails.env.development? %>
-<%= debug(@race.race_horses.map { |race_horse| race_horse.attributes }) if Rails.env.development? %>
+<div class="col-md-9">
+  <div class="container race_horses">
+    <%= render 'horse_table', race_horses: @race.race_horses %>
+  </div>
+</div>
+
+<%#= debug(@race.attributes) if Rails.env.development? %>
+<%#= debug(@race.race_horses.map { |race_horse| race_horse.attributes }) if Rails.env.development? %>
