@@ -1,24 +1,25 @@
-<table>
-  <thead>
-    <tr>
-      <td>出走レース</td>
-      <td>馬番</td>
-      <td>年齢</td>
-      <td>騎手</td>
-      <td>馬体重</td>
-    </tr>
-  </thead>
-  <tbody>
+<div class="container horse_info">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <h1><%= @horse.name %></h1>
+    <div class="row">
+      <div class="col-md-4"><strong>出走レース</strong></div>
+      <div class="col-md-1"><strong>馬番</strong></div>
+      <div class="col-md-1"><strong>年齢</strong></div>
+      <div class="col-md-3"><strong>騎手</strong></div>
+      <div class="col-md-3"><strong>馬体重</strong></div>
+    </div>
     <% @horse.race_horses.each do |race_horse| %>
-      <tr>
-        <td><%= link_to race_horse.race.name, race_horse.race %></td>
-        <td><%= race_horse.number %></td>
-        <td><%= race_horse.sexage %></td>
-        <td><%= race_horse.jockey %></td>
-        <td><%= race_horse.weight %></td>
-      </tr>
+      <div class="row raceclass-<%= race_horse.race.race_class.name %>">
+        <div class="col-md-4"><%= link_to race_horse.race.name, race_horse.race %></div>
+        <div class="col-md-1"><%= race_horse.number %></div>
+        <div class="col-md-1"><%= race_horse.sexage %></div>
+        <div class="col-md-3"><%= race_horse.jockey %></div>
+        <div class="col-md-3"><%= race_horse.weight %></div>
+      </div>
     <% end %>
-  </tbody>
-</table>
+  </div>
+  <div class="col-md-2"></div>
+</div>
 
-<%= debug(@horse.attributes) if Rails.env.development? %>
+<%#= debug(@horse.attributes) if Rails.env.development? %>

@@ -1,16 +1,25 @@
-<table>
-  <thead>
-    <tr>
-      <td>馬名</td>
-    </tr>
-  </thead>
-  <tbody>
-    <% @horses.each do |horse| %>
-      <tr>
-        <td><%= link_to horse.name, horse %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%#= render 'shared/paginate', posts: posts, user: user %>
 
-<%= debug(@horses[0..4].map { |horse| horse.attributes }) if Rails.env.development? %>
+<div class="container horse_list">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-md-4"><strong>馬名</strong></div>
+      <div class="col-md-3"><strong>直近のレース</strong></div>
+      <div class="col-md-2"><strong>成績</strong></div>
+      <div class="col-md-3"><strong>日時</strong></div>
+    </div>
+    <% @horses.each do |horse| %>
+      <div class="row">
+        <div class="col-md-4">
+          <%= link_to horse.name, horse %>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-3"></div>
+      </div>
+    <% end %>
+  <div class="col-md-2"></div>
+</div>
+
+<%#= debug(@horses[0..4].map { |horse| horse.attributes }) if Rails.env.development? %>
