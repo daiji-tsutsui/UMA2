@@ -11,12 +11,16 @@ RSpec.describe 'Races', type: :request do
     end
 
     it 'renders table of races' do
+      # table headers
       expect(response.body).to include('レース名')
       expect(response.body).to include('出走日')
+      expect(response.body).to include('競馬場')
+      # table rows
       expect(response.body).to include('2022-10-22')
       expect(response.body).to include('札幌')
       expect(response.body).to include('Test2')
-      expect(response.body).to include('G2')
+      # class identifier
+      expect(response.body).to include('raceclass-G2')
     end
   end
 
@@ -28,13 +32,18 @@ RSpec.describe 'Races', type: :request do
     end
 
     it 'renders table of a race' do
-      expect(response.body).to include('格付')
-      expect(response.body).to include('天気')
+      # h1 tag
       expect(response.body).to include('Test1')
+      # table headers
+      expect(response.body).to include('出走時刻')
+      expect(response.body).to include('レース番号')
+      expect(response.body).to include('距離')
+      # table rows
       expect(response.body).to include('2022-10-22')
       expect(response.body).to include('札幌')
       expect(response.body).to include('11R')
-      expect(response.body).to include('G1')
+      # class identifier
+      expect(response.body).to include('raceclass-G1')
     end
   end
 end

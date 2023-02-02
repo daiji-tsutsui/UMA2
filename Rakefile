@@ -61,3 +61,9 @@ desc 'Run tests except for web scraping'
 task :t do
   sh %(rspec --exclude-pattern "spec/scraping/*_spec.rb")
 end
+
+desc 'Run tests with test db migration'
+task :tmig do
+  sh %(RAILS_ENV=test rails db:migrate:reset)
+  sh %(rspec --exclude-pattern "spec/scraping/*_spec.rb")
+end
