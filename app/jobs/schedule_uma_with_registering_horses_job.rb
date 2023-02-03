@@ -26,7 +26,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     # 出馬情報が取れていないのはおかしい
     raise "Cannot fetch horses at #{course_name} #{race_num}R" if horses.blank?
 
-    race_horse_ids = register_or_fetch_ids(horses, race_id)
+    race_horse_ids = register_and_fetch_ids(horses, race_id)
 
     # UMAのスケジュール
     FetchOddsAndDoUmaJob.perform_later(date, race_horse_ids) unless race_horse_ids.empty?
@@ -34,7 +34,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
 
   private
 
-  def register_or_fetch_ids(horses, race_id)
+  def register_and_fetch_ids(horses, race_id)
     race_horse_ids = []
     horses.each do |horse_info|
       # 馬情報のINSERT
@@ -65,6 +65,9 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     race_horse = nil
     begin
       race_horse = RaceHorse.create(race_horse_hash)
+
+      # 最新出馬情報を更新
+      Horse.find(horse_id).update(last_race_horse_id: race_horse.id)
     rescue ActiveRecord::RecordNotUnique
       Rails.logger.debug("RaceHorse has already been registered: #{race_horse_hash}")
       return nil
