@@ -6,6 +6,9 @@ class RaceController < ApplicationController
 
   def index
     @races = Race.all.preload(:race_date, :race_class, :course)
+                 .order(race_date_id: :DESC)
+                 .order(course_id: :ASC)
+                 .order(number: :ASC)
                  .paginate(page: params[:page])
   end
 

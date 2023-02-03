@@ -8,5 +8,7 @@ class HorseController < ApplicationController
 
   def show
     @horse = Horse.find_by(id: params[:id])
+    # TODO race_horsesはViewではなくこっちでとった方がいい
+    # ORDERとかできないので
   end
 end
