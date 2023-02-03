@@ -1,12 +1,14 @@
-<div class="col-md-3">
-  <div class="container race_info">
-    <%= render 'info_table', race: @race %>
-  </div>
-</div>
 
-<div class="col-md-9">
-  <div class="container race_horses">
-    <%= render 'horse_table', race_horses: @race.race_horses %>
+<div class="container" style="display:flex">
+  <div class="col-md-3">
+    <div class="container race_info">
+      <%= render 'info_table', race: @race %>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="container race_horses">
+      <%= render 'horse_table', race_horses: @race.race_horses %>
+    </div>
   </div>
 </div>
 

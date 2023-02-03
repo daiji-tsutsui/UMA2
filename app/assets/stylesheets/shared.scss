@@ -1,0 +1,9 @@
+// 共有partial（app/views/shared）用のCSS
+
+div.paginate{
+    display: flex;
+    nav{
+        margin: auto;
+        background-color: white;
+    }
+}

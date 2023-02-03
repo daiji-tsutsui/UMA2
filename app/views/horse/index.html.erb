@@ -1,4 +1,3 @@
-<%#= render 'shared/paginate', posts: posts, user: user %>
 
 <div class="container horse_list">
   <div class="col-md-2"></div>
@@ -19,7 +18,10 @@
         <div class="col-md-3"></div>
       </div>
     <% end %>
+  </div>
   <div class="col-md-2"></div>
 </div>
+
+<%= render 'shared/paginate', objects: @horses %>
 
 <%#= debug(@horses[0..4].map { |horse| horse.attributes }) if Rails.env.development? %>

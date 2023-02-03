@@ -3,7 +3,7 @@
 # Horse information Controller
 class HorseController < ApplicationController
   def index
-    @horses = Horse.all
+    @horses = Horse.all.paginate(page: params[:page])
   end
 
   def show
