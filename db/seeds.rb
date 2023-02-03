@@ -81,4 +81,8 @@ if %w[development test].include? Rails.env
       jockey:   '武豊',
     },
   ])
+  Horse.find(1).update(last_race_horse_id: 4)
+  Horse.find(2).update(last_race_horse_id: 2)
+  Horse.find(3).update(last_race_horse_id: 3)
+  Horse.find(4).update(last_race_horse_id: 5)
 end

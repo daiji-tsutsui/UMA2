@@ -10,7 +10,7 @@
       <div class="col-md-2"><strong>騎手</strong></div>
       <div class="col-md-2"><strong>馬体重</strong></div>
     </div>
-    <% @horse.race_horses.each do |race_horse| %>
+    <% @race_horses.each do |race_horse| %>
       <div class="row raceclass-<%= race_horse.race.race_class.name %>">
         <div class="col-md-4"><%= link_to race_horse.race.name, race_horse.race %></div>
         <div class="col-md-2"><%= race_horse.race.race_date.value %></div>

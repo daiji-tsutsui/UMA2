@@ -5,16 +5,16 @@
     <div class="row">
       <div class="col-md-4"><strong>馬名</strong></div>
       <div class="col-md-3"><strong>直近のレース</strong></div>
+      <div class="col-md-3"><strong>開催日</strong></div>
       <div class="col-md-2"><strong>成績</strong></div>
-      <div class="col-md-3"><strong>日時</strong></div>
     </div>
     <% @horses.each do |horse| %>
       <div class="row">
         <div class="col-md-4">
           <%= link_to horse.name, horse %>
         </div>
-        <div class="col-md-3"></div>
-        <div class="col-md-2"></div>
+        <div class="col-md-3"><%= horse.race_horse.race.name %></div>
+        <div class="col-md-2"><%= horse.race_horse.race.race_date.value %></div>
         <div class="col-md-3"></div>
       </div>
     <% end %>
