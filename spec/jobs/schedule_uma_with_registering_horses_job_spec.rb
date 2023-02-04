@@ -20,16 +20,12 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
   describe 'when horses_info is obtained' do
     before do
       allow(@race_page).to receive(:horses_info).and_return(test_data)
-      race = Race.find_by(name: 'Test1')
-      @race_id = race.id
+      @race_id = Race.find_by(name: 'Test1').id
     end
-    let(:date) { Date.parse('2023/01/15') }
-    let(:course) { '中山' }
-    let(:race_num) { 11 }
 
     it '#perform inserts 3 Horse records' do
       expect do
-        ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+        ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       end.to change { Horse.count }.by(3)
       horse = Horse.find_by(name: 'ソールオリエンス')
       expect(horse).not_to be nil
@@ -38,7 +34,7 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
 
     it '#perform inserts 3 RaceHorse records' do
       expect do
-        ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+        ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       end.to change { RaceHorse.count }.by(3)
       horse = Horse.find_by(name: 'セブンマジシャン')
       race_horse = RaceHorse.find_by(race_id: @race_id, horse_id: horse.id)
@@ -48,20 +44,20 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
     end
 
     it '#perform calls FetchOddsAndDoUmaJob once' do
-      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+      ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).once
     end
 
     it '#perform AGAIN does NOT change Horse records' do
-      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+      ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       expect do
-        ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+        ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       end.not_to(change { Horse.count })
     end
 
     it '#perform AGAIN does NOT call FetchOddsAndDoUmaJob' do
-      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
-      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id) # Do again
+      ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
+      ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id) # Do again
       expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).once
     end
   end
@@ -69,17 +65,29 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
   describe 'when horses_info is NOT obtained' do
     before do
       allow(@race_page).to receive(:horses_info).and_return([])
-      race = Race.find_by(name: 'Test2')
-      @race_id = race.id
+      @race_id = Race.find_by(name: 'Test2').id
     end
-    let(:date) { Date.parse('2023/01/21') }
-    let(:course) { '函館' }
-    let(:race_num) { 9 }
 
     it '#perform raises RuntimeError' do
-      exception_expected = 'Cannot fetch horses at 函館 9R'
+      # 例外メッセージによるfetch_race_infoの動作保証も兼ねる
+      exception_expected = 'Cannot fetch horses at 中山 3R'
       expect do
-        ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+        ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
+      end.to raise_error(exception_expected)
+    end
+  end
+
+  describe 'when horse_table_page CANNOT be fetched' do
+    before do
+      allow(@race_page).to receive(:show_horse_table).and_return(nil)
+      @race_id = Race.find_by(name: 'Test1').id
+    end
+
+    it '#perform raises RuntimeError' do
+      # 例外メッセージによるfetch_race_infoの動作保証も兼ねる
+      exception_expected = 'Cannot get horse table: 札幌 - 11R'
+      expect do
+        ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       end.to raise_error(exception_expected)
     end
   end

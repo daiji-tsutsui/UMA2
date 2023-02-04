@@ -33,7 +33,7 @@ class ScheduleUmaByRaceJob < ApplicationJob
     race = Race.create(race_hash)
 
     # UMAのスケジュール
-    ScheduleUmaWithRegisteringHorsesJob.perform_later(date, course_name, race_num, race.id)
+    ScheduleUmaWithRegisteringHorsesJob.perform_later(race.id)
   end
 
   private

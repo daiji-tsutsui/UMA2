@@ -10,7 +10,9 @@ require 'retryable'
 class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
   queue_as :default
 
-  def perform(date, course_name, race_num, race_id)
+  def perform(race_id)
+    date, course_name, race_num = fetch_race_info(race_id)
+
     horses = []
     Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
       top_page = Netkeiba::TopPage.new
@@ -33,6 +35,11 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
   end
 
   private
+
+  def fetch_race_info(id)
+    race = Race.find(id)
+    [race.race_date.value, race.course.name, race.number]
+  end
 
   def register_and_fetch_ids(horses, race_id)
     race_horse_ids = []
