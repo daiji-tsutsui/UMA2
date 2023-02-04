@@ -3,22 +3,36 @@
   <%= form_with url: races_path, method: :get do |f| %>
     <div class="form-group">
       <%= f.label :name, 'レース名' %>
-      <%= f.text_field :name, class: "form-control" %>
+      <%= f.text_field :name, value: params[:name], class: "form-control" %>
     </div>
     <div class="form-group">
       <%= f.label :course, '競馬場' %>
-      <%= f.select :course, Course.all.pluck(:name, :id).to_h, {include_blank: ''} %>
+      <%= f.select :course, Course.all.pluck(:name, :id).to_h, {include_blank: '', selected: params[:course]} %>
     </div>
       <div class="form-group">
       <%= f.label :number, '番号' %>
-      <%= f.select :number, (1..12).to_a, {include_blank: ''} %>
+      <%= f.select :number, (1..12).to_a, {include_blank: '', selected: params[:number]} %>
     </div>
     <div class="form-group">
       <%= f.label :race_class, '格付' %>
-      <%= f.collection_check_boxes :race_class, RaceClass.all, :id, :name, include_hidden: false do |b| %>
+      <%= f.collection_check_boxes :race_class, RaceClass.all, :id, :name, checked: params[:race_class], include_hidden: false do |b| %>
         <%= b.label { b.check_box + b.text } %>
       <% end %>
     </div>
-    <%= f.submit '検索', class: "btn btn-light btn-block blank" %>
+    <div class="form-group">
+      <%= f.submit '検索', class: "btn btn-dark btn-block blank" %>
+      <%= button_tag type: 'button', onclick: 'clearForms();', class: "btn btn-dark btn-block blank" do %>
+        <%= 'クリア' %>
+      <% end %>
+    </div>
   <% end %>
 </div>
+
+<%= javascript_include_tag 'clear_form' %>
+<script>
+  function clearForms() {
+    clearTextInputs(['name']);
+    clearSelectBox(['course', 'number']);
+    clearCheckBox(['race_class[]'])
+  }
+</script>
