@@ -1,0 +1,27 @@
+// app/views/horse用のCSS
+
+div.horse_list{
+    display: flex;
+    div{
+        padding: 2px 5px;
+    }
+    .search_form{
+        padding-right: 10%;
+    }
+}
+
+div.horse_info{
+    display: flex;
+    div{
+        padding: 3px 5px;
+    }
+    .raceclass-G1{
+        background-color: #fbea8e;
+    }
+    .raceclass-G2{
+        background-color: #dfdddd;
+    }
+    .raceclass-G3{
+        background-color: #dbdbfd;
+    }
+}

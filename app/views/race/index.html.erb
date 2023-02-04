@@ -1,24 +1,38 @@
-<table>
-  <thead>
-    <tr>
-      <td>レース名</td>
-      <td>出走日</td>
-      <td>競馬場</td>
-      <td>レース番号</td>
-      <td>格付</td>
-    </tr>
-  </thead>
-  <tbody>
-    <% @races.each do |race| %>
-      <tr>
-        <td><%= race[:name] %></td>
-        <td><%= race[:date] %></td>
-        <td><%= race[:course] %></td>
-        <td><%= race[:number] %>R</td>
-        <td><%= race[:class] %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<%= debug(@races) if Rails.env.development? %>
+<div class="container race_list">
+  <div class="col-md-4">
+    <%= render 'search_form' %>
+  </div>
+
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-md-5"><strong>レース名</strong></div>
+      <div class="col-md-4"><strong>出走日時</strong></div>
+      <div class="col-md-1"><strong>競馬場</strong></div>
+      <div class="col-md-1"><strong>番号</strong></div>
+      <div class="col-md-1"><strong>種別</strong></div>
+    </div>
+
+    <% @races.each do |race| %>
+      <div class="row raceclass-<%= race.race_class.name %>">
+        <div class="col-md-5">
+          <%= link_to race.name, race, class: "break" %>
+        </div>
+        <div class="col-md-4">
+          <%= race.race_date.value %>
+          <%= race.starting_time %>
+        </div>
+        <div class="col-md-1"><%= race.course.name %></div>
+        <div class="col-md-1"><%= race.number %>R    </div>
+        <div class="col-md-1">
+          <%= race.distance %>
+          <%= race.course_type %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render 'shared/paginate', objects: @races %>
+
+<%#= debug(@races[0..4].map { |race| race.attributes }) if Rails.env.development? %>

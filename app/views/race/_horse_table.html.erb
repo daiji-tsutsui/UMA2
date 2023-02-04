@@ -1,0 +1,23 @@
+<div class="col-md-12">
+  <div class="row">
+    <div class="col-md-1"><strong>馬番</strong></div>
+    <div class="col-md-5"><strong>馬名</strong></div>
+    <div class="col-md-2"><strong>性齢</strong></div>
+    <div class="col-md-2"><strong>騎手</strong></div>
+    <div class="col-md-2"><strong>馬体重</strong></div>
+  </div>
+
+  <% race_horses.each do |race_horse| %>
+    <div class="row">
+      <div class="col-md-1 raceframe-<%= race_horse.frame %>">
+        <%= race_horse.number %>
+      </div>
+      <div class="col-md-5">
+        <%= link_to race_horse.horse.name, race_horse.horse %>
+      </div>
+      <div class="col-md-2"><%= race_horse.sexage %></div>
+      <div class="col-md-2"><%= race_horse.jockey %></div>
+      <div class="col-md-2"><%= race_horse.weight %></div>
+    </div>
+  <% end %>
+</div>

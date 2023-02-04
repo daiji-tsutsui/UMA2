@@ -33,4 +33,56 @@ if %w[development test].include? Rails.env
       weather:       'Rainy',
     },
   ])
+  Horse.create([
+    { name: 'ハリボテエレジー' },
+    { name: 'アシタハレルカナ' },
+    { name: 'タニノギムレット' },
+    { name: 'ダイダバッター' },
+  ])
+  RaceHorse.create([
+    {
+      race_id:  1,
+      horse_id: 1,
+      frame:    1,
+      number:   1,
+      sexage:   '牡4',
+      jockey:   'デムーロ',
+    },
+    {
+      race_id:  1,
+      horse_id: 2,
+      frame:    2,
+      number:   2,
+      sexage:   'セ8',
+      jockey:   '横山武',
+    },
+    {
+      race_id:  1,
+      horse_id: 3,
+      frame:    3,
+      number:   3,
+      sexage:   'セ7',
+      jockey:   '戸崎圭',
+    },
+    {
+      race_id:  2,
+      horse_id: 1,
+      frame:    1,
+      number:   1,
+      sexage:   '牡5',
+      jockey:   'デムーロ',
+    },
+    {
+      race_id:  2,
+      horse_id: 2,
+      frame:    2,
+      number:   2,
+      sexage:   '牡7',
+      jockey:   '武豊',
+    },
+  ])
+  Horse.find(1).update(last_race_horse_id: 4)
+  Horse.find(2).update(last_race_horse_id: 2)
+  Horse.find(3).update(last_race_horse_id: 3)
+  Horse.find(4).update(last_race_horse_id: 5)
 end

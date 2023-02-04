@@ -47,3 +47,5 @@ Metrics/MethodLength:
   Max: 15
   Exclude:
     - spec/jobs/*_spec.rb
+Metrics/AbcSize:
+  Max: 18

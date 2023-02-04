@@ -33,6 +33,7 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
       end.to change { Horse.count }.by(3)
       horse = Horse.find_by(name: 'ソールオリエンス')
       expect(horse).not_to be nil
+      expect(horse.last_race_horse_id).not_to be nil
     end
 
     it '#perform inserts 3 RaceHorse records' do
@@ -46,16 +47,16 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
       expect(race_horse.jockey).to eq 'ルメール'
     end
 
+    it '#perform calls FetchOddsAndDoUmaJob once' do
+      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
+      expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).once
+    end
+
     it '#perform AGAIN does NOT change Horse records' do
       ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
       expect do
         ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
       end.not_to(change { Horse.count })
-    end
-
-    it '#perform calls FetchOddsAndDoUmaJob once' do
-      ScheduleUmaWithRegisteringHorsesJob.perform_now(date, course, race_num, @race_id)
-      expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).once
     end
 
     it '#perform AGAIN does NOT call FetchOddsAndDoUmaJob' do
