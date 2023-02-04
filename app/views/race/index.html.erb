@@ -1,6 +1,9 @@
 
 <div class="container race_list">
-  <div class="col-md-2"></div>
+  <div class="col-md-4">
+    <%= render 'search_form' %>
+  </div>
+
   <div class="col-md-8">
     <div class="row">
       <div class="col-md-5"><strong>レース名</strong></div>
@@ -28,7 +31,6 @@
       </div>
     <% end %>
   </div>
-  <div class="col-md-2"></div>
 </div>
 
 <%= render 'shared/paginate', objects: @races %>

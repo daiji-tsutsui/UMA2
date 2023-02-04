@@ -1,0 +1,24 @@
+
+<div class="container search_form">
+  <%= form_with url: races_path, method: :get do |f| %>
+    <div class="form-group">
+      <%= f.label :name, 'レース名' %>
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <%= f.label :course, '競馬場' %>
+      <%= f.select :course, Course.all.pluck(:name, :id).to_h, {include_blank: ''} %>
+    </div>
+      <div class="form-group">
+      <%= f.label :number, '番号' %>
+      <%= f.select :number, (1..12).to_a, {include_blank: ''} %>
+    </div>
+    <div class="form-group">
+      <%= f.label :race_class, '格付' %>
+      <%= f.collection_check_boxes :race_class, RaceClass.all, :id, :name, include_hidden: false do |b| %>
+        <%= b.label { b.check_box + b.text } %>
+      <% end %>
+    </div>
+    <%= f.submit '検索', class: "btn btn-light btn-block blank" %>
+  <% end %>
+</div>
