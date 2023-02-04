@@ -65,13 +65,14 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     race_horse = nil
     begin
       race_horse = RaceHorse.create(race_horse_hash)
-
-      # 最新出馬情報を更新
-      Horse.find(horse_id).update(last_race_horse_id: race_horse.id)
     rescue ActiveRecord::RecordNotUnique
       Rails.logger.debug("RaceHorse has already been registered: #{race_horse_hash}")
       return nil
     end
+
+    # 最新出馬情報を更新
+    Horse.find(horse_id).update(last_race_horse_id: race_horse.id)
+
     race_horse.id
   end
 end

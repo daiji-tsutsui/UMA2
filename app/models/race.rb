@@ -12,10 +12,10 @@ class Race < ApplicationRecord
   def self.search(params)
     # TODO: dateに対応したい．2023-01とかで検索できるように
     result = Race.all
-    result = result.where('name LIKE ?', "%#{params[:name]}%") unless params[:name].blank?
-    result = result.where(course_id: params[:course])          unless params[:course].blank?
-    result = result.where(number: params[:number])             unless params[:number].blank?
-    result = result.where(race_class_id: params[:race_class])  unless params[:race_class].blank?
+    result.where!('name LIKE ?', "%#{params[:name]}%") unless params[:name].blank?
+    result.where!(course_id: params[:course])          unless params[:course].blank?
+    result.where!(number: params[:number])             unless params[:number].blank?
+    result.where!(race_class_id: params[:race_class])  unless params[:race_class].blank?
     result
   end
 end
