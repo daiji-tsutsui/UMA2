@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_03_171758) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_05_100451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -72,6 +72,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_171758) do
     t.index ["course_id"], name: "index_races_on_course_id"
     t.index ["race_class_id"], name: "index_races_on_race_class_id"
     t.index ["race_date_id"], name: "index_races_on_race_date_id"
+  end
+
+  create_table "schedule_rules", force: :cascade do |t|
+    t.integer "disable", default: 0, null: false
+    t.text "data_json", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "race_horses", "horses"
