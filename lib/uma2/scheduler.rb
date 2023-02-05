@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# require 'site_prism'
-# require 'capybara/dsl'
 require 'time'
 require 'json'
 
@@ -16,6 +14,13 @@ module Uma2
       plan!
     end
 
+    # 時刻表のそれぞれの時刻に対して処理実行
+    def execute!
+      yield(@table.shift) while next?
+    end
+
+    private
+
     # 'schedule_rules'のレコードをもとに時刻表を作る
     def plan!
       rule_data = []
@@ -29,18 +34,6 @@ module Uma2
       plan_recursively!(rule_data)
     end
 
-    # 時刻表のそれぞれの時刻に対して処理実行
-    def execute!
-      yield(@table.shift) while next?
-    end
-
-    def next?
-      # @end_timeは取り出せない
-      @table.size > 1
-    end
-
-    private
-
     def plan_recursively!(rule_data)
       # terminate
       return nil if rule_data.empty?
@@ -48,18 +41,23 @@ module Uma2
       datum = rule_data.shift
       plan_recursively!(rule_data)
 
-      plan_single_duration!(datum[:duration], datum[:interval])
+      plan_single_duration!(datum['duration'], datum['interval'])
     end
 
     def plan_single_duration!(duration, interval)
       next_time = @table.first.clone
-      while duration > interval
+      while duration >= interval
         next_time -= interval
         break if next_time < Time.now
 
         @table.unshift(next_time.clone)
         duration -= interval
       end
+    end
+
+    def next?
+      # @end_timeは取り出せない
+      @table.size > 1
     end
   end
 end

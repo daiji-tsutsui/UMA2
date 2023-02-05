@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'netkeiba'
+require 'time'
 
 # SCHEDULE_UMA_BY_RACE_JOB_COURSE_TOKYO = 5
 # SCHEDULE_UMA_BY_RACE_JOB_RACE_CLASS_G1 = 1
@@ -14,13 +15,19 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
     allow(@top_page).to receive(:load).and_return(nil)
     allow(@top_page).to receive(:go_race_page).and_return(@race_page)
     allow(@race_page).to receive(:show_horse_table).and_return(@race_page)
+    allow(FetchOddsAndDoUmaJob).to receive(:set).and_return(FetchOddsAndDoUmaJob)
     allow(FetchOddsAndDoUmaJob).to receive(:perform_later).and_return(true)
   end
 
   describe 'when horses_info is obtained' do
     before do
       allow(@race_page).to receive(:horses_info).and_return(test_data)
-      @race_id = Race.find_by(name: 'Test1').id
+      race = Race.find_by(name: 'Test1')
+      @race_id = race.id
+
+      # Schedulerの為に未来のレースにしておく
+      race_date = RaceDate.create(value: Date.tomorrow)
+      race.update(race_date_id: race_date.id)
     end
 
     it '#perform inserts 3 Horse records' do
@@ -43,9 +50,9 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
       expect(race_horse.jockey).to eq 'ルメール'
     end
 
-    it '#perform calls FetchOddsAndDoUmaJob once' do
+    it '#perform calls FetchOddsAndDoUmaJob for each time scheduled' do
       ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
-      expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).once
+      expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).exactly(17).times
     end
 
     it '#perform AGAIN does NOT change Horse records' do
@@ -58,7 +65,7 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
     it '#perform AGAIN does NOT call FetchOddsAndDoUmaJob' do
       ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id) # Do again
-      expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).once
+      expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).exactly(17).times
     end
   end
 

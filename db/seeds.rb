@@ -23,6 +23,9 @@ if %w[development test].include? Rails.env
       number:        11,
       race_class_id: RACE_CLASS_ID_G1,
       weather:       'Sunny',
+      distance:      2000,
+      course_type:   '芝',
+      starting_time: '15:45',
     },
     {
       name:          'Test2',
@@ -31,6 +34,9 @@ if %w[development test].include? Rails.env
       number:        3,
       race_class_id: RACE_CLASS_ID_G2,
       weather:       'Rainy',
+      distance:      1000,
+      course_type:   'ダ',
+      starting_time: '11:10',
     },
   ])
   Horse.create([

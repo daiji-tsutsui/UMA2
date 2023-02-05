@@ -33,8 +33,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     return if race_horse_ids.empty?
 
     # UMAのスケジュール
-    FetchOddsAndDoUmaJob.perform_later(race_horse_ids)
-    # schedule_jobs(race_id, race_horse_ids)
+    schedule_jobs(race_id, race_horse_ids)
   end
 
   private
@@ -46,7 +45,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
 
   def fetch_race_time(id)
     race = Race.find(id)
-    Time.parse("#{race.race_date.value} #{race.start_time}")
+    Time.parse("#{race.race_date.value} #{race.starting_time}")
   end
 
   def register_and_fetch_ids(horses, race_id)
