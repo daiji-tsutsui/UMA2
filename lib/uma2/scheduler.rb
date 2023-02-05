@@ -13,6 +13,7 @@ module Uma2
     def initialize(end_time:)
       @end_time = end_time.is_a?(Time) ? end_time : Time.parse(end_time)
       @table = [@end_time]
+      plan!
     end
 
     # 'schedule_rules'のレコードをもとに時刻表を作る

@@ -30,7 +30,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     raise "Cannot fetch horses at #{course_name} #{race_num}R" if horses.blank?
 
     race_horse_ids = register_and_fetch_ids(horses, race_id)
-    return unless race_horse_ids.empty?
+    return if race_horse_ids.empty?
 
     # UMAのスケジュール
     FetchOddsAndDoUmaJob.perform_later(race_horse_ids)
@@ -87,13 +87,11 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
 
     # 最新出馬情報を更新
     Horse.find(horse_id).update(last_race_horse_id: race_horse.id)
-
     race_horse.id
   end
 
   def schedule_jobs(race_id, race_horse_ids)
     scheduler = Uma2::Scheduler.new(end_time: fetch_race_time(race_id))
-    scheduler.plan!
     scheduler.execute! do |t|
       FetchOddsAndDoUmaJob.set(wait_until: t).perform_later(race_horse_ids)
     end
