@@ -4,6 +4,7 @@ require 'capybara'
 require 'selenium-webdriver'
 require 'netkeiba'
 require 'retryable'
+require 'uma2/scheduler'
 
 # レースごとの出馬情報を登録するジョブ
 # UMAのスケジュールもする
@@ -29,9 +30,11 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     raise "Cannot fetch horses at #{course_name} #{race_num}R" if horses.blank?
 
     race_horse_ids = register_and_fetch_ids(horses, race_id)
+    return unless race_horse_ids.empty?
 
     # UMAのスケジュール
-    FetchOddsAndDoUmaJob.perform_later(date, race_horse_ids) unless race_horse_ids.empty?
+    FetchOddsAndDoUmaJob.perform_later(race_horse_ids)
+    # schedule_jobs(race_id, race_horse_ids)
   end
 
   private
@@ -39,6 +42,11 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
   def fetch_race_info(id)
     race = Race.find(id)
     [race.race_date.value, race.course.name, race.number]
+  end
+
+  def fetch_race_time(id)
+    race = Race.find(id)
+    Time.parse("#{race.race_date.value} #{race.start_time}")
   end
 
   def register_and_fetch_ids(horses, race_id)
@@ -81,5 +89,13 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     Horse.find(horse_id).update(last_race_horse_id: race_horse.id)
 
     race_horse.id
+  end
+
+  def schedule_jobs(race_id, race_horse_ids)
+    scheduler = Uma2::Scheduler.new(end_time: fetch_race_time(race_id))
+    scheduler.plan!
+    scheduler.execute! do |t|
+      FetchOddsAndDoUmaJob.set(wait_until: t).perform_later(race_horse_ids)
+    end
   end
 end
