@@ -2,14 +2,24 @@
 
 div.schedule_list{
     display: flex;
-    .schedule_link_list{
-        padding-right: 10%;
-        a.schedule_link_list_item{
-            text-decoration: none;
-            margin: 2px 10px;
-            &:hover{
-                background-color: bisque;
-            }
+}
+
+div.schedule_editor{
+    display: flex;
+}
+
+div.schedule_link_list{
+    padding-right: 10%;
+    margin-right: 10%;
+    a.schedule_link_list_item{
+        text-decoration: none;
+        border: #BB9 solid thin;
+        margin: 2px 10px;
+        &:hover{
+            background-color: bisque;
         }
+    }
+    a.highlight{
+        background-color: cornsilk;
     }
 }

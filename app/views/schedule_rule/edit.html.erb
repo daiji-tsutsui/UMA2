@@ -1,6 +1,6 @@
-<div class="container schedule_list">
+<div class="container schedule_editor">
   <div class="col-md-4">
-    <%= render 'link_list', rules: @rules %>
+    <%= render 'link_list', rules: @rules, highlightened: params[:id] %>
   </div>
 
   <div class="col-md-8">

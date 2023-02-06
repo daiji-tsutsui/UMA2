@@ -3,11 +3,12 @@
 # Schedule rule Setting Controller
 class ScheduleRuleController < ApplicationController
   def index
-    @using_rule = ScheduleRule.find_by(disable: 0)
+    @target_rule = ScheduleRule.find_by(disable: 0)
     @rules = ScheduleRule.all
   end
 
   def edit
+    @target_rule = ScheduleRule.find(params[:id])
     @rules = ScheduleRule.all
   end
 
