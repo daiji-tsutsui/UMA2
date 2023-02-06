@@ -1,0 +1,12 @@
+
+<div class="container schedule_list">
+  <div class="col-md-4">
+    <%= render 'link_list', rules: @rules %>
+  </div>
+
+  <div class="col-md-8">
+    <div><%= @using_rule.data_json %></div>
+  </div>
+</div>
+
+<%#= debug(@rules) if Rails.env.development? %>

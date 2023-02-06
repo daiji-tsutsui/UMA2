@@ -1,0 +1,12 @@
+
+<div class="schedule_link_list">
+  <% rules.each do |rule| %>
+    <div class="row">
+      <%= link_to rule, class: "schedule_link_list_item" do %>
+        <div>項数: <%= rule.summary[:size] %></div>
+        <div>実行総数: <%= rule.summary[:num_exe] %></div>
+        <div>総期間: <%= rule.summary[:duration] %></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,15 @@
+// app/views/schedule_rule用のCSS
+
+div.schedule_list{
+    display: flex;
+    .schedule_link_list{
+        padding-right: 10%;
+        a.schedule_link_list_item{
+            text-decoration: none;
+            margin: 2px 10px;
+            &:hover{
+                background-color: bisque;
+            }
+        }
+    }
+}
