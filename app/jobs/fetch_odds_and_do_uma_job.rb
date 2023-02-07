@@ -8,7 +8,7 @@ require 'netkeiba'
 class FetchOddsAndDoUmaJob < ApplicationJob
   queue_as :default
 
-  def perform(race_horse_id)
+  def perform(race_horse_ids)
     # Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
     #   top_page = Netkeiba::TopPage.new
     #   top_page.load
@@ -20,8 +20,6 @@ class FetchOddsAndDoUmaJob < ApplicationJob
     #   Rails.logger.debug("Race numbers at #{course_name}: #{existing_race_nums.join(', ')}")
     # end
 
-    # existing_race_nums.each do |race_num|
-    #   ScheduleUmaByRaceJob.perform_later(date, course_name, race_num)
-    # end
+    # DoUmaJob.perform_later(race_id, odds_history_id, is_first: true)
   end
 end

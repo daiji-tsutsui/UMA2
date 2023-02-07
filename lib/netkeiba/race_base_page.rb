@@ -13,6 +13,9 @@ module Netkeiba
     element  :race_data,   'div.RaceData01'
     elements :course_info, 'div.RaceData01 > span'
 
+    element  :horse_table_link, 'ul.RaceMainMenu > li#navi_shutuba'
+    element  :odds_page_link,   'ul.RaceMainMenu > li#navi_odds_view'
+
     RACE_PAGE_CLASS_CSS_G1 = 'Icon_GradeType1'
     RACE_PAGE_CLASS_CSS_G2 = 'Icon_GradeType2'
     RACE_PAGE_CLASS_CSS_G3 = 'Icon_GradeType3'
@@ -34,7 +37,13 @@ module Netkeiba
     end
 
     def show_horse_table
-      self
+      horse_table_link.hover.click
+      Netkeiba::RacePage.new
+    end
+
+    def go_odds_page
+      odds_page_link.hover.click
+      Netkeiba::OddsPage.new
     end
 
     private
