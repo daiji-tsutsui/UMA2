@@ -5,13 +5,12 @@ require 'json'
 # Model class for 'schedule_rules' table
 class ScheduleRule < ApplicationRecord
   def data
-    load_data!
-    @data
+    @data ||= JSON.parse(data_json)
   end
 
   def summary
     load_data!
-    {
+    @summary ||= {
       size:     @data.size,
       num_exe:  calculate_number_of_execution,
       duration: sum_of_duration,
@@ -21,7 +20,7 @@ class ScheduleRule < ApplicationRecord
   private
 
   def load_data!
-    @data = JSON.parse(data_json) if @data.nil?
+    data
   end
 
   def calculate_number_of_execution
