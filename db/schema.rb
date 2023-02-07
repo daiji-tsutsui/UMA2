@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_05_123025) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_07_143034) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_05_123025) do
     t.datetime "updated_at", null: false
     t.bigint "last_race_horse_id"
     t.index ["name"], name: "index_horses_on_name", unique: true
+  end
+
+  create_table "odds_histories", force: :cascade do |t|
+    t.bigint "race_id"
+    t.text "data_json"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["race_id"], name: "index_odds_histories_on_race_id"
   end
 
   create_table "race_classes", force: :cascade do |t|
@@ -81,6 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_05_123025) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "odds_histories", "races"
   add_foreign_key "race_horses", "horses"
   add_foreign_key "race_horses", "races"
   add_foreign_key "races", "courses"
