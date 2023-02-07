@@ -93,4 +93,5 @@ group :test do
   gem 'database_cleaner-active_record'
   gem 'mocha'
   gem 'pry-rails'
+  gem 'rails-controller-testing'
 end

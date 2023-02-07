@@ -14,11 +14,11 @@ Rails.application.routes.draw do
   get '/horses',       to: 'horse#index', as: :horses
   get '/horses/(:id)', to: 'horse#show',  as: :horse
 
-  get  '/schedule',       to: 'schedule_rule#index', as: :schedule_rules
-  get  '/schedule/new',   to: 'schedule_rule#new',   as: :new_schedule
-  post '/schedule/new',   to: 'schedule_rule#create'
-  get  '/schedule/(:id)', to: 'schedule_rule#edit', as: :schedule_rule
-  post '/schedule/(:id)', to: 'schedule_rule#update'
+  get  '/schedules',       to: 'schedule_rule#index', as: :schedule_rules
+  get  '/schedules/new',   to: 'schedule_rule#new',   as: :new_schedule
+  post '/schedules/new',   to: 'schedule_rule#create'
+  get  '/schedules/(:id)', to: 'schedule_rule#edit', as: :schedule_rule
+  post '/schedules/(:id)', to: 'schedule_rule#update'
 
   mount Sidekiq::Web, at: '/sidekiq'
 end
