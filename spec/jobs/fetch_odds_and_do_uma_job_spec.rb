@@ -26,7 +26,7 @@ RSpec.describe 'FetchOddsAndDoUmaJob' do
         FetchOddsAndDoUmaJob.perform_now(@race_id)
       end.to change { OddsHistory.count }.by(1)
       odds = OddsHistory.find_by(race_id: @race_id)
-      expect(odds).not_to be nil
+      expect(odds).not_to be_nil
       expect(odds.data).to eq [2.0, 2.7, 4.0, 8.0]
     end
 
@@ -61,7 +61,7 @@ RSpec.describe 'FetchOddsAndDoUmaJob' do
         FetchOddsAndDoUmaJob.perform_now(@race_id)
       end.to change { OddsHistory.count }.by(1)
       odds = OddsHistory.find_by(race_id: @race_id)
-      expect(odds).not_to be nil
+      expect(odds).not_to be_nil
       expect(odds.data).to eq [1.6, 0.0, 3.2, 3.2, 0.0, 0.0]
     end
   end

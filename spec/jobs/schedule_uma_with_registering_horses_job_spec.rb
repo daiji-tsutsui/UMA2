@@ -32,8 +32,8 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
         ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       end.to change { Horse.count }.by(3)
       horse = Horse.find_by(name: 'ソールオリエンス')
-      expect(horse).not_to be nil
-      expect(horse.last_race_horse_id).not_to be nil
+      expect(horse).not_to be_nil
+      expect(horse.last_race_horse_id).not_to be_nil
     end
 
     it '#perform inserts 3 RaceHorse records' do
