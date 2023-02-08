@@ -11,9 +11,11 @@ module Netkeiba
     element :single_odds_table_link, 'ul.RaceSubMenu > li#odds_navi_b1'
     element :single_odds_table, 'div#odds_tan_block'
 
+    ODDS_PAGE_SINGLE_ODDS_CSS = 'span[id^="odds-1_"]'
+
     def single_odds
       select_single_odds_table!
-      single_odds_table.all('span[id^="odds-1_"]').map(&:text)
+      single_odds_table.all(ODDS_PAGE_SINGLE_ODDS_CSS).map(&:text)
     end
 
     private
