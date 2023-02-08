@@ -1,0 +1,69 @@
+// app/views/race用のCSS
+
+div.race_list{
+    display: flex;
+    div{
+        padding: 3px 5px;
+    }
+    .raceclass-G1{
+        background-color: #fbea8e;
+    }
+    .raceclass-G2{
+        background-color: #dfdddd;
+    }
+    .raceclass-G3{
+        background-color: #dbdbfd;
+    }
+    .search_form{
+        padding-right: 10%;
+    }
+}
+
+div.race_info{
+    display: flex;
+    .raceclass-G1{
+        text-decoration: underline double #fbea8e;
+    }
+    .raceclass-G2{
+        text-decoration: underline double #dfdddd;
+    }
+    .raceclass-G3{
+        text-decoration: underline double #dbdbfd;
+    }
+}
+
+div.race_horses{
+    display: flex;
+    .raceframe-1{
+        background-color: white;
+        color: black;
+    }
+    .raceframe-2{
+        background-color: #333;
+        color: white;
+    }
+    .raceframe-3{
+        background-color: #e95556;
+        color: white;
+    }
+    .raceframe-4{
+        background-color: #385da2;
+        color: white;
+    }
+    .raceframe-5{
+        background-color: #e7c52c;
+        color: white;
+    }
+    .raceframe-6{
+        background-color: #2a7f30;
+        color: white;
+    }
+    .raceframe-7{
+        background-color: orange;
+        color: white;
+    }
+    .raceframe-8{
+        background-color: pink;
+        color: white;
+    }
+}

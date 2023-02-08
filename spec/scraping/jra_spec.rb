@@ -40,10 +40,10 @@ RSpec.describe 'Jra' do
         date_str = date.strftime('%-m月%-d日')
         course_table = @odds_page.select_date(date)
         if @odds_page.this_week.has_content?(date_str)
-          expect(course_table).not_to be nil
+          expect(course_table).not_to be_nil
           selectable.push date_str
         else
-          expect(course_table).to be nil
+          expect(course_table).to be_nil
         end
       end
       expect(selectable.size).to be > 0

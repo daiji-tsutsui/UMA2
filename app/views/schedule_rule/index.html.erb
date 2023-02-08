@@ -1,0 +1,29 @@
+
+<div class="container schedule_list">
+  <div class="col-md-4">
+    <%= render 'link_list', rules: @rules, highlightened: @target_rule.id %>
+  </div>
+
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-5"><strong>適用期間</strong></div>
+      <div class="col-md-5"><strong>実行間隔</strong></div>
+    </div>
+
+    <% @target_rule.data.each.with_index(1) do |datum, num| %>
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-1"><%= num %></div>
+        <div class="col-md-5"><%= datum['duration'] %></div>
+        <div class="col-md-5"><%= datum['interval'] %></div>
+      </div>
+    <% end %>
+
+    <div class="text-center">
+      <%= link_to '編集', @target_rule, class: "btn btn-dark" %>
+    </div>
+  </div>
+</div>
+
+<%#= debug(@rules) if Rails.env.development? %>

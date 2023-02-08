@@ -1,0 +1,35 @@
+
+<%= form_with url: url do |f| %>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-5"><strong>適用期間</strong></div>
+    <div class="col-md-5"><strong>実行間隔</strong></div>
+  </div>
+
+  <% (0..9).each do |num| %>
+    <div class="row form-group">
+      <div class="col-md-1"></div>
+      <div class="col-md-1"><%= num + 1 %></div>
+      <% if rule_data[num].nil? %>
+        <div class="col-md-5">
+          <%= f.text_field 'duration[]', class: 'form-control' %>
+        </div>
+        <div class="col-md-5">
+          <%= f.text_field 'interval[]', class: 'form-control' %>
+        </div>
+      <% else %>
+        <div class="col-md-5">
+          <%= f.text_field 'duration[]', value: rule_data[num]['duration'], class: 'form-control' %>
+        </div>
+        <div class="col-md-5">
+          <%= f.text_field 'interval[]', value: rule_data[num]['interval'], class: 'form-control' %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="form-group text-center">
+    <%= f.submit '登録', class: 'btn btn-dark btn-block blank' %>
+  </div>
+<% end %>
+
+<%#= debug(rule_data.to_s) if Rails.env.development? %>

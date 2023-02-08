@@ -1,0 +1,17 @@
+
+<div class="schedule_link_list">
+  <% rules.each do |rule| %>
+    <div class="row">
+      <% highlight_css = rule.id == highlightened.to_i ? 'highlight' : '' %>
+      <%= link_to rule, class: "schedule_link_list_item #{highlight_css}" do %>
+        <div>項数: <%= rule.summary[:size] %></div>
+        <div>実行総数: <%= rule.summary[:num_exe] %></div>
+        <div>総期間: <%= rule.summary[:duration] %></div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="text-center">
+    <%= link_to '新規', new_schedule_path, class: 'btn btn-dark' %>
+  </div>
+</div>

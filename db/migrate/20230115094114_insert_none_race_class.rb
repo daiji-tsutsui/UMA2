@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InsertNoneRaceClass < ActiveRecord::Migration[7.0]
   def change
     # 格付けのないレースは None

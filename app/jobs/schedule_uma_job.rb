@@ -10,7 +10,6 @@ class ScheduleUmaJob < ApplicationJob
 
   def perform
     date = Date.today
-    # date = Date.parse('2023-01-05')  # For debug
     Rails.logger.debug("ScheduleUma: #{date.strftime('%Y%m%d')}")
 
     course_names = []
@@ -31,11 +30,11 @@ class ScheduleUmaJob < ApplicationJob
 
   def formal_course_name(text)
     @courses_all ||= Course.all
-    course = @courses_all.find { |course| text.include? course.name }
-    if course.nil?
+    record = @courses_all.find { |course| text.include? course.name }
+    if record.nil?
       Rails.logger.warn("Cannot pick course name from original text: #{text}")
       return nil
     end
-    course.name
+    record.name
   end
 end

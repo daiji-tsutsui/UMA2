@@ -40,7 +40,7 @@ RSpec.describe 'Netkeiba' do
       expect(can_get.size).to be > 0
     end
 
-    it 'cannot get race names and numbers for dates not displayed' do
+    it 'CANNOT get race names and numbers for dates NOT displayed' do
       dates = (-3..3).map { |diff| Date.today + diff }
       dates.each do |date|
         date_str = date.strftime(DATE_PATTERN)
@@ -56,14 +56,7 @@ RSpec.describe 'Netkeiba' do
 
   describe 'race page' do
     before do
-      @race_page = nil
-      dates = (-3..3).map { |diff| Date.today + diff }
-      dates.select! { |date| @top_page.date_list.has_content? date.strftime(DATE_PATTERN) }
-      NETKEIBA_COURSE_NAMES.each do |course_name|
-        # R11のみ公開される場合があるため
-        @race_page = @top_page.go_race_page(dates[0], course_name, 11)
-        break unless @race_page.nil?
-      end
+      @race_page = get_race_page(@top_page)
     end
 
     it 'is displayed' do
@@ -71,6 +64,40 @@ RSpec.describe 'Netkeiba' do
       expect(@race_page).to have_race_name
       expect(@race_page).to have_race_num
       expect(@race_page).to have_race_data
+      expect(@race_page).to have_horse_table_link
+      expect(@race_page).to have_odds_page_link
     end
+
+    it 'can get horses info' do
+      horse_table_page = @race_page.show_horse_table
+      horses_info = horse_table_page.horses_info
+      expect(horses_info).not_to be_nil
+      expect(horses_info[0][:name]).not_to be_nil
+      expect(horses_info[0][:race_horse]).not_to be_nil
+    end
+  end
+
+  describe 'odds page' do
+    before do
+      race_page = get_race_page(@top_page)
+      @odds_page = race_page.go_odds_page
+    end
+
+    it 'is displayed' do
+      expect(@odds_page).to be_displayed
+      # 直前でないと出ない
+      # expect(@odds_page).to have_single_odds_table_link
+      # expect(@odds_page).to have_single_odds_table
+    end
+  end
+end
+
+def get_race_page(top_page)
+  dates = (-3..3).map { |diff| Date.today + diff }
+  dates.select! { |date| top_page.date_list.has_content? date.strftime(DATE_PATTERN) }
+  NETKEIBA_COURSE_NAMES.each do |course_name|
+    # R11のみ公開される場合があるため
+    race_page = top_page.go_race_page(dates[0], course_name, 11)
+    return race_page unless race_page.nil?
   end
 end

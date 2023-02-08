@@ -1,0 +1,38 @@
+<div class="col-md-12">
+  <h1 class="raceclass-<%= race.race_class.name %>">
+    <%= race.name %>
+  </h1>
+  <table>
+    <thead></thead>
+    <tbody>
+      <tr>
+        <td>出走日</td>
+        <td><%= race.race_date.value %></td>
+      </tr>
+      <tr>
+        <td>出走時刻</td>
+        <td><%= race.starting_time %></td>
+      </tr>
+      <tr>
+        <td>競馬場</td>
+        <td><%= race.course.name %></td>
+      </tr>
+      <tr>
+        <td>レース番号</td>
+        <td><%= race.number %>R</td>
+      </tr>
+      <tr>
+        <td>距離</td>
+        <td><%= race.distance %></td>
+      </tr>
+      <tr>
+        <td>種別</td>
+        <td><%= race.course_type %></td>
+      </tr>
+      <tr>
+        <td>天気</td>
+        <td><%= race.weather %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

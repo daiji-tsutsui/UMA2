@@ -29,5 +29,6 @@ module UMA2
     config.time_zone = 'Tokyo'
 
     config.colorize_logging = false
+    config.log_formatter = Logger::Formatter.new
   end
 end

@@ -1,0 +1,9 @@
+<div class="container schedule_editor">
+  <div class="col-md-4">
+    <%= render 'link_list', rules: @rules, highlightened: params[:id] %>
+  </div>
+
+  <div class="col-md-8">
+    <%= render 'form', url: @target_rule, rule_data: @target_rule.data %>
+  </div>
+</div>
