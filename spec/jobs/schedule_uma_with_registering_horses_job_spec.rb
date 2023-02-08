@@ -4,9 +4,6 @@ require 'rails_helper'
 require 'netkeiba'
 require 'time'
 
-# SCHEDULE_UMA_BY_RACE_JOB_COURSE_TOKYO = 5
-# SCHEDULE_UMA_BY_RACE_JOB_RACE_CLASS_G1 = 1
-
 RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
   before do
     @top_page = instance_double(Netkeiba::TopPage)
