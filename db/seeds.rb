@@ -91,4 +91,8 @@ if %w[development test].include? Rails.env
   Horse.find(2).update(last_race_horse_id: 2)
   Horse.find(3).update(last_race_horse_id: 3)
   Horse.find(4).update(last_race_horse_id: 5)
+  ScheduleRule.create({
+    disable:   1,
+    data_json: '[{"duration":1000,"interval":100}]',
+  })
 end

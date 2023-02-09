@@ -8,6 +8,7 @@ class ScheduleRuleController < ApplicationController
   ERROR_MESSAGE_NO_VALID_SCHEDULE_RULES = 'There are no valid schedule rules...'
   ERROR_MESSAGE_NO_SUCH_SCHEDULE_RULE   = 'There is no such a schedule rule...'
   ERROR_MESSAGE_NO_DATA_GIVEN           = 'Please enter clauses for a schedule rule.'
+  ERROR_MESSAGE_SOMETHING_WENT_WRONG    = 'Sorry. Something went wrong...'
 
   def index
     @rules = ScheduleRule.all.order(id: :ASC)
@@ -34,6 +35,9 @@ class ScheduleRuleController < ApplicationController
       @target_rule.update!(disable: 0, data_json: @form_data.to_json)
     end
     redirect_to schedule_rules_path
+  rescue ActiveRecord::ActiveRecordError
+    flash[:danger] = ERROR_MESSAGE_SOMETHING_WENT_WRONG
+    redirect_back(fallback_location: schedule_rules_path)
   end
 
   def new
@@ -70,7 +74,7 @@ class ScheduleRuleController < ApplicationController
     intervals = convert_to_integer(form_params[:interval])
     return [] if durations.size != intervals.size || durations.empty?
 
-    durations.map do |duration, i|
+    durations.map.with_index do |duration, i|
       {
         duration: duration,
         interval: intervals[i],
