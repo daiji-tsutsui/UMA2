@@ -60,9 +60,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
   def register_or_fetch_horse(horse_name)
     horse = nil
     Retryable.retryable(on: [ActiveRecord::RecordNotUnique], tries: 5) do
-      Horse.transaction do
-        horse = Horse.find_or_create_by(name: horse_name)
-      end
+      horse = Horse.find_or_create_by!(name: horse_name)
     end
     horse.id
   end
@@ -72,7 +70,7 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
       race_id:  race_id,
       horse_id: horse_id,
     })
-    race_horse = RaceHorse.create(race_horse_hash)
+    race_horse = RaceHorse.create!(race_horse_hash)
 
     # 最新出馬情報を更新
     Horse.find(horse_id).update(last_race_horse_id: race_horse.id)
