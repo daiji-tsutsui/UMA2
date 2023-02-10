@@ -79,11 +79,11 @@ RSpec.describe 'ScheduleRules', type: :request do
     describe 'with improper parameters' do
       let(:schedule_rule_id) { 2 }
       let(:params) { { duration: ['', '2400'], interval: %w[300 200] } }
-      let(:headers) { { 'HTTP_REFERER' => '/there' } }
+      let(:headers) { { 'HTTP_REFERER' => '/from_there' } }
 
       it 'should redirect back' do
         is_expected.to eq 302
-        is_expected.to redirect_to '/there'
+        is_expected.to redirect_to '/from_there'
       end
 
       it 'does NOT change a target record' do
@@ -98,13 +98,13 @@ RSpec.describe 'ScheduleRules', type: :request do
     describe 'with some problems on database' do
       let(:schedule_rule_id) { 2 }
       let(:params) { { duration: %w[3600 2400], interval: %w[300 200] } }
-      let(:headers) { { 'HTTP_REFERER' => '/there' } }
+      let(:headers) { { 'HTTP_REFERER' => '/from_there' } }
 
       before { allow_any_instance_of(ScheduleRule).to receive(:update!).and_raise(ActiveRecord::ActiveRecordError) }
 
       it 'should redirect back' do
         is_expected.to eq 302
-        is_expected.to redirect_to '/there'
+        is_expected.to redirect_to '/from_there'
       end
 
       it 'does NOT change a target record' do
@@ -128,8 +128,57 @@ RSpec.describe 'ScheduleRules', type: :request do
       is_expected.to render_template('_form')
     end
   end
-end
 
-def from_there
-  request.env['HTTP_REFERER'] = '/there'
+  describe 'POST /schedules/new' do
+    subject { post new_schedule_path, params: params, headers: headers }
+
+    describe 'with proper parameters' do
+      let(:params) { { duration: %w[3000 1200], interval: %w[600 100] } }
+      let(:headers) { {} }
+
+      it 'should redirect to "/schedules"' do
+        is_expected.to eq 302
+        is_expected.to redirect_to schedule_rules_path
+      end
+
+      it 'create a record' do
+        expect { subject }.to change { ScheduleRule.count }.by(1)
+        rule = ScheduleRule.last
+        expect(rule.disable).to eq 0
+        expect(rule.data.size).to eq 2
+        expect(rule.data[0]).to eq({ 'duration' => 3000, 'interval' => 600 })
+        expect(rule.data[1]).to eq({ 'duration' => 1200, 'interval' => 100 })
+      end
+    end
+
+    describe 'with improper parameters' do
+      let(:params) { { duration: %w[1000], interval: %w[200 100] } }
+      let(:headers) { { 'HTTP_REFERER' => '/from_there' } }
+
+      it 'should redirect back ' do
+        is_expected.to eq 302
+        is_expected.to redirect_to '/from_there'
+      end
+
+      it 'does NOT create any record' do
+        expect { subject }.not_to(change { ScheduleRule.count })
+      end
+    end
+
+    describe 'with some problems on database' do
+      let(:params) { { duration: %w[3000 1200], interval: %w[600 100] } }
+      let(:headers) { { 'HTTP_REFERER' => '/from_there' } }
+
+      before { allow(ScheduleRule).to receive(:create!).and_raise(ActiveRecord::ActiveRecordError) }
+
+      it 'should redirect back' do
+        is_expected.to eq 302
+        is_expected.to redirect_to '/from_there'
+      end
+
+      it 'does NOT create any record' do
+        expect { subject }.not_to(change { ScheduleRule.count })
+      end
+    end
+  end
 end

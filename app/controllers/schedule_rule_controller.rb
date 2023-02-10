@@ -16,7 +16,7 @@ class ScheduleRuleController < ApplicationController
     return unless @target_rule.nil?
 
     flash[:danger] = ERROR_MESSAGE_NO_VALID_SCHEDULE_RULES
-    redirect_to root_path
+    @target_rule = ScheduleRule.find(1)
   end
 
   def edit
@@ -45,13 +45,16 @@ class ScheduleRuleController < ApplicationController
   end
 
   def create
-    redirect_to new_schedule_path and return if @form_data.empty?
+    redirect_back(fallback_location: new_schedule_path) and return if @form_data.empty?
 
     ScheduleRule.transaction do
       ScheduleRule.update_all(disable: 1)
       ScheduleRule.create!(disable: 0, data_json: @form_data.to_json)
     end
     redirect_to schedule_rules_path
+  rescue ActiveRecord::ActiveRecordError
+    flash[:danger] = ERROR_MESSAGE_SOMETHING_WENT_WRONG
+    redirect_back(fallback_location: new_schedule_path)
   end
 
   private
