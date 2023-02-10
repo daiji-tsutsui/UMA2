@@ -26,6 +26,13 @@ RSpec.describe 'ScheduleRules', type: :request do
       expect(response.body).to include('1800')
       expect(response.body).to include('300')
     end
+
+    it 'renders a schedule example' do
+      is_expected.to render_template('_example')
+      expect(response.body).to include('Schedule example')
+      expect(response.body).to include('14:20:00')
+      expect(response.body).to include('15:33:00')
+    end
   end
 
   describe 'GET /schedules/:id' do
@@ -50,6 +57,13 @@ RSpec.describe 'ScheduleRules', type: :request do
       # table rows
       expect(response.body).to include('1200')
       expect(response.body).to include('600')
+    end
+
+    it 'renders a schedule example' do
+      is_expected.to render_template('_example')
+      expect(response.body).to include('Schedule example')
+      expect(response.body).to include('14:30:00')
+      expect(response.body).to include('15:31:00')
     end
   end
 

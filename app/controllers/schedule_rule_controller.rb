@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
+require 'uma2'
+require 'time'
+
 # Schedule rule Setting Controller
 class ScheduleRuleController < ApplicationController
   before_action :prepare_target_rule, only: %i[edit update]
   before_action :prepare_form_data,   only: %i[update create]
+  before_action :prepare_scheduler,   only: %i[index edit]
 
   ERROR_MESSAGE_NO_VALID_SCHEDULE_RULES = 'There are no valid schedule rules...'
   ERROR_MESSAGE_NO_SUCH_SCHEDULE_RULE   = 'There is no such a schedule rule...'
@@ -68,6 +72,10 @@ class ScheduleRuleController < ApplicationController
     flash[:danger] = ERROR_MESSAGE_NO_DATA_GIVEN if @form_data.empty?
   end
 
+  def prepare_scheduler
+    @scheduler = Uma2::Scheduler.new(end_time: example_time, rule: @target_rule)
+  end
+
   def form_params
     params.permit(duration: [], interval: [])
   end
@@ -87,5 +95,9 @@ class ScheduleRuleController < ApplicationController
 
   def convert_to_integer(array)
     array.map(&:to_i).select(&:positive?)
+  end
+
+  def example_time
+    Time.parse('15:35', Date.tomorrow)
   end
 end

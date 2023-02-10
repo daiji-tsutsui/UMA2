@@ -1,0 +1,14 @@
+<div class="container schedule_example">
+  <div><strong>Schedule example:</strong></div>
+  <div class="row">
+    <% num = 0 %>
+    <% scheduler.execute! do |t| %>
+      <div class="col-2"></div>
+      <div class="col-2"><%= num += 1 %>: </div>
+      <div class="col-4"><%= t.strftime('%-m月%-d日 %H:%M:%S') %></div>
+      <div class="col-4"></div>
+    <% end %>
+  </div>
+</div>
+
+<%#= debug(scheduler.table) if Rails.env.development? %>
