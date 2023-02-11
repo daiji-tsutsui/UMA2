@@ -19,7 +19,7 @@ class ScheduleRuleController < ApplicationController
     @target_rule = ScheduleRule.find_by(disable: 0)
     return unless @target_rule.nil?
 
-    flash[:danger] = ERROR_MESSAGE_NO_VALID_SCHEDULE_RULES
+    flash[:warning] = ERROR_MESSAGE_NO_VALID_SCHEDULE_RULES
     @target_rule = ScheduleRule.find(1)
   end
 
