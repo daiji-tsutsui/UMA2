@@ -11,9 +11,10 @@ RSpec.describe 'ServiceStatuses', type: :request do
   end
 
   describe 'GET /service_status' do
+    subject { get '/service_status' }
+
     it 'returns OK' do
-      get '/service_status'
-      expect(response).to have_http_status(200)
+      is_expected.to eq 200
       res = JSON.parse(response.body)
       expect(res['app_name']).to     eq 'UMA2'
       expect(res['status']).to       eq 'OK'
@@ -24,8 +25,7 @@ RSpec.describe 'ServiceStatuses', type: :request do
       before { allow(RaceClass).to receive(:first).and_raise('RuntimeError') }
 
       it 'returns db errors' do
-        get '/service_status'
-        expect(response).to have_http_status(200)
+        is_expected.to eq 200
         res = JSON.parse(response.body)
         expect(res['status']).to eq 'NG'
         expect(res['errors']).to eq ['db: RuntimeError']
@@ -36,8 +36,7 @@ RSpec.describe 'ServiceStatuses', type: :request do
       before { allow_any_instance_of(Redis).to receive(:ping).and_raise('RuntimeError') }
 
       it 'returns redis errors' do
-        get '/service_status'
-        expect(response).to have_http_status(200)
+        is_expected.to eq 200
         res = JSON.parse(response.body)
         expect(res['status']).to eq 'NG'
         expect(res['errors']).to eq ['redis: RuntimeError']
@@ -48,8 +47,7 @@ RSpec.describe 'ServiceStatuses', type: :request do
       before { allow_any_instance_of(Sidekiq::Stats).to receive(:processes_size).and_return(0) }
 
       it 'returns sidekiq errors' do
-        get '/service_status'
-        expect(response).to have_http_status(200)
+        is_expected.to eq 200
         res = JSON.parse(response.body)
         expect(res['status']).to eq 'NG'
         expect(res['errors']).to eq ['sidekiq: processes_size 0 is too small']
