@@ -55,9 +55,7 @@ class ScheduleUmaByRaceJob < ApplicationJob
   def race_date_id(date)
     race_date = nil
     Retryable.retryable(on: [ActiveRecord::RecordNotUnique], tries: 5) do
-      ActiveRecord::Base.transaction do
-        race_date = RaceDate.find_or_create_by(value: date)
-      end
+      race_date = RaceDate.find_or_create_by!(value: date)
     end
     race_date.id
   end

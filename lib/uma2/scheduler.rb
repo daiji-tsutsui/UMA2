@@ -8,9 +8,10 @@ module Uma2
   class Scheduler
     attr_reader :table
 
-    def initialize(end_time:)
+    def initialize(end_time:, rule: ScheduleRule.find_by(disable: 0))
       @end_time = end_time.is_a?(Time) ? end_time : Time.parse(end_time)
       @table = [@end_time]
+      @rule = rule || ScheduleRule.find(1)
       plan!
     end
 
@@ -23,15 +24,7 @@ module Uma2
 
     # 'schedule_rules'のレコードをもとに時刻表を作る
     def plan!
-      rule_data = []
-      rule = ScheduleRule.find_by(disable: 0)
-      begin
-        rule_data = JSON.parse(rule.data_json)
-      rescue JSON::ParserError
-        raise "Eval error, broken schedule_rule record: #{rule.data_json}"
-      end
-
-      plan_recursively!(rule_data)
+      plan_recursively!(@rule.data.clone)
     end
 
     def plan_recursively!(rule_data)

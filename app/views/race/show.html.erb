@@ -1,16 +1,16 @@
 
 <div class="container" style="display:flex">
   <div class="col-md-3">
-    <div class="container race_info">
-      <%= render 'info_table', race: @race %>
-    </div>
+    <%= render 'info_table', race: @race %>
   </div>
   <div class="col-md-9">
-    <div class="container race_horses">
-      <%= render 'horse_table', race_horses: @race.race_horses %>
-    </div>
+    <%= render 'horse_table', race_horses: @race.race_horses %>
   </div>
 </div>
+
+<% unless @race.odds_histories.blank? %>
+  <%= render 'odds_history', odds_histories: @race.odds_histories %>
+<% end %>
 
 <%#= debug(@race.attributes) if Rails.env.development? %>
 <%#= debug(@race.race_horses.map { |race_horse| race_horse.attributes }) if Rails.env.development? %>

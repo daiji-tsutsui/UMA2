@@ -4,13 +4,14 @@ require 'rails_helper'
 
 RSpec.describe 'Horses', type: :request do
   describe 'GET /horses' do
-    before { get horses_path }
+    subject { get horses_path }
 
     it 'should response success' do
-      expect(response).to have_http_status(200)
+      is_expected.to eq 200
     end
 
     it 'renders table of horses' do
+      subject
       # table headers
       expect(response.body).to include('馬名')
       expect(response.body).to include('直近のレース')
@@ -24,13 +25,14 @@ RSpec.describe 'Horses', type: :request do
   end
 
   describe 'GET /horses/:id' do
-    before { get horse_path(1) }
+    subject { get horse_path(1) }
 
     it 'should response success' do
-      expect(response).to have_http_status(200)
+      is_expected.to eq 200
     end
 
     it 'renders table of a horse' do
+      subject
       # h1 tag
       expect(response.body).to include('ハリボテエレジー')
       # race table headers
