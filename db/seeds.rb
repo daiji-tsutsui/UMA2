@@ -95,4 +95,16 @@ if %w[development test].include? Rails.env
     disable:   1,
     data_json: '[{"duration":1000,"interval":100}]',
   })
+  OddsHistory.create([
+    {
+      race_id:    1,
+      data_json:  '[8.0,2.7,1.3]',
+      created_at: '2023-02-11 14:15:30',
+    },
+    {
+      race_id:    1,
+      data_json:  '[16.0,5.3,1.1]',
+      created_at: '2023-02-11 14:30:00',
+    },
+  ])
 end

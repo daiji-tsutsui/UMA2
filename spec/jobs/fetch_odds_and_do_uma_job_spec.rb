@@ -18,7 +18,7 @@ RSpec.describe 'FetchOddsAndDoUmaJob' do
   describe 'when odds_info is obtained' do
     before do
       allow(@odds_page).to receive(:single_odds).and_return(test_data1)
-      @race_id = Race.find_by(name: 'Test1').id
+      @race_id = Race.find_by(name: 'Test2').id
     end
 
     it '#perform inserts 1 OddsHistory record' do
