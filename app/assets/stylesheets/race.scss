@@ -67,3 +67,18 @@ div.race_horses{
         color: white;
     }
 }
+
+div.odds_history{
+    display: flex;
+    padding: 20px;
+    th, td{
+        border: solid black 1px;
+        padding: 3px 5px;
+    }
+    td.zero{
+        color: #AAA;
+    }
+    td.dominant{
+        color: red;
+    }
+}
