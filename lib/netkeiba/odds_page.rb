@@ -15,7 +15,8 @@ module Netkeiba
 
     ODDS_PAGE_SINGLE_ODDS_CSS = 'span[id^="odds-1_"]'
 
-    def single_odds
+    def single_odds(race_id)
+      @race_id = race_id
       select_single_odds_table!
       result = update_and_fetch_single_odds
       return result unless result.map(&:to_f).include?(0.0)
@@ -33,9 +34,22 @@ module Netkeiba
     end
 
     def update_and_fetch_single_odds
+      result = update_and_fetch_single_odds_without_retry
+      return result unless same_single_odds?(result)
+
+      # 前回取得したものと同じ値ならば一回だけリトライ
+      update_and_fetch_single_odds_without_retry
+    end
+
+    def update_and_fetch_single_odds_without_retry
       odds_update_button.hover.click
       wait_until_last_odds_update_date_visible
       single_odds_table.all(ODDS_PAGE_SINGLE_ODDS_CSS).map(&:text)
+    end
+
+    def same_single_odds?(data)
+      last_odds = OddsHistory.where(race_id: @race_id).last
+      data == last_odds.data
     end
   end
 end

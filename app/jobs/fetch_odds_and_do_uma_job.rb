@@ -17,7 +17,7 @@ class FetchOddsAndDoUmaJob < ApplicationJob
       top_page = Netkeiba::TopPage.new
       top_page.load
       race_page = top_page.go_race_page(date, course_name, race_num)
-      odds_info = race_page.go_odds_page.single_odds
+      odds_info = race_page.go_odds_page.single_odds(race_id)
     end
 
     # オッズ情報が取れていないのはおかしい
