@@ -5,7 +5,7 @@ class Race < ApplicationRecord
   belongs_to :race_date
   belongs_to :course
   belongs_to :race_class
-  has_many   :race_horses
+  has_many   :race_horses,    -> { order(number: :ASC) }
   has_many   :odds_histories, -> { order(created_at: :DESC) }
 
   scope :sort_by_date, -> { order(race_date_id: :DESC, course_id: :ASC, number: :ASC) }
