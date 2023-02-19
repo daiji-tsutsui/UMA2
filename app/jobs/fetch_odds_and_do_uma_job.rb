@@ -13,6 +13,7 @@ class FetchOddsAndDoUmaJob < ApplicationJob
     date, course_name, race_num = fetch_race_info(race_id)
 
     odds_info = []
+    Capybara.reset_sessions!
     Capybara::Session.new(:selenium_chrome_headless).tap do |_session|
       top_page = Netkeiba::TopPage.new
       top_page.load
