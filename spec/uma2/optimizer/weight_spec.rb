@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+# require 'rails_helper'
 require 'uma2/optimizer/weight'
 
 RSpec.describe 'Weight' do
   describe 'when end_time is given' do
     before do
-      @a = Weight.new
+      @a = Uma2::Optimizer::Weight.new
     end
 
     it '#update raises error' do

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+# require 'rails_helper'
 require 'uma2/optimizer/true_distribution'
 
 RSpec.describe 'TrueDistribution' do
   describe 'when end_time is given' do
     before do
-      @t = TrueDistribution.new
+      @t = Uma2::Optimizer::TrueDistribution.new
     end
 
     it '#update raises error' do

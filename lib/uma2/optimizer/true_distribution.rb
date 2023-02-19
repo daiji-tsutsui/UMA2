@@ -2,9 +2,13 @@
 
 require 'uma2/probability'
 
-# True distribution parameter for odds forecasting model
-class TrueDistribution < Probability
-  def update
-    raise 'Define Me'
+module Uma2
+  class Optimizer
+    # True distribution parameter for odds forecasting model
+    class TrueDistribution < Probability
+      def update
+        raise 'Define Me'
+      end
+    end
   end
 end

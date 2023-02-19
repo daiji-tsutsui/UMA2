@@ -2,9 +2,13 @@
 
 require 'uma2/probability'
 
-# Weight parameter for odds forecasting model
-class Weight < Probability
-  def update
-    raise 'Define Me'
+module Uma2
+  class Optimizer
+    # Weight parameter for odds forecasting model
+    class Weight < Probability
+      def update
+        raise 'Define Me'
+      end
+    end
   end
 end
