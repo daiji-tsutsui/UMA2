@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
+require 'rails_helper'
 require 'uma2/probability'
 
-RSpec.describe Probability do
+RSpec.describe 'Uma2::Probability' do
   describe '#new' do
     it 'with no args' do
-      vect = Probability.new
+      vect = Uma2::Probability.new
       expect(vect).to eq [1.0]
     end
 
     context 'with an arg' do
       before do
         @arg = [0.1, 0.3, 0.4]
-        @vect = Probability.new(@arg)
+        @vect = Uma2::Probability.new(@arg)
       end
 
       it 'gives the summation 1' do
@@ -24,12 +25,17 @@ RSpec.describe Probability do
         expect(vect_ratio).to eq arg_ratio
       end
     end
+
+    it 'with nil' do
+      vect = Uma2::Probability.new(nil)
+      expect(vect).to eq [1.0]
+    end
   end
 
   describe '#kl_div' do
     before do
       @ini = [1.0, 3.0, 4.0]
-      @src = Probability.new(@ini)
+      @src = Uma2::Probability.new(@ini)
     end
 
     it 'gives zero when compared with itself' do
@@ -37,15 +43,15 @@ RSpec.describe Probability do
     end
     describe 'gives a positive value when compared with other one' do
       it '#1' do
-        other1 = Probability.new([1.0, 1.0, 1.0])
+        other1 = Uma2::Probability.new([1.0, 1.0, 1.0])
         expect(@src.kl_div(other1) > 0).to be_truthy
       end
       it '#2' do
-        other2 = Probability.new([1.0, 2.0, 3.0])
+        other2 = Uma2::Probability.new([1.0, 2.0, 3.0])
         expect(@src.kl_div(other2) > 0).to be_truthy
       end
       it '#3' do
-        other3 = Probability.new([1.0, 3.0, 4.1])
+        other3 = Uma2::Probability.new([1.0, 3.0, 4.1])
         expect(@src.kl_div(other3) > 0).to be_truthy
       end
     end
@@ -54,7 +60,7 @@ RSpec.describe Probability do
   describe '#move!' do
     before do
       @ini = [0.125, 0.375, 0.5]
-      @src = Probability.new(@ini)
+      @src = Uma2::Probability.new(@ini)
     end
 
     it 'moves self in the meaning of m-parallel transportation' do
@@ -74,7 +80,7 @@ RSpec.describe Probability do
   describe '#move_with_natural_grad!' do
     before do
       @ini = [0.125, 0.375, 0.5]
-      @src = Probability.new(@ini)
+      @src = Uma2::Probability.new(@ini)
     end
 
     describe 'moves self in the direction of natural gradient' do
@@ -103,7 +109,7 @@ RSpec.describe Probability do
   describe '#extend_to!' do
     before do
       @ini = [1.0, 2.0, 3.0]
-      @src = Probability.new(@ini)
+      @src = Uma2::Probability.new(@ini)
     end
 
     context 'extends self' do
@@ -129,7 +135,7 @@ RSpec.describe Probability do
     describe '#new_from_odds' do
       before do
         @arg = [0.1, 0.3, 0.4]
-        @vect = Probability.new_from_odds(@arg)
+        @vect = Uma2::Probability.new_from_odds(@arg)
       end
 
       it 'gives the summation 1' do
@@ -144,15 +150,15 @@ RSpec.describe Probability do
 
     describe '#delta' do
       it 'returns 1.0 when i == j' do
-        expect(Probability.delta(1, 1)).to eq 1.0
-        expect(Probability.delta(2, 2)).to eq 1.0
-        expect(Probability.delta(5, 5)).to eq 1.0
+        expect(Uma2::Probability.delta(1, 1)).to eq 1.0
+        expect(Uma2::Probability.delta(2, 2)).to eq 1.0
+        expect(Uma2::Probability.delta(5, 5)).to eq 1.0
       end
       it 'returns 0.0 when i != j' do
-        expect(Probability.delta(1, 2)).to eq 0.0
-        expect(Probability.delta(2, 4)).to eq 0.0
-        expect(Probability.delta(3, 1)).to eq 0.0
-        expect(Probability.delta(5, 2)).to eq 0.0
+        expect(Uma2::Probability.delta(1, 2)).to eq 0.0
+        expect(Uma2::Probability.delta(2, 4)).to eq 0.0
+        expect(Uma2::Probability.delta(3, 1)).to eq 0.0
+        expect(Uma2::Probability.delta(5, 2)).to eq 0.0
       end
     end
   end

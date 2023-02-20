@@ -1,25 +1,31 @@
 # frozen_string_literal: true
 
+require 'rails_helper'
 require 'uma2/positives'
 
-RSpec.describe Positives do
+RSpec.describe 'Uma2::Positives' do
   describe '#new' do
     it 'with no args' do
-      vect = Positives.new
+      vect = Uma2::Positives.new
       expect(vect).to eq [1.0]
     end
 
     it 'with an arg' do
       arg = [0.1, 0.2, 0.3]
-      vect = Positives.new(arg)
+      vect = Uma2::Positives.new(arg)
       expect(vect).to eq arg
+    end
+
+    it 'with nil' do
+      vect = Uma2::Positives.new(nil)
+      expect(vect).to eq [1.0]
     end
   end
 
   describe '#move!' do
     before do
       @ini = [1.0, 2.0, 3.0]
-      @src = Positives.new(@ini)
+      @src = Uma2::Positives.new(@ini)
     end
 
     it 'moves self in the meaning of m-parallel transportation' do
@@ -37,7 +43,7 @@ RSpec.describe Positives do
   describe '#move_with_natural_grad!' do
     before do
       @ini = [1.0, 2.0, 3.0]
-      @src = Positives.new(@ini)
+      @src = Uma2::Positives.new(@ini)
     end
 
     it 'moves self in the direction of natural gradient' do
@@ -55,7 +61,7 @@ RSpec.describe Positives do
   describe '#extend_to!' do
     before do
       @ini = [1.0, 2.0, 3.0]
-      @src = Positives.new(@ini)
+      @src = Uma2::Positives.new(@ini)
     end
 
     it 'extends self simply by adding extra 1.0' do

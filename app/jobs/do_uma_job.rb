@@ -3,6 +3,7 @@
 require 'capybara'
 require 'selenium-webdriver'
 require 'netkeiba'
+require 'json'
 # require 'uma2/optimizer'
 
 # UMAを実行するジョブ
@@ -32,16 +33,18 @@ class DoUmaJob < ApplicationJob
     # return unless process.last_odds_history_id == odds_history_id
 
     # # Optimization process
-    # optimizer = Uma2::Optimizer.new(process.params)
-    # odds_histories = OddsHistory.where(race_id: race_id).all.map(&:data)
-    # optimizer.add(odds_histories)
+    # optimizer = Uma2::Optimizer.new(params: process.params)
+    # odds_histories = OddsHistory.where(race_id: race_id)
+    #                             .where(id: ...odds_history_id)
+    #                             .all.map(&:data)
+    # optimizer.add_odds(odds_histories)
     # optimizer.run(OPTIMIZER_ITERATION)
 
     # process = OptimizationProcess.find_by(race_id: race_id)
     # process.with_lock do
     #   # 所有権が違ったら更新しない
     #   return unless process.last_odds_history_id == odds_history_id
-    #   process.update!(params: optimizer.parameter)
+    #   process.update!(params: optimizer.params.to_json)
     # end
 
     # DoUmaJob.perform_later(race_id, odds_history_id)

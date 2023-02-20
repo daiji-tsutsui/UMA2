@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# require 'rails_helper'
+require 'rails_helper'
 require 'uma2/optimizer/weight'
 
 RSpec.describe 'Weight' do

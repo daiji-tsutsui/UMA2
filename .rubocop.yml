@@ -32,6 +32,8 @@ Style/RedundantSelf:
   Exclude:
     - lib/uma2/positives.rb
     - lib/uma2/probability.rb
+Style/PreferredHashMethods:
+  EnforcedStyle: verbose
 
 Naming/MethodParameterName:
   Exclude:

@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-require 'uma2/probability'
-
 module Uma2
   class Optimizer
     # True distribution parameter for odds forecasting model
-    class TrueDistribution < Probability
+    class TrueDistribution < Uma2::Probability
       def update
         raise 'Define Me'
       end
