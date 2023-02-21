@@ -37,7 +37,8 @@ module Uma2
 
     def loss
       # updateの後に呼ぶこと
-      @model ||= Model.new
+      return 0.0 if @model.nil?
+
       @model.loss(@odds_list)
     end
 
@@ -59,9 +60,9 @@ module Uma2
 
     def update!
       @model = Model.new
-      model.forecast(@odds_list, parameter)
-      model.series.each.with_index(1) do |p, m|
-        q = Probability.new_from_odds(odds_list[m])
+      @model.forecast(@odds_list, parameter)
+      @model.series.each.with_index(1) do |p, m|
+        q = Probability.new_from_odds(@odds_list[m])
         # @a.update(m, p, q)
         # @b.update(m, p, q, @odds_list)
         # @t.update(m, p, q, @odds_list)
