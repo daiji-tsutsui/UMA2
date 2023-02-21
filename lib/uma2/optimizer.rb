@@ -8,15 +8,10 @@ module Uma2
   # Optimizer of odds forecasting model
   class Optimizer
     def initialize(params: {})
-      if params.has_key?('a')
-        @a = Weight.new(params['a'])
-        @b = Certainty.new(params['b'])
-        @t = TrueDistribution.new(params['t'])
-      else
-        @a = Weight.new(params[:a])
-        @b = Certainty.new(params[:b])
-        @t = TrueDistribution.new(params[:t])
-      end
+      a, b, t = extract(params)
+      @a = Weight.new(a)
+      @b = Certainty.new(b)
+      @t = TrueDistribution.new(t)
     end
 
     def params
@@ -33,6 +28,13 @@ module Uma2
     end
 
     private
+
+    def extract(params)
+      a = params['a'] || params[:a]
+      b = params['b'] || params[:b]
+      t = params['t'] || params[:t]
+      [a, b, t]
+    end
 
     def adjust_params_size
       @ini_p ||= Probability.new_from_odds(@odds_list[0])
