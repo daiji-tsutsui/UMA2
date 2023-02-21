@@ -111,21 +111,21 @@ RSpec.describe 'Uma2::Optimizer' do
       is_expected.to be < old_loss
     end
   end
-end
 
-def params_data
-  {
-    'a' => [0.2, 0.8],
-    'b' => [1.0, 2.0],
-    't' => [0.2, 0.3, 0.5],
-  }
-end
+  def params_data
+    {
+      'a' => [0.2, 0.8],
+      'b' => [1.0, 2.0],
+      't' => [0.2, 0.3, 0.5],
+    }
+  end
 
-def odds_histories_data
-  [
-    [3.2,  3.2,  1.6],
-    [4.0,  2.67, 1.6],
-    [5.33, 2.67, 1.45],
-    [5.33, 2.29, 1.6],
-  ]
+  def odds_histories_data
+    [
+      [3.2,  3.2,  1.6],
+      [4.0,  2.67, 1.6],
+      [5.33, 2.67, 1.45],
+      [5.33, 2.29, 1.6],
+    ]
+  end
 end

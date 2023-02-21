@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-# require 'uma2/optimizer/weight'
-# require 'uma2/optimizer/certainty'
-# require 'uma2/optimizer/true_distribution'
-
 module Uma2
   class Optimizer
     # Odds forecasting model

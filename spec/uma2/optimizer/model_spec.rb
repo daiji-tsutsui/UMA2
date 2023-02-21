@@ -124,31 +124,31 @@ RSpec.describe 'Uma2::Optimizer::Model' do
       end
     end
   end
-end
 
-def odds_list_data
-  [
-    [3.2,  3.2,  1.6],
-    [4.0,  2.67, 1.6],
-    [5.33, 2.67, 1.45],
-    [5.33, 2.29, 1.6],
-  ]
-end
+  def odds_list_data
+    [
+      [3.2,  3.2,  1.6],
+      [4.0,  2.67, 1.6],
+      [5.33, 2.67, 1.45],
+      [5.33, 2.29, 1.6],
+    ]
+  end
 
-def odds_list_data_too_long
-  [
-    [3.2,  3.2,  1.6],
-    [4.0,  2.67, 1.6],
-    [5.33, 2.67, 1.45],
-    [5.33, 2.29, 1.6],
-    [4.0,  2.67, 1.6],
-  ]
-end
+  def odds_list_data_too_long
+    [
+      [3.2,  3.2,  1.6],
+      [4.0,  2.67, 1.6],
+      [5.33, 2.67, 1.45],
+      [5.33, 2.29, 1.6],
+      [4.0,  2.67, 1.6],
+    ]
+  end
 
-def params_data
-  {
-    a: Uma2::Optimizer::Weight.new([0.25, 0.25, 0.25, 0.25]),
-    b: Uma2::Optimizer::Certainty.new([1.0, 2.0, 3.0, 2.5]),
-    t: Uma2::Optimizer::TrueDistribution.new([0.25, 0.35, 0.4]),
-  }
+  def params_data
+    {
+      a: Uma2::Optimizer::Weight.new([0.25, 0.25, 0.25, 0.25]),
+      b: Uma2::Optimizer::Certainty.new([1.0, 2.0, 3.0, 2.5]),
+      t: Uma2::Optimizer::TrueDistribution.new([0.25, 0.35, 0.4]),
+    }
+  end
 end
