@@ -11,9 +11,9 @@ RSpec.describe 'Uma2::Optimizer' do
       let(:params) { {} }
       it 'creates new parameters' do
         subject
-        expect(@optimizer.params[:a].class).to eq Uma2::Optimizer::Weight
-        expect(@optimizer.params[:b].class).to eq Uma2::Optimizer::Certainty
-        expect(@optimizer.params[:t].class).to eq Uma2::Optimizer::TrueDistribution
+        expect(@optimizer.a.class).to eq Uma2::Optimizer::Weight
+        expect(@optimizer.b.class).to eq Uma2::Optimizer::Certainty
+        expect(@optimizer.t.class).to eq Uma2::Optimizer::TrueDistribution
       end
     end
 
@@ -27,12 +27,12 @@ RSpec.describe 'Uma2::Optimizer' do
       end
       it 'takes over give parameters' do
         subject
-        expect(@optimizer.params[:a].class).to eq Uma2::Optimizer::Weight
-        expect(@optimizer.params[:b].class).to eq Uma2::Optimizer::Certainty
-        expect(@optimizer.params[:t].class).to eq Uma2::Optimizer::TrueDistribution
-        expect(@optimizer.params[:a]).to eq [0.2, 0.8]
-        expect(@optimizer.params[:b]).to eq [1.0, 2.0]
-        expect(@optimizer.params[:t]).to eq [0.2, 0.3, 0.5]
+        expect(@optimizer.a.class).to eq Uma2::Optimizer::Weight
+        expect(@optimizer.b.class).to eq Uma2::Optimizer::Certainty
+        expect(@optimizer.t.class).to eq Uma2::Optimizer::TrueDistribution
+        expect(@optimizer.a).to eq [0.2, 0.8]
+        expect(@optimizer.b).to eq [1.0, 2.0]
+        expect(@optimizer.t).to eq [0.2, 0.3, 0.5]
       end
     end
   end
@@ -58,9 +58,9 @@ RSpec.describe 'Uma2::Optimizer' do
         ]
       end
       it 'extends optimizer size to odds histories size' do
-        expect { subject }.to change { @optimizer.params[:a].size }.by(2)
-        expect(@optimizer.params[:b].size).to eq 4
-        expect(@optimizer.params[:t].size).to eq 3
+        expect { subject }.to change { @optimizer.a.size }.by(2)
+        expect(@optimizer.b.size).to eq 4
+        expect(@optimizer.t.size).to eq 3
       end
     end
 
@@ -71,9 +71,9 @@ RSpec.describe 'Uma2::Optimizer' do
         ]
       end
       it 'does NOT change optimizer size' do
-        expect { subject }.to_not(change { @optimizer.params[:a].size })
-        expect(@optimizer.params[:b].size).to eq 2
-        expect(@optimizer.params[:t].size).to eq 3
+        expect { subject }.to_not(change { @optimizer.a.size })
+        expect(@optimizer.b.size).to eq 2
+        expect(@optimizer.t.size).to eq 3
       end
     end
 
@@ -85,10 +85,10 @@ RSpec.describe 'Uma2::Optimizer' do
         ]
       end
       it 'extends true distribution size' do
-        expect { subject }.to change { @optimizer.params[:t].size }.by(2)
-        expect(@optimizer.params[:a].size).to eq 1
-        expect(@optimizer.params[:b].size).to eq 1
-        expect(@optimizer.params[:t].size).to eq 3
+        expect { subject }.to change { @optimizer.t.size }.by(2)
+        expect(@optimizer.a.size).to eq 1
+        expect(@optimizer.b.size).to eq 1
+        expect(@optimizer.t.size).to eq 3
       end
     end
   end

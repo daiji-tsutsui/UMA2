@@ -39,6 +39,7 @@ Naming/MethodParameterName:
   Exclude:
     - lib/uma2/positives.rb
     - lib/uma2/probability.rb
+    - lib/uma2/optimizer/model.rb
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent

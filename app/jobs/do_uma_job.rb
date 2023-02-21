@@ -44,7 +44,7 @@ class DoUmaJob < ApplicationJob
     # process.with_lock do
     #   # 所有権が違ったら更新しない
     #   return unless process.last_odds_history_id == odds_history_id
-    #   process.update!(params: optimizer.params.to_json)
+    #   process.update!(params: optimizer.parameter.to_json)
     # end
 
     # DoUmaJob.perform_later(race_id, odds_history_id)
