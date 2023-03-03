@@ -18,6 +18,8 @@ RSpec.describe 'FetchOddsAndDoUmaJob' do
   describe 'when odds_info is obtained' do
     before do
       allow(@odds_page).to receive(:single_odds).and_return(test_data1)
+      # 出走前に実行した設定
+      allow(Time).to receive(:now).and_return(Time.parse('2022/10/22 02:00:00'))
       @race_id = Race.find_by(name: 'Test2').id
     end
 
@@ -39,6 +41,8 @@ RSpec.describe 'FetchOddsAndDoUmaJob' do
   describe 'when odds_info is NOT obtained' do
     before do
       allow(@odds_page).to receive(:single_odds).and_return([])
+      # 出走前に実行した設定
+      allow(Time).to receive(:now).and_return(Time.parse('2022/10/22 02:00:00'))
       @race_id = Race.find_by(name: 'Test1').id
     end
 
@@ -53,6 +57,8 @@ RSpec.describe 'FetchOddsAndDoUmaJob' do
   describe 'when odds_info contains missing data' do
     before do
       allow(@odds_page).to receive(:single_odds).and_return(test_data2)
+      # 出走前に実行した設定
+      allow(Time).to receive(:now).and_return(Time.parse('2022/10/22 02:00:00'))
       @race_id = Race.find_by(name: 'Test2').id
     end
 
@@ -63,6 +69,26 @@ RSpec.describe 'FetchOddsAndDoUmaJob' do
       odds = OddsHistory.find_by(race_id: @race_id)
       expect(odds).not_to be_nil
       expect(odds.data).to eq [1.6, 0.0, 3.2, 3.2, 0.0, 0.0]
+    end
+  end
+
+  describe 'when the target race has already started' do
+    before do
+      allow(@odds_page).to receive(:single_odds).and_return(test_data1)
+      # 出走は 2022/10/22 15:45:00
+      allow(Time).to receive(:now).and_return(Time.parse('2022/10/22 16:00:00'))
+      @race_id = Race.find_by(name: 'Test1').id
+    end
+
+    it '#perform does NOT insert OddsHistory records' do
+      expect do
+        FetchOddsAndDoUmaJob.perform_now(@race_id)
+      end.to_not change { OddsHistory.count }
+    end
+
+    it '#perform does NOT call DoUmaJob' do
+      FetchOddsAndDoUmaJob.perform_now(@race_id)
+      expect(DoUmaJob).not_to have_received(:perform_later)
     end
   end
 
