@@ -10,6 +10,8 @@ class FetchOddsAndDoUmaJob < ApplicationJob
   queue_as :default
 
   def perform(race_id)
+    return if race_started?(race_id)
+
     date, course_name, race_num = fetch_race_info(race_id)
 
     odds_info = []
@@ -34,5 +36,14 @@ class FetchOddsAndDoUmaJob < ApplicationJob
     json = odds_info.map(&:to_f).to_json
     odds_history = OddsHistory.create({ race_id: race_id, data_json: json })
     odds_history.id
+  end
+
+  def race_started?(race_id)
+    Time.now > fetch_race_time(race_id)
+  end
+
+  def fetch_race_time(id)
+    race = Race.find(id)
+    Time.parse("#{race.race_date.value} #{race.starting_time}")
   end
 end
