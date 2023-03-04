@@ -4,8 +4,6 @@ module Uma2
   class Optimizer
     # Weight parameter for odds forecasting model
     class Weight < Uma2::Probability
-      DEFAULT_LEARNING_RATE = 0.01
-
       def update(odds_list, model)
         @eps = DEFAULT_LEARNING_RATE
         @model_p = model.series

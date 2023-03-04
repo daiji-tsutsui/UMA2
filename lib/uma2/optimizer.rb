@@ -8,6 +8,8 @@ require 'uma2/optimizer/model'
 module Uma2
   # Optimizer of odds forecasting model
   class Optimizer
+    DEFAULT_LEARNING_RATE = 0.01
+
     attr_reader :a, :b, :t
 
     def initialize(params: {})
@@ -62,7 +64,7 @@ module Uma2
       @model = Model.new
       @model.forecast(@odds_list, parameter)
       @a.update(@odds_list, @model)
-      # @b.update(m, p, q, @odds_list)
+      @b.update(@odds_list, @model, @a, @t)
       # @t.update(m, p, q, @odds_list)
     end
   end
