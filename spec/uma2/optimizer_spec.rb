@@ -100,15 +100,15 @@ RSpec.describe 'Uma2::Optimizer' do
       is_expected.to be > 0.1
     end
 
-    it 'gives the same values in another updates' do
+    it 'gives the same values before updation' do
       old_loss = @optimizer.loss
       is_expected.to be_within(1e-5).of(old_loss)
     end
 
-    xit 'decreases loss function' do
+    it 'decreases loss function' do
       old_loss = @optimizer.loss
       @optimizer.run(1)
-      is_expected.to be < old_loss
+      is_expected.to be < old_loss - 1e-4
     end
   end
 
