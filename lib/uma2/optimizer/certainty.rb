@@ -11,7 +11,6 @@ module Uma2
         @odds_list = odds_list
         @a = a
         @t = t
-        @ini_p = Probability.new_from_odds(@odds_list[0])
         v = grad.map { |db_i| -@eps * db_i }
         move_with_natural_grad!(v)
       end

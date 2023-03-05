@@ -64,10 +64,11 @@ module Uma2
       @model = Model.new
       @model.forecast(@odds_list, parameter)
       old_a = @a.clone
+      old_b = @b.clone
       old_t = @t.clone
       @a.update(@odds_list, @model)
       @b.update(@odds_list, @model, old_a, old_t)
-      # @t.update(m, p, q, @odds_list)
+      @t.update(@odds_list, @model, old_a, old_b)
     end
   end
 end
