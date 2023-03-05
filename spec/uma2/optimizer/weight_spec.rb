@@ -16,14 +16,13 @@ RSpec.describe 'Weight' do
     before do
       @model = Uma2::Optimizer::Model.new
       @model.forecast(odds_list_data, params_data)
-      @a = params_data[:a].clone
+      @a = params_data[:a]
     end
 
     it '#update changes own values' do
       old_a = @a.clone
       @a.update(odds_list_data, @model)
-      distance = @a.map.with_index { |a_k, k| (a_k - old_a[k]).abs }.sum
-      expect(distance).to be > 1e-3
+      expect(abs_distance(@a, old_a)).to be > 1e-3
     end
   end
 
@@ -37,9 +36,12 @@ RSpec.describe 'Weight' do
     it '#update changes own values a bit' do
       old_a = @a.clone
       @a.update(odds_list_data_constant, @model)
-      distance = @a.map.with_index { |a_k, k| (a_k - old_a[k]).abs }.sum
-      expect(distance).to be < 1e-3
+      expect(abs_distance(@a, old_a)).to be < 1e-6
     end
+  end
+
+  def abs_distance(new, old)
+    new.map.with_index { |val_k, k| (val_k - old[k]).abs }.sum
   end
 
   def odds_list_data
@@ -61,18 +63,18 @@ RSpec.describe 'Weight' do
 
   def odds_list_data_constant
     [
-      [4.0,  2.667, 1.6],
-      [4.0,  2.667, 1.6],
-      [4.0,  2.667, 1.6],
-      [4.0,  2.667, 1.6],
+      [2.67, 2.67, 2.67],
+      [2.67, 2.67, 2.67],
+      [2.67, 2.67, 2.67],
+      [2.67, 2.67, 2.67],
     ]
   end
 
   def params_data_constant
     {
-      a: Uma2::Optimizer::Weight.new([0.55, 0.15, 0.15, 0.15]),
+      a: Uma2::Optimizer::Weight.new([0.25, 0.25, 0.25, 0.25]),
       b: Uma2::Optimizer::Certainty.new([1.0, 1.0, 1.0, 1.0]),
-      t: Uma2::Optimizer::TrueDistribution.new([0.2, 0.3, 0.5]),
+      t: Uma2::Optimizer::TrueDistribution.new([0.33, 0.33, 0.33]),
     }
   end
 end
