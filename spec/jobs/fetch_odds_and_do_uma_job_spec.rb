@@ -83,7 +83,7 @@ RSpec.describe 'FetchOddsAndDoUmaJob' do
     it '#perform does NOT insert OddsHistory records' do
       expect do
         FetchOddsAndDoUmaJob.perform_now(@race_id)
-      end.to_not change { OddsHistory.count }
+      end.to_not(change { OddsHistory.count })
     end
 
     it '#perform does NOT call DoUmaJob' do
