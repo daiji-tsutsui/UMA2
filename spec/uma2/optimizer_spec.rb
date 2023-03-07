@@ -21,8 +21,8 @@ RSpec.describe 'Uma2::Optimizer' do
     end
 
     context 'with params' do
-      let(:params) { params_data }
-      it 'takes over give parameters' do
+      let(:params) { params_data1 }
+      it 'takes over given parameters' do
         subject
         expect(@optimizer.a).to be_a Uma2::Optimizer::Weight
         expect(@optimizer.b).to be_a Uma2::Optimizer::Certainty
@@ -35,11 +35,11 @@ RSpec.describe 'Uma2::Optimizer' do
   end
 
   describe '#add_odds' do
-    before { @optimizer = Uma2::Optimizer.new(params: params_data) }
+    before { @optimizer = Uma2::Optimizer.new(params: params_data1) }
     subject { @optimizer.add_odds(odds_histories) }
 
     context 'with larger odds histories than optimizer size' do
-      let(:odds_histories) { odds_histories_data }
+      let(:odds_histories) { odds_histories_data1 }
       it 'extends optimizer size to odds histories size' do
         expect { subject }.to change { @optimizer.a.size }.by(2)
         expect(@optimizer.b.size).to eq odds_histories.size
@@ -57,7 +57,7 @@ RSpec.describe 'Uma2::Optimizer' do
 
     context 'if optimizer has no params' do
       before { @optimizer = Uma2::Optimizer.new }
-      let(:odds_histories) { odds_histories_data }
+      let(:odds_histories) { odds_histories_data1 }
 
       it 'extends time parameters size' do
         expect { subject }.to change { @optimizer.b.size }.by(3)
@@ -73,15 +73,24 @@ RSpec.describe 'Uma2::Optimizer' do
 
   describe '#run' do
     before do
-      @optimizer = Uma2::Optimizer.new(params: params_data)
-      @optimizer.add_odds(odds_histories_data)
+      @optimizer = Uma2::Optimizer.new(params: params_data1)
+      @optimizer.add_odds(odds_histories_data1)
     end
     subject { @optimizer.run(iteration) }
 
-    let(:iteration) { 10 }
     context 'for 10 iteration' do
       before { allow(@optimizer).to receive(:update!).and_return(1) }
+      let(:iteration) { 10 }
       it 'calls #update! 10 times' do
+        subject
+        expect(@optimizer).to have_received(:update!).exactly(iteration).times
+      end
+    end
+
+    context 'for 20 iteration' do
+      before { allow(@optimizer).to receive(:update!).and_return(1) }
+      let(:iteration) { 20 }
+      it 'calls #update! 20 times' do
         subject
         expect(@optimizer).to have_received(:update!).exactly(iteration).times
       end
@@ -90,29 +99,92 @@ RSpec.describe 'Uma2::Optimizer' do
 
   describe '#loss' do
     before do
-      @optimizer = Uma2::Optimizer.new(params: params_data)
-      @optimizer.add_odds(odds_histories_data)
+      @optimizer = Uma2::Optimizer.new(params: params)
+      @optimizer.add_odds(odds_histories)
       @optimizer.run(1)
     end
     subject { @optimizer.loss }
 
-    it 'gives a positive value' do
-      is_expected.to be > 0.1
+    context 'with pattern #1' do
+      let(:params) { params_data1 }
+      let(:odds_histories) { odds_histories_data1 }
+
+      it 'gives a positive value' do
+        is_expected.to be > 0.1
+      end
+
+      it 'gives the same values before updation' do
+        old_loss = @optimizer.loss
+        is_expected.to be_within(1e-6).of(old_loss)
+      end
+
+      it 'decreases loss function' do
+        old_loss = @optimizer.loss
+        @optimizer.run(1)
+        is_expected.to be < old_loss - 1e-4
+      end
     end
 
-    it 'gives the same values before updation' do
-      old_loss = @optimizer.loss
-      is_expected.to be_within(1e-5).of(old_loss)
+    context 'with pattern #2' do
+      let(:params) { params_data2 }
+      let(:odds_histories) { odds_histories_data2 }
+
+      it 'gives a positive value' do
+        is_expected.to be > 0.02
+      end
+
+      it 'gives the same values before updation' do
+        old_loss = @optimizer.loss
+        is_expected.to be_within(1e-6).of(old_loss)
+      end
+
+      it 'decreases loss function' do
+        old_loss = @optimizer.loss
+        @optimizer.run(1)
+        is_expected.to be < old_loss - 1e-4
+      end
     end
 
-    it 'decreases loss function' do
-      old_loss = @optimizer.loss
-      @optimizer.run(1)
-      is_expected.to be < old_loss - 1e-4
+    context 'with pattern #3' do
+      let(:params) { params_data3 }
+      let(:odds_histories) { odds_histories_data3 }
+
+      it 'gives a positive value' do
+        is_expected.to be > 0.1
+      end
+
+      it 'gives the same values before updation' do
+        old_loss = @optimizer.loss
+        is_expected.to be_within(1e-6).of(old_loss)
+      end
+
+      it 'decreases loss function' do
+        old_loss = @optimizer.loss
+        @optimizer.run(1)
+        is_expected.to be < old_loss - 1e-4
+      end
+    end
+
+    context 'with equilibrium parameters' do
+      let(:params) { params_data_equilibrium }
+      let(:odds_histories) { odds_histories_data_equilibrium }
+
+      it 'gives a very small positive value' do
+        is_expected.to be > 1e-6
+        is_expected.to be < 1e-5
+      end
+
+      it 'does NOT decrease loss function' do
+        old_loss = @optimizer.loss
+        @optimizer.run(1)
+        is_expected.to be < old_loss
+        is_expected.to be > old_loss - 1e-6
+      end
     end
   end
 
-  def params_data
+  # 2 time-units smaller than odds_histories_data1
+  def params_data1
     {
       'a' => [0.2, 0.8],
       'b' => [1.0, 2.0],
@@ -120,12 +192,64 @@ RSpec.describe 'Uma2::Optimizer' do
     }
   end
 
-  def odds_histories_data
+  def odds_histories_data1
     [
       [3.2,  3.2,  1.6],
       [4.0,  2.67, 1.6],
       [5.33, 2.67, 1.45],
       [5.33, 2.29, 1.6],
+    ]
+  end
+
+  # According to odds_histories_data2 to some extent
+  def params_data2
+    {
+      'a' => [0.25, 0.25, 0.25, 0.25],
+      'b' => [1.0, 2.0, 1.5, 2.0],
+      't' => [0.3, 0.3, 0.2, 0.2],
+    }
+  end
+
+  def odds_histories_data2
+    [
+      [2.67, 2.67, 4.0, 4.0],
+      [2.29, 2.67, 3.56, 3.56],
+      [2.29, 3.2,  4.0,  4.0],
+      [2.67, 2.67, 4.0,  4.0],
+    ]
+  end
+
+  # NOT according to odds_histories_data3
+  def params_data3
+    {
+      'a' => [0.2, 0.5, 0.3],
+      'b' => [1.0, 2.0, 1.0],
+      't' => [0.2, 0.3, 0.1, 0.4],
+    }
+  end
+
+  def odds_histories_data3
+    [
+      [3.2,  3.2,  3.2, 3.2],
+      [1.6,  2.67, 8.0, 8.0],
+      [5.33, 3.2,  1.6, 8.0],
+    ]
+  end
+
+  # Completely according to odds_histories_data
+  def params_data_equilibrium
+    {
+      'a' => [0.7, 0.1, 0.2],
+      'b' => [1.0, 2.0, 1.0],
+      't' => [0.2, 0.3, 0.5],
+    }
+  end
+
+  def odds_histories_data_equilibrium
+    [
+      [2.4,  2.4,  2.4],
+      [2.61, 2.51, 2.19],
+      [2.69, 2.50, 2.09],
     ]
   end
 end

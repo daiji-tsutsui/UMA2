@@ -33,7 +33,7 @@ RSpec.describe 'Weight' do
       @a = params_data_constant[:a].clone
     end
 
-    it '#update changes own values a bit' do
+    it '#update does NOT change own values' do
       old_a = @a.clone
       @a.update(odds_list_data_constant, @model)
       expect(abs_distance(@a, old_a)).to be < 1e-6

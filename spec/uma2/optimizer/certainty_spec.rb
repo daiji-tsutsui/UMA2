@@ -37,7 +37,7 @@ RSpec.describe 'Certainty' do
       @t = params_data_constant[:t].clone
     end
 
-    it '#update changes own values a bit' do
+    it '#update does NOT change own values' do
       old_b = @b.clone
       @b.update(odds_list_data_constant, @model, @a, @t)
       expect(abs_distance(@b, old_b)).to be < 1e-6

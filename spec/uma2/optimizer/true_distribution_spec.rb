@@ -37,7 +37,7 @@ RSpec.describe 'TrueDistribution' do
       @b = params_data_constant[:b].clone
     end
 
-    it '#update changes own values a bit' do
+    it '#update does NOT change own values' do
       old_t = @t.clone
       @t.update(odds_list_data_constant, @model, @a, @b)
       expect(abs_distance(@t, old_t)).to be < 1e-6
