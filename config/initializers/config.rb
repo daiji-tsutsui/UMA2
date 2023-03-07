@@ -59,5 +59,14 @@ Config.setup do |config|
   # config.evaluate_erb_in_yaml = true
 end
 
+Capybara.register_driver :selenium_chrome_headless do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.args << '--headless'
+  options.args << '--disable-gpu'
+  options.args << '--no-sandbox'
+  # Net::ReadTimeoutが起きる場合は15秒で起きるように
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options, timeout: 15)
+end
+
 Capybara.default_driver = :selenium_chrome_headless
 Capybara.javascript_driver = :selenium_chrome_headless
