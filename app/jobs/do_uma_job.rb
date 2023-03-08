@@ -27,14 +27,15 @@ class DoUmaJob < ApplicationJob
     return unless owned?(process, odds_history_id)
 
     # Optimization process
-    optimized_params = optimize(process.params)
+    odds_list = odds_histories(race_id, odds_history_id)
+    optimized_params = optimize(process.params, odds_list)
 
     process = OptimizationProcess.find_by!(race_id: race_id)
     process.with_lock do
       # せっかく最適化しても，所有権が違ったら更新しない
       return unless owned?(process, odds_history_id)
 
-      process.update!(params: optimized_params.to_json)
+      process.update!(params_json: optimized_params.to_json)
     end
 
     DoUmaJob.perform_later(race_id, odds_history_id)
@@ -56,13 +57,16 @@ class DoUmaJob < ApplicationJob
     process.last_odds_history_id == odds_history_id
   end
 
-  def optimize(params)
+  def optimize(params, odds_list)
     optimizer = Uma2::Optimizer.new(params: params)
-    odds_histories = OddsHistory.where(race_id: race_id)
-                                .where(id: ...odds_history_id)
-                                .all.map(&:data)
-    optimizer.add_odds(odds_histories)
+    optimizer.add_odds(odds_list)
     optimizer.run(OPTIMIZER_ITERATION)
     optimizer.parameter
+  end
+
+  def odds_histories(race_id, last_odds_history_id)
+    OddsHistory.where(race_id: race_id)
+               .where(id: ...last_odds_history_id)
+               .all.map(&:data)
   end
 end
