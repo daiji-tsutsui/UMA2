@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_07_151649) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_08_155331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_151649) do
     t.boolean "is_finished", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["race_id"], name: "index_optimization_processes_on_race_id"
+    t.index ["race_id"], name: "index_optimization_processes_on_race_id", unique: true
   end
 
   create_table "race_classes", force: :cascade do |t|
