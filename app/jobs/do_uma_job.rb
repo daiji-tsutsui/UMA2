@@ -4,7 +4,7 @@ require 'capybara'
 require 'selenium-webdriver'
 require 'netkeiba'
 require 'json'
-# require 'uma2/optimizer'
+require 'uma2/optimizer'
 
 # UMAを実行するジョブ
 # 適度な回数で一旦最適化を打ち切り，自身をエンキューする
@@ -15,38 +15,54 @@ require 'json'
 class DoUmaJob < ApplicationJob
   queue_as :default
 
+  # TODO: 環境変数化
   OPTIMIZER_ITERATION = 100
 
   def perform(race_id, odds_history_id, is_first: false)
-    # # optimization_processのUPSERT
-    # if is_first
-    #   Retryable.retryable(on: [ActiveRecord::RecordNotUnique], tries: 5) do
-    #     OptimizationProcess.upsert_all([{
-    #       race_id:              race_id,
-    #       last_odds_history_id: odds_history_id,
-    #     }], unique_by: 'race_id')
-    #   end
-    # end
+    # オッズを取得して初めての最適化時，所有権を自分に移す
+    occupy_process(race_id, odds_history_id) if is_first
 
-    # process = OptimizationProcess.find_by(race_id: race_id)
-    # # 所有権が違ったら終わり
-    # return unless process.last_odds_history_id == odds_history_id
+    # 所有権が違ったら終わり
+    process = OptimizationProcess.find_by!(race_id: race_id)
+    return unless owned?(process, odds_history_id)
 
-    # # Optimization process
-    # optimizer = Uma2::Optimizer.new(params: process.params)
-    # odds_histories = OddsHistory.where(race_id: race_id)
-    #                             .where(id: ...odds_history_id)
-    #                             .all.map(&:data)
-    # optimizer.add_odds(odds_histories)
-    # optimizer.run(OPTIMIZER_ITERATION)
+    # Optimization process
+    optimized_params = optimize(process.params)
 
-    # process = OptimizationProcess.find_by(race_id: race_id)
-    # process.with_lock do
-    #   # 所有権が違ったら更新しない
-    #   return unless process.last_odds_history_id == odds_history_id
-    #   process.update!(params: optimizer.parameter.to_json)
-    # end
+    process = OptimizationProcess.find_by!(race_id: race_id)
+    process.with_lock do
+      # せっかく最適化しても，所有権が違ったら更新しない
+      return unless owned?(process, odds_history_id)
 
-    # DoUmaJob.perform_later(race_id, odds_history_id)
+      process.update!(params: optimized_params.to_json)
+    end
+
+    DoUmaJob.perform_later(race_id, odds_history_id)
+  end
+
+  private
+
+  # optimization_processのUPSERT
+  def occupy_process(race_id, odds_history_id)
+    Retryable.retryable(on: [ActiveRecord::RecordNotUnique], tries: 5) do
+      OptimizationProcess.upsert_all([{
+        race_id:              race_id,
+        last_odds_history_id: odds_history_id,
+      }], unique_by: 'race_id')
+    end
+  end
+
+  def owned?(process, odds_history_id)
+    process.last_odds_history_id == odds_history_id
+  end
+
+  def optimize(params)
+    optimizer = Uma2::Optimizer.new(params: params)
+    odds_histories = OddsHistory.where(race_id: race_id)
+                                .where(id: ...odds_history_id)
+                                .all.map(&:data)
+    optimizer.add_odds(odds_histories)
+    optimizer.run(OPTIMIZER_ITERATION)
+    optimizer.parameter
   end
 end
