@@ -5,7 +5,7 @@ module Uma2
     # Certainty parameter for odds forecasting model
     class Certainty < Uma2::Positives
       def update(odds_list, model, a, t)
-        @eps = DEFAULT_LEARNING_RATE
+        @eps = Settings.uma2.learning_rate
         @model_p = model.series
         @strategies = model.strategies
         @odds_list = odds_list

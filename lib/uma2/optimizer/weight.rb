@@ -5,7 +5,7 @@ module Uma2
     # Weight parameter for odds forecasting model
     class Weight < Uma2::Probability
       def update(odds_list, model)
-        @eps = DEFAULT_LEARNING_RATE
+        @eps = Settings.uma2.learning_rate
         @model_p = model.series
         @strategies = model.strategies
         @odds_list = odds_list

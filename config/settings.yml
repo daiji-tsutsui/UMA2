@@ -4,3 +4,6 @@ app_name: <%= ENV.fetch('APP_NAME'){ 'APP_NAME' } %>
 redis:
   url: <%= ENV.fetch('REDIS_URL'){ 'redis://localhost:6379' } %>
   namespace: <%= ENV.fetch('REDIS_NAMESPACE'){ 'general' } %>
+uma2:
+  learning_rate: <%= ENV.fetch('UMA2_LEARNING_RATE'){ '0.01' }.to_f %>
+  iteration: <%= ENV.fetch('UMA2_ITERATION_PER_JOB'){ '100' }.to_i %>

@@ -5,7 +5,7 @@ module Uma2
     # True distribution parameter for odds forecasting model
     class TrueDistribution < Uma2::Probability
       def update(odds_list, model, a, b)
-        @eps = DEFAULT_LEARNING_RATE
+        @eps = Settings.uma2.learning_rate
         @model_p = model.series
         @strategies = model.strategies
         @odds_list = odds_list

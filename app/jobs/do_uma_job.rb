@@ -15,9 +15,6 @@ require 'uma2/optimizer'
 class DoUmaJob < ApplicationJob
   queue_as :default
 
-  # TODO: 環境変数化
-  OPTIMIZER_ITERATION = 100
-
   def perform(race_id, odds_history_id, is_first: false)
     # オッズを取得して初めての最適化時，所有権を自分に移す
     occupy_process(race_id, odds_history_id) if is_first
@@ -60,7 +57,7 @@ class DoUmaJob < ApplicationJob
   def optimize(params, odds_list)
     optimizer = Uma2::Optimizer.new(params: params)
     optimizer.add_odds(odds_list)
-    optimizer.run(OPTIMIZER_ITERATION)
+    optimizer.run(Settings.uma2.iteration)
     optimizer.parameter
   end
 

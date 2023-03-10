@@ -8,8 +8,6 @@ require 'uma2/optimizer/model'
 module Uma2
   # Optimizer of odds forecasting model
   class Optimizer
-    DEFAULT_LEARNING_RATE = 0.01
-
     attr_reader :a, :b, :t
 
     def initialize(params: {})
