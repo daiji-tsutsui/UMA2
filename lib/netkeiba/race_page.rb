@@ -28,14 +28,27 @@ module Netkeiba
       {
         frame:  horse.first('td', class: /\AWaku/).text.to_i,
         number: horse.first('td', class: /\AUmaban/).text.to_i,
-        sexage: horse.first('td', class: 'Barei').text,
-        jockey: horse.first('td', class: 'Jockey').text,
-        weight: current_weight(horse.first('td', class: 'Weight').text),
+        sexage: get_sexage(horse),
+        jockey: get_jockey(horse),
+        weight: get_weight(horse),
       }
     end
 
-    def current_weight(weight_str)
+    def get_sexage(horse)
+      horse.first('td', class: 'Barei').text
+    rescue Capybara::ExpectationNotMet
+      horse.first('span', class: 'Age').text
+    end
+
+    def get_jockey(horse)
+      horse.first('td', class: 'Jockey').text
+    end
+
+    def get_weight(horse)
+      weight_str = horse.first('td', class: 'Weight').text
       RACE_PAGE_CURRENT_WEIGHT_PATTERN =~ weight_str ? $1 : weight_str
+    rescue Capybara::ExpectationNotMet
+      ''
     end
   end
 end
