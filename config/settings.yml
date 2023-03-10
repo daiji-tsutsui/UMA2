@@ -7,3 +7,6 @@ redis:
 uma2:
   learning_rate: <%= ENV.fetch('UMA2_LEARNING_RATE'){ '0.01' }.to_f %>
   iteration: <%= ENV.fetch('UMA2_ITERATION_PER_JOB'){ '100' }.to_i %>
+  convergence_margin: <%= ENV.fetch('UMA2_CONVERGENCE_MARGIN'){ '1e-5' }.to_f %>
+  check_loss_margin: <%= ENV.fetch('UMA2_CHECK_LOSS_MARGIN'){ '1e-6' }.to_f %>
+  check_loss_interval: <%= ENV.fetch('UMA2_CHECK_LOSS_INTERVAL'){ '10' }.to_i %>

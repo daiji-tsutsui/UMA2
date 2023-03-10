@@ -183,6 +183,45 @@ RSpec.describe 'Uma2::Optimizer' do
     end
   end
 
+  describe '#converges?' do
+    before do
+      @optimizer = Uma2::Optimizer.new(params: params)
+      @optimizer.add_odds(odds_histories)
+      allow(Settings.uma2).to receive(:check_loss_interval).and_return(1)
+    end
+    subject { @optimizer.converges? }
+
+    context 'with non-equilibrium parameters' do
+      let(:params) { params_data1 }
+      let(:odds_histories) { odds_histories_data1 }
+
+      it 'returns false' do
+        @optimizer.run(2)
+        is_expected.to be_falsy
+      end
+    end
+
+    context 'with equilibrium parameters' do
+      let(:params) { params_data_equilibrium }
+      let(:odds_histories) { odds_histories_data_equilibrium }
+
+      it 'returns true' do
+        @optimizer.run(2)
+        is_expected.to be_truthy
+      end
+    end
+
+    context 'with the only 1 #run' do
+      let(:params) { params_data_equilibrium }
+      let(:odds_histories) { odds_histories_data_equilibrium }
+
+      it 'necessarily returns false' do
+        @optimizer.run(1)
+        is_expected.to be_falsy
+      end
+    end
+  end
+
   # 2 time-units smaller than odds_histories_data1
   def params_data1
     {

@@ -25,8 +25,9 @@ class DoUmaJob < ApplicationJob
 
     # Optimization process
     odds_list = odds_histories(race_id, odds_history_id)
-    optimized_params = optimize(process.params, odds_list)
+    optimized_params, is_converged = optimize(process.params, odds_list)
 
+    # 最新のレコードを取り直す
     process = OptimizationProcess.find_by!(race_id: race_id)
     process.with_lock do
       # せっかく最適化しても，所有権が違ったら更新しない
@@ -35,7 +36,11 @@ class DoUmaJob < ApplicationJob
       process.update!(params_json: optimized_params.to_json)
     end
 
-    DoUmaJob.perform_later(race_id, odds_history_id)
+    if is_converged
+      Rails.logger.info('Optimizer converges!!')
+    else
+      DoUmaJob.perform_later(race_id, odds_history_id)
+    end
   end
 
   private
@@ -58,7 +63,8 @@ class DoUmaJob < ApplicationJob
     optimizer = Uma2::Optimizer.new(params: params)
     optimizer.add_odds(odds_list)
     optimizer.run(Settings.uma2.iteration)
-    optimizer.parameter
+    is_converged = optimizer.converges?
+    [optimizer.parameter, is_converged]
   end
 
   def odds_histories(race_id, last_odds_history_id)

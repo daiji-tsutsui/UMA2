@@ -15,6 +15,8 @@ module Uma2
       @a = Weight.new(a)
       @b = Certainty.new(b)
       @t = TrueDistribution.new(t)
+      @loss = 1000.0
+      @is_converged = false
     end
 
     def parameter
@@ -31,8 +33,12 @@ module Uma2
     end
 
     def run(iteration)
-      iteration.times { |_i| update! }
-      loss
+      (1..iteration).each do |i|
+        update!
+        check_interval = Settings.uma2.check_loss_interval
+        check_loss_decreasing(loss) if (i % check_interval).zero?
+      end
+      @loss
     end
 
     def loss
@@ -40,6 +46,10 @@ module Uma2
       return 0.0 if @model.nil?
 
       @model.loss(@odds_list)
+    end
+
+    def converges?
+      @is_converged
     end
 
     private
@@ -67,6 +77,16 @@ module Uma2
       @a.update(@odds_list, @model)
       @b.update(@odds_list, @model, old_a, old_t)
       @t.update(@odds_list, @model, old_a, old_b)
+    end
+
+    def check_loss_decreasing(new_loss)
+      check_margin = Settings.uma2.check_loss_margin
+      conv_margin = Settings.uma2.convergence_margin
+      if @loss - new_loss > check_margin # 有意に増加が認められたら警告しておく
+        Rails.logger.warn("Loss function increasing!! #{@loss} -> #{new_loss}")
+      end
+      @is_converged = (@loss - new_loss < conv_margin)
+      @loss = new_loss
     end
   end
 end
