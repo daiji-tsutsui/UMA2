@@ -26,7 +26,7 @@ class ScheduleUmaByRaceJob < ApplicationJob
     end
 
     # レース名が取れていないのはおかしい
-    raise "Cannot fetch info at #{course_name} #{race_num}R" unless race_info.key?(:name)
+    raise "Cannot fetch info at #{course_name} #{race_num}R" unless race_info.has_key?(:name)
 
     # レース情報のINSERT
     race_hash = format_for_insert(race_info)

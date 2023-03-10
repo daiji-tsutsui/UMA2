@@ -5,6 +5,7 @@ require 'json'
 # Model class for 'schedule_rules' table
 class ScheduleRule < ApplicationRecord
   def data
+    # Array of hashes such as { 'duration' => Integer, 'interval' => Integer }
     @data ||= JSON.parse(data_json)
   end
 

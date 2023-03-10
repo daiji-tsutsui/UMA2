@@ -28,6 +28,18 @@ Style/PerlBackrefs:
   Exclude:
     - lib/netkeiba/race_base_page.rb
     - lib/netkeiba/race_page.rb
+Style/RedundantSelf:
+  Exclude:
+    - lib/uma2/positives.rb
+    - lib/uma2/probability.rb
+Style/PreferredHashMethods:
+  EnforcedStyle: verbose
+
+Naming/MethodParameterName:
+  Exclude:
+    - lib/uma2/positives.rb
+    - lib/uma2/probability.rb
+    - lib/uma2/optimizer/*
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
