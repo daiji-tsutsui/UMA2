@@ -3,6 +3,7 @@
 module Uma2
   # Presentation for nonnegative distributions with $n$-dim
   class Positives < Array
+    # TODO: 環境変数化
     NON_NEGATIVE_MARGIN = 1e-5
 
     def initialize(w = [])

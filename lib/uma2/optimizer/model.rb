@@ -30,6 +30,7 @@ module Uma2
         end.sum
       end
 
+      # TODO: privateでいいよ
       class << self
         def strategy(odds, b, t)
           expect_gain = t.schur(odds)

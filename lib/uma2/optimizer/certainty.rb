@@ -18,7 +18,7 @@ module Uma2
       private
 
       def grad
-        (1..@strategies.size).map { |k| grad_entry(k) }
+        (1..size - 1).map { |k| grad_entry(k) }
       end
 
       def grad_entry(k)

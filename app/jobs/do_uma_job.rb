@@ -23,11 +23,14 @@ class DoUmaJob < ApplicationJob
     process = OptimizationProcess.find_by!(race_id: race_id)
     return unless owned?(process, odds_history_id)
 
+    # TODO: 出走時刻を過ぎていたら終わり
+
     # Optimization process
     odds_list = odds_histories(race_id, odds_history_id)
     optimized_params, is_converged = optimize(process.params, odds_list)
 
     # 最新のレコードを取り直す
+    # TODO: キャッシュから取らないようにしましょう
     process = OptimizationProcess.find_by!(race_id: race_id)
     process.with_lock do
       # せっかく最適化しても，所有権が違ったら更新しない
@@ -69,7 +72,8 @@ class DoUmaJob < ApplicationJob
 
   def odds_histories(race_id, last_odds_history_id)
     OddsHistory.where(race_id: race_id)
-               .where(id: ...last_odds_history_id)
+               .where(id: ..last_odds_history_id)
+               .order(id: :asc)
                .all.map(&:data)
   end
 end

@@ -82,7 +82,7 @@ module Uma2
     def check_loss_decreasing(new_loss)
       check_margin = Settings.uma2.check_loss_margin
       conv_margin = Settings.uma2.convergence_margin
-      if @loss - new_loss > check_margin # 有意に増加が認められたら警告しておく
+      if new_loss - @loss > check_margin # 有意に増加が認められたら警告しておく
         Rails.logger.warn("Loss function increasing!! #{@loss} -> #{new_loss}")
       end
       @is_converged = (@loss - new_loss < conv_margin)

@@ -17,9 +17,12 @@ module Uma2
       private
 
       def grad
-        (1..@strategies.size).map { |k| grad_entry(k) }
+        (1..size - 1).map { |k| grad_entry(k) }
       end
 
+      # odds_list: 0 1 2 ... n-1 n
+      # model_p:   0 1 2 ... n-1
+      # index m:     1 2 ... n-1 n
       def grad_entry(k)
         @model_p.map.with_index(1) do |p, m|
           grad_at_instant(k, m, p)
@@ -42,9 +45,10 @@ module Uma2
 
       def grad_integrant_for_small_m(_k, m, p)
         alpha = shrink_rate(m)
+        a = shrink(m)
         p.map.with_index do |p_i, i|
-          shrink(m).map.with_index(1) do |a_h, h|
-            alpha * a_h * (@strategies[h - 1][i] - @ini_p[i]) / p_i
+          (1..m).map do |h|
+            alpha * a[h] * (@strategies[h - 1][i] - @ini_p[i]) / p_i
           end.sum
         end
       end
