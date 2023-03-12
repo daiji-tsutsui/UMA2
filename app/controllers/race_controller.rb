@@ -14,6 +14,8 @@ class RaceController < ApplicationController
   def show
     @race = Race.includes(race_horses: :horse)
                 .find(params[:id])
+    @odds_histories = @race.odds_histories # DESC
+    @optimized_params = optimized_params(@race)
     return unless @race.nil?
 
     flash[:danger] = ERROR_MESSAGE_NO_SUCH_RACE
@@ -24,5 +26,22 @@ class RaceController < ApplicationController
 
   def search_params
     params.permit(:name, :date, :course, :number, race_class: [])
+  end
+
+  def optimized_params(race)
+    process = race.optimization_process
+    return dummy_params if process.nil?
+
+    params = process.params
+    params.each { |_key, val| val.reverse! }
+    params
+  end
+
+  def dummy_params
+    {
+      'a' => [],
+      'b' => [],
+      't' => [],
+    }
   end
 end

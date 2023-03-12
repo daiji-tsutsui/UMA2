@@ -4,11 +4,13 @@
     <table align="center">
       <thead>
         <tr>
-          <th><strong>&#35;</strong></th>
-          <th><strong>取得時刻</strong></th>
+          <th><strong> &#35; </strong></th>
+          <th><strong> 取得時刻 </strong></th>
           <% odds_histories[0].data.size.times do |i| %>
             <th><strong><%= i + 1 %></strong></th>
           <% end %>
+          <th> weight </th>
+          <th> certainty </th>
         </tr>
       </thead>
       <tbody>
@@ -21,6 +23,8 @@
                 <%= value %>
               </td>
             <% end %>
+            <td><%= params['a'][i - 1].round(4) unless params['a'][i - 1].nil? %></td>
+            <td><%= params['b'][i - 1].round(2) unless params['b'][i - 1].nil? %></td>
           </tr>
         <% end %>
       </tbody>

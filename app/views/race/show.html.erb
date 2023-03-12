@@ -8,8 +8,8 @@
   </div>
 </div>
 
-<% unless @race.odds_histories.blank? %>
-  <%= render 'odds_history', odds_histories: @race.odds_histories %>
+<% unless  @odds_histories.blank? %>
+  <%= render 'odds_history', odds_histories: @odds_histories, params: @optimized_params %>
 <% end %>
 
 <%#= debug(@race.attributes) if Rails.env.development? %>
