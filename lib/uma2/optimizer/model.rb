@@ -11,6 +11,11 @@ module Uma2
         @strategies = []
       end
 
+      # odds_list:  0 1 2 ... n-1 n
+      # param a, b: 1 2 3 ... n-1 x
+      #  results in
+      # @series:    0 1 2 ... n-2
+      # @strategies 0 1 2 ... n-2
       def forecast(odds_list, params)
         p = Probability.new_from_odds(odds_list[0])
         @series = (1..odds_list.size - 1).map do |i|
@@ -30,21 +35,18 @@ module Uma2
         end.sum
       end
 
-      # TODO: privateでいいよ
-      class << self
-        def strategy(odds, b, t)
-          expect_gain = t.schur(odds)
-          w = expect_gain.map { |r| Math.exp(r * b) }
-          Probability.new(w)
-        end
-      end
-
       private
 
       def forecast_next(prev, odds, a, b, t)
-        s = self.class.strategy(odds, b, t)
+        s = strategy(odds, b, t)
         @strategies.push s
         w = prev.map.with_index { |r, i| ((1.0 - a) * r) + (a * s[i]) }
+        Probability.new(w)
+      end
+
+      def strategy(odds, b, t)
+        expect_gain = t.schur(odds)
+        w = expect_gain.map { |r| Math.exp(r * b) }
         Probability.new(w)
       end
     end

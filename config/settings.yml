@@ -10,3 +10,4 @@ uma2:
   convergence_margin: <%= ENV.fetch('UMA2_CONVERGENCE_MARGIN'){ '1e-5' }.to_f %>
   check_loss_margin: <%= ENV.fetch('UMA2_CHECK_LOSS_MARGIN'){ '1e-6' }.to_f %>
   check_loss_interval: <%= ENV.fetch('UMA2_CHECK_LOSS_INTERVAL'){ '10' }.to_i %>
+  nonnegative_margin: <%= ENV.fetch('UMA2_NONNEGATIVE_MARGIN'){ '1e-5' }.to_f %>

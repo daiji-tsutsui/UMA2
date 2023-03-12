@@ -21,6 +21,9 @@ module Uma2
         (1..size - 1).map { |j| grad_entry(j) }
       end
 
+      # odds_list: 0 1 2 ... n-1 n
+      # model_p:   0 1 2 ... n-1
+      # index m:     1 2 ... n-1 n
       def grad_entry(j)
         @model_p.map.with_index(1) do |p, m|
           grad_at_instant(j, m, p)

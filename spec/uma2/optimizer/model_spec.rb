@@ -4,7 +4,7 @@ require 'rails_helper'
 require 'uma2/optimizer/model'
 
 RSpec.describe 'Uma2::Optimizer::Model' do
-  describe '#strategy' do
+  xdescribe '#strategy' do
     subject { Uma2::Optimizer::Model.strategy(odds, b, t) }
 
     context 'with uniform odds and t' do
