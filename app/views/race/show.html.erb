@@ -8,7 +8,10 @@
   </div>
 </div>
 
-<% unless  @odds_histories.blank? %>
+<% unless @optimized_params.blank? %>
+  <%= render 'strategies', proposer: @proposer %>
+<% end %>
+<% unless @odds_histories.blank? %>
   <%= render 'odds_history', odds_histories: @odds_histories, params: @optimized_params %>
 <% end %>
 

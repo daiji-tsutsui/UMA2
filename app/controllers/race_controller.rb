@@ -15,7 +15,8 @@ class RaceController < ApplicationController
     @race = Race.includes(race_horses: :horse)
                 .find(params[:id])
     @odds_histories = @race.odds_histories # DESC
-    @optimized_params = optimized_params(@race)
+    @optimized_params = optimized_params
+    @proposer = proposer(10)
     return unless @race.nil?
 
     flash[:danger] = ERROR_MESSAGE_NO_SUCH_RACE
@@ -28,13 +29,26 @@ class RaceController < ApplicationController
     params.permit(:name, :date, :course, :number, race_class: [])
   end
 
-  def optimized_params(race)
-    process = race.optimization_process
+  def optimized_params
+    {
+      a: process_params['a'].reverse,
+      b: process_params['b'].reverse,
+      t: process_params['t'],
+    }
+  end
+
+  def proposer(bet)
+    odds = @race.odds_histories.first.data
+    Uma2::Proposer.new(process_params, odds, bet)
+  end
+
+  def process_params
+    return @process_params unless @process_params.nil?
+
+    process = @race.optimization_process
     return dummy_params if process.nil?
 
-    params = process.params
-    params.each { |_key, val| val.reverse! }
-    params
+    @process_params = process.params
   end
 
   def dummy_params

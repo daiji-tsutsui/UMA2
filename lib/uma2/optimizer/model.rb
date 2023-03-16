@@ -35,18 +35,18 @@ module Uma2
         end.sum
       end
 
+      def strategy(odds, b, t)
+        expect_gain = t.schur(odds)
+        w = expect_gain.map { |r| Math.exp(r * b) }
+        Probability.new(w)
+      end
+
       private
 
       def forecast_next(prev, odds, a, b, t)
         s = strategy(odds, b, t)
         @strategies.push s
         w = prev.map.with_index { |r, i| ((1.0 - a) * r) + (a * s[i]) }
-        Probability.new(w)
-      end
-
-      def strategy(odds, b, t)
-        expect_gain = t.schur(odds)
-        w = expect_gain.map { |r| Math.exp(r * b) }
         Probability.new(w)
       end
     end

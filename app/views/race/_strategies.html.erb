@@ -1,0 +1,58 @@
+
+<div class="container odds_history">
+  <div class="col-md-12">
+    <table align="center">
+      <thead>
+        <tr>
+          <th><strong> &#35; </strong></th>
+          <% proposer.t.size.times do |i| %>
+            <th><strong><%= i + 1 %></strong></th>
+          <% end %>
+          <th> expect </th>
+          <th> hit prob. </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- true_distribution -->
+        <tr>
+          <td> true distirbution </td>
+          <% proposer.t.each do |value| %>
+            <td><%= value.round(3) %></td>
+          <% end %>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <!-- base_strategy -->
+        <tr>
+          <td> base strategy </td>
+          <% proposer.base_strategy.each do |value| %>
+            <td><%= value.round(3) %></td>
+          <% end %>
+          <td><%= proposer.base_expectation.round(3) %></td>
+          <td></td>
+        </tr>
+
+        <!-- gain_strategy -->
+        <tr>
+          <td> gain strategy </td>
+          <% proposer.gain_strategy.each do |value| %>
+            <td><%= value %></td>
+          <% end %>
+          <td><%= proposer.gain_expectation.round(3) %></td>
+          <td><%= proposer.gain_probability.round(3) %></td>
+        </tr>
+
+        <!-- hit_strategy -->
+        <tr>
+          <td> hit strategy </td>
+          <% proposer.hit_strategy.each do |value| %>
+            <td><%= value %></td>
+          <% end %>
+          <td><%= proposer.hit_expectation.round(3) %></td>
+          <td><%= proposer.hit_probability.round(3) %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

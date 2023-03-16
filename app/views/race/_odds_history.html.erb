@@ -23,8 +23,8 @@
                 <%= value %>
               </td>
             <% end %>
-            <td><%= params['a'][i - 1].round(4) unless params['a'][i - 1].nil? %></td>
-            <td><%= params['b'][i - 1].round(2) unless params['b'][i - 1].nil? %></td>
+            <td><%= params[:a][i - 1].round(4) unless params[:a][i - 1].nil? %></td>
+            <td><%= params[:b][i - 1].round(2) unless params[:b][i - 1].nil? %></td>
           </tr>
         <% end %>
       </tbody>
