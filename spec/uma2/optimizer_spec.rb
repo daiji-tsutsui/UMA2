@@ -15,7 +15,7 @@ RSpec.describe 'Uma2::Optimizer' do
         expect(@optimizer.b).to be_a Uma2::Optimizer::Certainty
         expect(@optimizer.t).to be_a Uma2::Optimizer::TrueDistribution
         expect(@optimizer.a).to eq [1.0]
-        expect(@optimizer.b).to eq [1.0]
+        expect(@optimizer.b).to eq [Settings.uma2.initial_certainty]
         expect(@optimizer.t).to eq [1.0]
       end
     end

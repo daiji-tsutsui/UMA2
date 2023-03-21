@@ -4,8 +4,14 @@ module Uma2
   class Optimizer
     # Certainty parameter for odds forecasting model
     class Certainty < Uma2::Positives
+      def initialize(w = [])
+        @settings = Settings.uma2
+        w = [@settings.initial_certainty] if w.blank?
+        super(w)
+      end
+
       def update(odds_list, model, a, t)
-        @eps = Settings.uma2.learning_rate
+        @eps = @settings.learning_rate
         @model_p = model.series
         @strategies = model.strategies
         @odds_list = odds_list
