@@ -23,7 +23,6 @@
           <td></td>
         </tr>
 
-        <!-- base_strategy -->
         <tr>
           <td> base strategy </td>
           <% proposer.base_strategy.each do |value| %>
@@ -33,24 +32,22 @@
           <td></td>
         </tr>
 
-        <!-- gain_strategy -->
         <tr>
           <td> gain strategy </td>
           <% proposer.gain_strategy.each do |value| %>
             <td><%= value %></td>
           <% end %>
-          <td><%= proposer.gain_expectation.round(3) %></td>
-          <td><%= proposer.gain_probability.round(3) %></td>
+          <td><%= proposer.gain_strategy.expectation.round(3) %></td>
+          <td><%= proposer.gain_strategy.probability.round(3) %></td>
         </tr>
 
-        <!-- hit_strategy -->
         <tr>
           <td> hit strategy </td>
           <% proposer.hit_strategy.each do |value| %>
             <td><%= value %></td>
           <% end %>
-          <td><%= proposer.hit_expectation.round(3) %></td>
-          <td><%= proposer.hit_probability.round(3) %></td>
+          <td><%= proposer.hit_strategy.expectation.round(3) %></td>
+          <td><%= proposer.hit_strategy.probability.round(3) %></td>
         </tr>
       </tbody>
     </table>
