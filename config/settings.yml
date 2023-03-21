@@ -11,3 +11,8 @@ uma2:
   check_loss_margin: <%= ENV.fetch('UMA2_CHECK_LOSS_MARGIN'){ '1e-6' }.to_f %>
   check_loss_interval: <%= ENV.fetch('UMA2_CHECK_LOSS_INTERVAL'){ '10' }.to_i %>
   nonnegative_margin: <%= ENV.fetch('UMA2_NONNEGATIVE_MARGIN'){ '1e-5' }.to_f %>
+  proposer:
+    hit_probability_min: <%= ENV.fetch('UMA2_PROPOSER_HIT_PROBABILITY_MIN'){ '0.8' }.to_f %>
+app:
+  race:
+    bet: <%= ENV.fetch('APP_RACE_PROPOSER_BET'){ '10' }.to_i %>

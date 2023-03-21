@@ -7,8 +7,6 @@ module Uma2
   class Proposer
     attr_reader :t
 
-    HIT_PROBABILITY_CRITERION = 0.8
-
     def initialize(params, odds, bet)
       raise 'Only integer bet is permitted' unless bet.is_a?(Integer)
 
@@ -17,6 +15,7 @@ module Uma2
       @t = Probability.new(t)
       @odds = odds
       @bet = bet
+      @settings = Settings.uma2.proposer
     end
 
     def gain_strategy
@@ -36,17 +35,7 @@ module Uma2
     def hit_strategy
       return @hit_strategy unless @hit_strategy.nil?
 
-      strategy = Array.new(@odds.size, 0)
-      hit_probability = 0.0
-      @odds.size.times do |i|
-        break if hit_probability >= HIT_PROBABILITY_CRITERION
-
-        weight, index = @t.each.with_index.sort.reverse[i]
-        strategy[index] = 1
-        hit_probability += weight
-      end
-      sub_strategy = discrete_base_strategy(@bet - strategy.sum)
-      @hit_strategy = strategy.map.with_index { |s_i, i| s_i + sub_strategy[i] }
+      @hit_strategy = build_hit_strategy
     end
 
     def hit_expectation
@@ -73,6 +62,20 @@ module Uma2
       b = params['b'] || params[:b]
       t = params['t'] || params[:t]
       [b, t]
+    end
+
+    def build_hit_strategy
+      strategy = Array.new(@odds.size, 0)
+      hit_probability = 0.0
+      @odds.size.times do |i|
+        break if hit_probability >= @settings.hit_probability_min
+
+        weight, index = @t.each.with_index.sort.reverse[i]
+        strategy[index] = 1
+        hit_probability += weight
+      end
+      sub_strategy = discrete_base_strategy(@bet - strategy.sum)
+      strategy.map.with_index { |s_i, i| s_i + sub_strategy[i] }
     end
 
     def discrete_base_strategy(bet)
