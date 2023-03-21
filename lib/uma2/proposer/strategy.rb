@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'uma2/optimizer/model'
-
 module Uma2
   class Proposer
     # Strategy instance class which entries are nonnegative Integer

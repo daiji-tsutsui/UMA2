@@ -11,9 +11,7 @@ module Uma2
     def initialize(params, odds, bet)
       raise 'Only integer bet is permitted' unless bet.is_a?(Integer)
 
-      b, t = extract(params)
-      @b = b[-1]
-      @t = Probability.new(t)
+      @b, @t = extract(params)
       @odds = odds
       @bet = bet
       @settings = Settings.uma2.proposer
@@ -40,7 +38,7 @@ module Uma2
     def extract(params)
       b = params['b'] || params[:b]
       t = params['t'] || params[:t]
-      [b, t]
+      [b[-1], Probability.new(t)]
     end
 
     def discrete_base_strategy(bet)
