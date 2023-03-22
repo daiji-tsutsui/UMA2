@@ -10,8 +10,6 @@ module Netkeiba
 
     element :horse_table, 'table.Shutuba_Table'
 
-    RACE_PAGE_CURRENT_WEIGHT_PATTERN = /\A(\d+)\(.*\)/
-
     # 出馬情報
     def horses_info
       horse_table.find_all('tbody > tr.HorseList').map do |horse|

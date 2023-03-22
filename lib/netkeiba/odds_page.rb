@@ -15,8 +15,7 @@ module Netkeiba
 
     ODDS_PAGE_SINGLE_ODDS_CSS = 'span[id^="odds-1_"]'
 
-    def single_odds(race_id)
-      @race_id = race_id
+    def single_odds
       select_single_odds_table!
       Rails.logger.debug('1st update_and_fetch_single_odds')
       result = update_and_fetch_single_odds
@@ -25,6 +24,11 @@ module Netkeiba
       # 変な数値があれば一回だけリトライ
       Rails.logger.debug('2nd update_and_fetch_single_odds')
       update_and_fetch_single_odds
+    end
+
+    def single_odds_for_result
+      single_odds_table_link.hover.click
+      fetch_single_odds
     end
 
     private
@@ -41,6 +45,10 @@ module Netkeiba
         wait_until_last_odds_update_date_visible
       end
       sleep(0.5)
+      fetch_single_odds
+    end
+
+    def fetch_single_odds
       single_odds_table.all(ODDS_PAGE_SINGLE_ODDS_CSS).map(&:text)
     end
   end

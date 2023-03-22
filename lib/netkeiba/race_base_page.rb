@@ -22,6 +22,7 @@ module Netkeiba
     RACE_PAGE_STARTING_TIME_PATTERN = /\A(.*)発走/
     RACE_PAGE_COURSE_TYPE_PATTERN   = /\A([^\d]+)\d/
     RACE_PAGE_DISTANCE_PATTERN      = /(\d+)m/
+    RACE_PAGE_CURRENT_WEIGHT_PATTERN = /\A(\d+)\(.*\)/
 
     # レース情報
     def race_info
