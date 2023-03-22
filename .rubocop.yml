@@ -28,6 +28,7 @@ Style/PerlBackrefs:
   Exclude:
     - lib/netkeiba/race_base_page.rb
     - lib/netkeiba/race_page.rb
+    - lib/netkeiba/result_page.rb
 Style/RedundantSelf:
   Exclude:
     - lib/uma2/positives.rb
