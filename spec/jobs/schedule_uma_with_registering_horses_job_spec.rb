@@ -14,6 +14,8 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
     allow(@race_page).to receive(:show_horse_table).and_return(@race_page)
     allow(FetchOddsAndDoUmaJob).to receive(:set).and_return(FetchOddsAndDoUmaJob)
     allow(FetchOddsAndDoUmaJob).to receive(:perform_later).and_return(true)
+    allow(FetchResultJob).to receive(:set).and_return(FetchResultJob)
+    allow(FetchResultJob).to receive(:perform_later).and_return(true)
   end
 
   describe 'when horses_info is obtained' do
@@ -50,6 +52,7 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
     it '#perform calls FetchOddsAndDoUmaJob for each time scheduled' do
       ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).exactly(17).times
+      expect(FetchResultJob).to have_received(:perform_later).once
     end
 
     it '#perform AGAIN does NOT change Horse records' do
@@ -63,6 +66,7 @@ RSpec.describe 'ScheduleUmaWithRegisteringHorsesJob' do
       ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id)
       ScheduleUmaWithRegisteringHorsesJob.perform_now(@race_id) # Do again
       expect(FetchOddsAndDoUmaJob).to have_received(:perform_later).exactly(17).times
+      expect(FetchResultJob).to have_received(:perform_later).once
     end
   end
 

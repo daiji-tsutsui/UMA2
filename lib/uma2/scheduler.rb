@@ -20,6 +20,10 @@ module Uma2
       yield(@table.shift) while next?
     end
 
+    def execute_after
+      yield(after_end)
+    end
+
     private
 
     # 'schedule_rules'のレコードをもとに時刻表を作る
@@ -51,6 +55,11 @@ module Uma2
     def next?
       # @end_timeは取り出せない
       @table.size > 1
+    end
+
+    def after_end
+      wait = Settings.uma2.scheduler.after_wait_minutes
+      @end_time + wait.minutes
     end
   end
 end

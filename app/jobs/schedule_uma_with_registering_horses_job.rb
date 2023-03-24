@@ -85,5 +85,8 @@ class ScheduleUmaWithRegisteringHorsesJob < ApplicationJob
     scheduler.execute! do |t|
       FetchOddsAndDoUmaJob.set(wait_until: t).perform_later(race_id)
     end
+    scheduler.execute_after do |t|
+      FetchResultJob.set(wait_until: t).perform_later(race_id)
+    end
   end
 end

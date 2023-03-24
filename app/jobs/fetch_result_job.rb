@@ -9,7 +9,6 @@ require 'json'
 class FetchResultJob < ApplicationJob
   queue_as :default
 
-  # TODO: 推定結果との比較，統計がしやすいようにフォーマットする
   # TODO: 天気とったり，完了フラグも立てたい
   def perform(race_id)
     date, course_name, race_num = fetch_race_info(race_id)
