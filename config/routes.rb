@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get '/races/(:id)',  to: 'race#show',   as: :race
   get '/horses',       to: 'horse#index', as: :horses
   get '/horses/(:id)', to: 'horse#show',  as: :horse
+  get '/stats',        to: 'stats#index', as: :stats
 
   get  '/schedules',       to: 'schedule_rule#index', as: :schedule_rules
   get  '/schedules/new',   to: 'schedule_rule#new',   as: :new_schedule

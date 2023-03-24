@@ -40,19 +40,20 @@ RSpec.describe 'Uma2::Scheduler' do
       expect { Uma2::Scheduler.new }.to raise_error(ArgumentError)
     end
   end
+end
 
-  class MockJob
-    def self.set(wait_until: nil)
-      @wait_until = wait_until
-      MockJob
-    end
+# Job class for mock using only in this test
+class MockJob
+  def self.set(wait_until: nil)
+    @wait_until = wait_until
+    MockJob
+  end
 
-    def self.perform_later
-      # nothing
-    end
+  def self.perform_later
+    # nothing
+  end
 
-    def self.wait_until
-      @wait_until
-    end
+  class << self
+    attr_reader :wait_until
   end
 end
