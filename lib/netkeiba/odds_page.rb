@@ -19,7 +19,7 @@ module Netkeiba
       select_single_odds_table!
       Rails.logger.debug('1st update_and_fetch_single_odds')
       result = update_and_fetch_single_odds
-      return result unless result.map(&:to_f).include?(0.0)
+      return result if seems_ok(result)
 
       # 変な数値があれば一回だけリトライ
       Rails.logger.debug('2nd update_and_fetch_single_odds')
@@ -27,14 +27,21 @@ module Netkeiba
     end
 
     def single_odds_for_result
-      single_odds_table_link.hover.click
+      select_single_odds_table!(update: false)
+      result = fetch_single_odds
+      return result if seems_ok(result)
+
+      # 変な数値があれば一回だけリトライ
       fetch_single_odds
     end
 
     private
 
-    def select_single_odds_table!
+    def select_single_odds_table!(update: true)
       single_odds_table_link.hover.click
+      wait_until_single_odds_table_visible
+      return self unless update
+
       wait_until_last_odds_update_date_visible
       self
     end
@@ -50,6 +57,10 @@ module Netkeiba
 
     def fetch_single_odds
       single_odds_table.all(ODDS_PAGE_SINGLE_ODDS_CSS).map(&:text)
+    end
+
+    def seems_ok(array)
+      !array.map(&:to_f).include?(0.0)
     end
   end
 end
