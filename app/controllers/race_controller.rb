@@ -17,7 +17,7 @@ class RaceController < ApplicationController
     @race = Race.includes(race_horses: :horse)
                 .find(params[:id])
     @odds_histories = @race.odds_histories # DESC
-    @optimized_params = optimized_params
+    @optimized_parameters = optimized_parameters
     @proposer = proposer(@settings.bet)
     return unless @race.nil?
 
@@ -35,36 +35,36 @@ class RaceController < ApplicationController
     @settings = Settings.app.race
   end
 
-  def optimized_params
-    return dummy_params if process_params.nil?
+  def optimized_parameters
+    return empty_parameters if process_parameters.nil?
 
     {
-      a: process_params['a'].reverse,
-      b: process_params['b'].reverse,
-      t: process_params['t'],
+      a: process_parameters['a'].reverse,
+      b: process_parameters['b'].reverse,
+      t: process_parameters['t'],
     }
   end
 
   def proposer(bet)
-    return if process_params.nil?
+    return if process_parameters.nil?
 
     odds_histories = @race.odds_histories
     return if odds_histories.empty?
 
     odds = odds_histories.first.data
-    Uma2::Proposer.new(process_params, odds, bet)
+    Uma2::Proposer.new(process_parameters, odds, bet)
   end
 
-  def process_params
-    return @process_params unless @process_params.nil?
+  def process_parameters
+    return @process_parameters unless @process_parameters.nil?
 
     process = @race.optimization_process
     return if process.nil?
 
-    @process_params = process.params
+    @process_parameters = process.params
   end
 
-  def dummy_params
+  def empty_parameters
     {
       a: [],
       b: [],

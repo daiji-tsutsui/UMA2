@@ -11,7 +11,8 @@
             </th>
           <% end %>
           <th> expect </th>
-          <th> hit prob. </th>
+          <th> prob. </th>
+          <th> actual </th>
         </tr>
       </thead>
       <tbody>
@@ -25,6 +26,7 @@
           <% end %>
           <td></td>
           <td></td>
+          <td></td>
         </tr>
 
         <tr>
@@ -34,6 +36,7 @@
           <% end %>
           <td><%= display_float proposer.base_expectation %></td>
           <td></td>
+          <td><%= display_float actual_gain(proposer.base_strategy) %></td>
         </tr>
 
         <tr>
@@ -45,6 +48,7 @@
           <% end %>
           <td><%= display_float proposer.gain_strategy.expectation %></td>
           <td><%= display_float proposer.gain_strategy.probability %></td>
+          <td><%= display_float actual_gain(proposer.gain_strategy) %></td>
         </tr>
 
         <tr>
@@ -56,6 +60,7 @@
           <% end %>
           <td><%= display_float proposer.hit_strategy.expectation %></td>
           <td><%= display_float proposer.hit_strategy.probability %></td>
+          <td><%= display_float actual_gain(proposer.hit_strategy) %></td>
         </tr>
 
       </tbody>

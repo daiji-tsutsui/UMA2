@@ -45,9 +45,26 @@ module RaceHelper
     ''
   end
 
+  def order_css(order)
+    return "resultorder-#{order}" if [1, 2, 3].include? order
+    'resultorder-rest'
+  end
+
   def tooltip_horse_name(number)
     race_horse = get_race_horse_by_number(number)
     race_horse.nil? ? '' : race_horse.horse.name
+  end
+
+  def sort(result_array)
+    result_array.sort { |h1, h2| h1['number'] <=> h2['number'] }
+  end
+
+  def actual_gain(strategy)
+    number = get_win_horse_number
+    return '' if number.nil?
+
+    actual_bet = strategy[number.to_i - 1]
+    actual_bet * get_win_horse_odds(number)
   end
 
   private
@@ -58,5 +75,19 @@ module RaceHelper
     @race.race_horses.find do |race_horse|
       race_horse.number == number
     end
+  end
+
+  def get_win_horse_number
+    return nil if @race.nil?
+
+    result = @race.race_result.data
+    result.find { |horse| horse['order'] == 1 }['number']
+  end
+
+  def get_win_horse_odds(number)
+    return nil if @race.nil?
+
+    final_odds = @race.race_result.odds
+    final_odds[number.to_i - 1]
   end
 end

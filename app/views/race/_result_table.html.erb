@@ -1,0 +1,38 @@
+
+<div class="container result_table">
+  <div class="col-md-12">
+    <table align="center">
+      <thead>
+        <tr>
+          <th></th>
+          <% result.odds.size.times do |i| %>
+            <th class="<%= frame_css_from_number(i + 1) %>" title="<%= tooltip_horse_name(i + 1) %>" data-bs-toggle="tooltip" data-bs-placement="top">
+              <%= i + 1 %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td> final odds </td>
+          <% result.odds.each do |value| %>
+            <td class="<%= odds_css(value) %>">
+              <%= value %>
+            </td>
+          <% end %>
+        </tr>
+
+        <tr>
+          <td> order </td>
+          <% sort(result.data).each do |horse| %>
+            <td class="<%= order_css(horse['order']) %>">
+              <%= horse['order'] %>
+            </td>
+          <% end %>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>

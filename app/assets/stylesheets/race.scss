@@ -38,7 +38,7 @@ div.race_horses{
 
 div.odds_history{
     display: flex;
-    padding: 20px;
+    padding: 15px;
     th, td{
         border: solid black 1px;
         padding: 3px 5px;
@@ -53,13 +53,25 @@ div.odds_history{
 
 div.strategies{
     display: flex;
-    padding: 20px;
+    padding: 10px;
     th, td{
         border: solid black 1px;
-        padding: 3px 5px;
+        padding: 2px 5px;
     }
     td.zero{
         color: #dfdddd;
+    }
+    td.dominant{
+        color: red;
+    }
+}
+
+div.result_table{
+    display: flex;
+    padding: 15px;
+    th, td{
+        border: solid black 2px;
+        padding: 3.5px 7px;
     }
     td.dominant{
         color: red;
@@ -97,4 +109,23 @@ div.strategies{
 .raceframe-8{
     background-color: pink;
     color: white;
+}
+
+.resultorder-1{
+    color: crimson;
+    background-color: mistyrose;
+    font-weight: bold;
+}
+.resultorder-2{
+    color: cornflowerblue;
+    background-color: lightcyan;
+    font-weight: bold;
+}
+.resultorder-3{
+    color: orange;
+    background-color: floralwhite;
+    font-weight: bold;
+}
+.resultorder-rest{
+    color: #ccc;
 }

@@ -8,11 +8,16 @@
   </div>
 </div>
 
+<% if @race.race_result.present? %>
+  <%= render 'result_table', result: @race.race_result %>
+<% end %>
+
 <% if @proposer.present? %>
   <%= render 'strategies', proposer: @proposer %>
 <% end %>
+
 <% if @odds_histories.present? %>
-  <%= render 'odds_history', odds_histories: @odds_histories, params: @optimized_params %>
+  <%= render 'odds_history', odds_histories: @odds_histories, params: @optimized_parameters %>
 <% end %>
 
 <%#= debug(@race.attributes) if Rails.env.development? %>

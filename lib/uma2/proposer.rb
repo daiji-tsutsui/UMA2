@@ -30,7 +30,8 @@ module Uma2
     end
 
     def base_expectation
-      @t.expectation(base_strategy)
+      f = base_strategy.map.with_index { |s_i, i| s_i * @odds[i] }
+      @t.expectation(f)
     end
 
     private
