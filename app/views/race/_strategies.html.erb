@@ -1,23 +1,27 @@
 
-<div class="container odds_history">
+<div class="container strategies">
   <div class="col-md-12">
     <table align="center">
       <thead>
         <tr>
-          <th><strong> &#35; </strong></th>
+          <th></th>
           <% proposer.t.size.times do |i| %>
-            <th><strong><%= i + 1 %></strong></th>
+            <th class="<%= frame_css_from_number(i + 1) %>" title="<%= tooltip_horse_name(i + 1) %>" data-bs-toggle="tooltip" data-bs-placement="top">
+              <%= i + 1 %>
+            </th>
           <% end %>
           <th> expect </th>
           <th> hit prob. </th>
         </tr>
       </thead>
       <tbody>
-        <!-- true_distribution -->
+
         <tr>
           <td> true distirbution </td>
           <% proposer.t.each do |value| %>
-            <td><%= value.round(3) %></td>
+            <td class="<%= true_distribution_css(value) %>">
+              <%= display_float value %>
+            </td>
           <% end %>
           <td></td>
           <td></td>
@@ -26,29 +30,34 @@
         <tr>
           <td> base strategy </td>
           <% proposer.base_strategy.each do |value| %>
-            <td><%= value.round(3) %></td>
+            <td><%= display_float value %></td>
           <% end %>
-          <td><%= proposer.base_expectation.round(3) %></td>
+          <td><%= display_float proposer.base_expectation %></td>
           <td></td>
         </tr>
 
         <tr>
           <td> gain strategy </td>
           <% proposer.gain_strategy.each do |value| %>
-            <td><%= value %></td>
+            <td class="<%= strategy_css(value) %>">
+              <%= value %>
+            </td>
           <% end %>
-          <td><%= proposer.gain_strategy.expectation.round(3) %></td>
-          <td><%= proposer.gain_strategy.probability.round(3) %></td>
+          <td><%= display_float proposer.gain_strategy.expectation %></td>
+          <td><%= display_float proposer.gain_strategy.probability %></td>
         </tr>
 
         <tr>
           <td> hit strategy </td>
           <% proposer.hit_strategy.each do |value| %>
-            <td><%= value %></td>
+            <td class="<%= strategy_css(value) %>">
+              <%= value %>
+            </td>
           <% end %>
-          <td><%= proposer.hit_strategy.expectation.round(3) %></td>
-          <td><%= proposer.hit_strategy.probability.round(3) %></td>
+          <td><%= display_float proposer.hit_strategy.expectation %></td>
+          <td><%= display_float proposer.hit_strategy.probability %></td>
         </tr>
+
       </tbody>
     </table>
   </div>

@@ -34,38 +34,6 @@ div.race_info{
 
 div.race_horses{
     display: flex;
-    .raceframe-1{
-        background-color: white;
-        color: black;
-    }
-    .raceframe-2{
-        background-color: #333;
-        color: white;
-    }
-    .raceframe-3{
-        background-color: #e95556;
-        color: white;
-    }
-    .raceframe-4{
-        background-color: #385da2;
-        color: white;
-    }
-    .raceframe-5{
-        background-color: #e7c52c;
-        color: white;
-    }
-    .raceframe-6{
-        background-color: #2a7f30;
-        color: white;
-    }
-    .raceframe-7{
-        background-color: orange;
-        color: white;
-    }
-    .raceframe-8{
-        background-color: pink;
-        color: white;
-    }
 }
 
 div.odds_history{
@@ -81,4 +49,52 @@ div.odds_history{
     td.dominant{
         color: red;
     }
+}
+
+div.strategies{
+    display: flex;
+    padding: 20px;
+    th, td{
+        border: solid black 1px;
+        padding: 3px 5px;
+    }
+    td.zero{
+        color: #dfdddd;
+    }
+    td.dominant{
+        color: red;
+    }
+}
+
+.raceframe-1{
+    background-color: white;
+    color: black;
+}
+.raceframe-2{
+    background-color: #333;
+    color: white;
+}
+.raceframe-3{
+    background-color: #e95556;
+    color: white;
+}
+.raceframe-4{
+    background-color: #385da2;
+    color: white;
+}
+.raceframe-5{
+    background-color: #e7c52c;
+    color: white;
+}
+.raceframe-6{
+    background-color: #2a7f30;
+    color: white;
+}
+.raceframe-7{
+    background-color: orange;
+    color: white;
+}
+.raceframe-8{
+    background-color: pink;
+    color: white;
 }

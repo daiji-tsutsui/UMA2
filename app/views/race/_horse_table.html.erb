@@ -11,7 +11,7 @@
 
     <% race_horses.each do |race_horse| %>
       <div class="row">
-        <div class="col-md-1 raceframe-<%= race_horse.frame %>">
+        <div class="col-md-1 <%= frame_css(race_horse.frame) %>">
           <%= race_horse.number %>
         </div>
         <div class="col-md-5">
