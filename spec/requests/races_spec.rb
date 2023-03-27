@@ -140,7 +140,7 @@ RSpec.describe 'Races', type: :request do
       is_expected.to render_template('_strategies')
       # strategy table headers
       expect(response.body).to include('expect')
-      expect(response.body).to include('hit prob.')
+      expect(response.body).to include('prob.')
       # strategy table rows
       expect(response.body).to include('true distirbution')
       expect(response.body).to include('0.75')

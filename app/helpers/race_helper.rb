@@ -31,22 +31,26 @@ module RaceHelper
   def odds_css(value)
     return 'zero' if value.zero?
     return 'dominant' if value < 10.0
+
     ''
   end
 
   def true_distribution_css(value)
     return 'zero' if value.round(ROUND_FLOAT).zero?
     return 'dominant' if value > 0.10
+
     ''
   end
 
   def strategy_css(value)
     return 'zero' if value.zero?
+
     ''
   end
 
   def order_css(order)
     return "resultorder-#{order}" if [1, 2, 3].include? order
+
     'resultorder-rest'
   end
 
@@ -60,11 +64,11 @@ module RaceHelper
   end
 
   def actual_gain(strategy)
-    number = get_win_horse_number
+    number = win_horse_number
     return '' if number.nil?
 
     actual_bet = strategy[number.to_i - 1]
-    actual_bet * get_win_horse_odds(number)
+    actual_bet * win_horse_odds(number)
   end
 
   private
@@ -77,15 +81,15 @@ module RaceHelper
     end
   end
 
-  def get_win_horse_number
-    return nil if @race.nil?
+  def win_horse_number
+    return nil if @race.nil? || @race.race_result.nil?
 
     result = @race.race_result.data
     result.find { |horse| horse['order'] == 1 }['number']
   end
 
-  def get_win_horse_odds(number)
-    return nil if @race.nil?
+  def win_horse_odds(number)
+    return nil if @race.nil? || @race.race_result.nil?
 
     final_odds = @race.race_result.odds
     final_odds[number.to_i - 1]
