@@ -26,6 +26,7 @@ RSpec.describe 'Races', type: :request do
   end
 
   describe 'GET /races/:id' do
+    # has odds_history
     subject { get race_path(1) }
 
     it 'should response success' do
@@ -77,6 +78,7 @@ RSpec.describe 'Races', type: :request do
   end
 
   describe 'GET /races/:id #2' do
+    # has nothing
     subject { get race_path(2) }
 
     it 'should response success' do
@@ -112,6 +114,7 @@ RSpec.describe 'Races', type: :request do
   end
 
   describe 'GET /races/:id #3' do
+    # has odds_history and optimization
     subject { get race_path(3) }
 
     it 'should response success' do
@@ -144,6 +147,45 @@ RSpec.describe 'Races', type: :request do
       # strategy table rows
       expect(response.body).to include('true distirbution')
       expect(response.body).to include('0.75')
+    end
+
+    it 'does NOT render result table of a race' do
+      is_expected.not_to render_template('_result_table')
+    end
+  end
+
+  describe 'GET /races/:id #4' do
+    # has odds_history, optimization, and result
+    subject { get race_path(4) }
+
+    it 'should response success' do
+      is_expected.to eq 200
+    end
+
+    it 'renders information table of a race' do
+      is_expected.to render_template('_info_table')
+      expect(response.body).to include('Test4')
+      expect(response.body).to include('阪神')
+    end
+
+    it 'renders horses table of a race' do
+      is_expected.to render_template('_horse_table')
+    end
+
+    it 'renders odds table of a race' do
+      is_expected.to render_template('_odds_history')
+    end
+
+    it 'renders strategy table of a race' do
+      is_expected.to render_template('_strategies')
+    end
+
+    it 'renders result table of a race' do
+      is_expected.to render_template('_result_table')
+      # result table rows
+      expect(response.body).to include('final odds')
+      expect(response.body).to include('order')
+      expect(response.body).to include('2.5')
     end
   end
 end

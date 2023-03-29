@@ -51,6 +51,9 @@ Layout/HashAlignment:
   Exclude:
     - lib/netkeiba/race_page.rb
     - spec/jobs/*_spec.rb
+Layout/LineLength:
+  Exclude:
+    - db/seeds.rb
 
 Metrics/BlockLength:
   Exclude:
