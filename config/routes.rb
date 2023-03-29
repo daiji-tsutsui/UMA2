@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/horses',       to: 'horse#index', as: :horses
   get '/horses/(:id)', to: 'horse#show',  as: :horse
   get '/stats',        to: 'stats#index', as: :stats
+  get '/stats/api',    to: 'stats#api'
 
   get  '/schedules',       to: 'schedule_rule#index', as: :schedule_rules
   get  '/schedules/new',   to: 'schedule_rule#new',   as: :new_schedule

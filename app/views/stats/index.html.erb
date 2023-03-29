@@ -1,0 +1,41 @@
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages': ['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function setApiUrl() {
+    let url = new URL('/stats/api', location.href);
+    return url;
+  }
+
+  function drawChart() {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    xhr.open('GET', setApiUrl());
+    xhr.send();
+    xhr.onload = function() {
+      drawGainChart(xhr);
+    };
+  }
+
+  function drawGainChart(xhr) {
+    var res = [['日時', 'test1', 'test2', 'test3']];
+    if (xhr.status != 200) return;
+
+    xhr.response.forEach((x) => {
+      res.push([new Date(x.datetime), x.test1, x.test2, x.test3]);
+    });
+    console.log(res);
+    var data = new google.visualization.arrayToDataTable(res);
+    var options = {
+        legend: { position: 'right' },
+        vAxis: { minValue: 0, maxValue: 1000, gridlines: { count: 5 } },
+        hAxis: { format: 'MM/dd HH:mm', gridlines: { count: 20 } },
+    };
+    var chart = new google.visualization.SteppedAreaChart(document.getElementById('gain_chart'));
+    chart.draw(data, options);
+  }
+</script>
+
+<div id="gain_chart"></div>
