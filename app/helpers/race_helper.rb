@@ -59,39 +59,15 @@ module RaceHelper
     race_horse.nil? ? '' : race_horse.horse.name
   end
 
-  def sort(result_array)
-    result_array.sort { |h1, h2| h1['number'] <=> h2['number'] }
-  end
-
   def actual_gain(strategy)
-    number = win_horse_number
-    return '' if number.nil?
+    return '' unless @race.race_result.present?
 
-    actual_bet = strategy[number.to_i - 1]
-    actual_bet * win_horse_odds(number)
+    @race.race_result.gain(strategy)
   end
 
   private
 
   def get_race_horse_by_number(number)
-    return nil if @race.nil?
-
-    @race.race_horses.find do |race_horse|
-      race_horse.number == number
-    end
-  end
-
-  def win_horse_number
-    return nil if @race.nil? || @race.race_result.nil?
-
-    result = @race.race_result.data
-    result.find { |horse| horse['order'] == 1 }['number']
-  end
-
-  def win_horse_odds(number)
-    return nil if @race.nil? || @race.race_result.nil?
-
-    final_odds = @race.race_result.odds
-    final_odds[number.to_i - 1]
+    @race.race_horses.find { |race_horse| race_horse.number == number }
   end
 end

@@ -18,7 +18,7 @@ class RaceController < ApplicationController
                 .find(params[:id])
     @odds_histories = @race.odds_histories # DESC
     @optimized_parameters = optimized_parameters
-    @proposer = proposer(@settings.bet)
+    @proposer = proposer
     return unless @race.nil?
 
     flash[:danger] = ERROR_MESSAGE_NO_SUCH_RACE
@@ -36,32 +36,22 @@ class RaceController < ApplicationController
   end
 
   def optimized_parameters
-    return empty_parameters if process_parameters.nil?
+    process = @race.optimization_process
+    return empty_parameters if process.nil? || process.params.empty?
 
     {
-      a: process_parameters['a'].reverse,
-      b: process_parameters['b'].reverse,
-      t: process_parameters['t'],
+      a: process.params['a'].reverse,
+      b: process.params['b'].reverse,
+      t: process.params['t'],
     }
   end
 
-  def proposer(bet)
-    return if process_parameters.nil?
-
-    odds_histories = @race.odds_histories
-    return if odds_histories.empty?
-
-    odds = odds_histories.first.data
-    Uma2::Proposer.new(process_parameters, odds, bet)
-  end
-
-  def process_parameters
-    return @process_parameters unless @process_parameters.nil?
-
+  def proposer
     process = @race.optimization_process
     return if process.nil?
 
-    @process_parameters = process.params
+    odds = @race.odds_histories.first.data
+    process.proposer(odds, @settings.bet)
   end
 
   def empty_parameters

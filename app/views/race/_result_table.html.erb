@@ -25,7 +25,7 @@
 
         <tr>
           <td> order </td>
-          <% sort(result.data).each do |horse| %>
+          <% result.sorted_by_number.each do |horse| %>
             <td class="<%= order_css(horse['order']) %>">
               <%= horse['order'] %>
             </td>

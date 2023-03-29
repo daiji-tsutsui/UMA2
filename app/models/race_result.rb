@@ -9,8 +9,23 @@ class RaceResult < ApplicationRecord
     @data ||= JSON.parse(data_json)
   end
 
+  def sorted_by_number
+    data.sort { |h1, h2| h1['number'] <=> h2['number'] }
+  end
+
   # Array
   def odds
     @odds ||= JSON.parse(odds_json)
+  end
+
+  def gain(strategy)
+    number = won_number.to_i
+    strategy[number - 1] * odds[number - 1]
+  end
+
+  private
+
+  def won_number
+    data.find { |horse| horse['order'] == 1 }['number']
   end
 end
