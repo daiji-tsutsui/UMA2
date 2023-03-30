@@ -11,7 +11,7 @@ RSpec.describe 'Horses', type: :request do
     end
 
     it 'renders table of horses' do
-      subject
+      is_expected.to render_template('index')
       # table headers
       expect(response.body).to include('馬名')
       expect(response.body).to include('直近のレース')
@@ -32,7 +32,7 @@ RSpec.describe 'Horses', type: :request do
     end
 
     it 'renders table of a horse' do
-      subject
+      is_expected.to render_template('show')
       # h1 tag
       expect(response.body).to include('ハリボテエレジー')
       # race table headers

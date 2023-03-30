@@ -11,7 +11,7 @@ RSpec.describe 'Races', type: :request do
     end
 
     it 'renders table of races' do
-      subject
+      is_expected.to render_template('index')
       # table headers
       expect(response.body).to include('レース名')
       expect(response.body).to include('出走日')
