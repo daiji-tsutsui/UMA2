@@ -54,15 +54,33 @@ module RaceHelper
     'resultorder-rest'
   end
 
+  def gain_css(value)
+    return if value.blank?
+
+    value.negative? ? 'gain-nega' : 'gain-posi'
+  end
+
   def tooltip_horse_name(number)
     race_horse = get_race_horse_by_number(number)
     race_horse.nil? ? '' : race_horse.horse.name
   end
 
-  def actual_gain(strategy)
-    return '' unless @race.race_result.present?
+  def td_expected_gain(strategy)
+    content_tag(:td, display_float(strategy.expected_gain), class: gain_css(strategy.expected_gain))
+  end
 
-    @race.race_result.gain(strategy)
+  def td_probability(strategy)
+    content_tag(:td, display_float(strategy.probability))
+  end
+
+  def td_actual_gain(strategy)
+    content_tag(:td, display_float(actual_gain(strategy)), class: gain_css(actual_gain(strategy)))
+  end
+
+  def actual_gain(strategy)
+    return unless @race.race_result.present?
+
+    @race.race_result.earnings(strategy) - strategy.sum
   end
 
   private

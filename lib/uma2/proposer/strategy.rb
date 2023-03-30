@@ -15,6 +15,10 @@ module Uma2
         @t.expectation(gain)
       end
 
+      def expected_gain
+        expectation - bet
+      end
+
       def probability
         @t.expectation(betting)
       end
@@ -32,6 +36,10 @@ module Uma2
         map!.with_index { |s_i, i| s_i + other[i] }
         validate_params!
         self
+      end
+
+      def bet
+        sum
       end
 
       private

@@ -29,12 +29,16 @@ module Uma2
       @base_strategy ||= Optimizer::Model.new.strategy(@odds, @b, @t)
     end
 
-    def base_expectation
-      f = base_strategy.map.with_index { |s_i, i| s_i * @odds[i] }
-      @t.expectation(f)
+    def base_expected_gain
+      base_expectation - 1.0
     end
 
     private
+
+    def base_expectation
+      f = base_strategy.schur(@odds)
+      @t.expectation(f)
+    end
 
     def extract(params)
       b = params['b'] || params[:b]
