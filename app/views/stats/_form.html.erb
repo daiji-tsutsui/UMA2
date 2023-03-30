@@ -1,0 +1,70 @@
+
+<div class="container stats_form">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <%= form_with url: stats_path, method: :get do |f| %>
+      <div class="form-group">
+        <div class="col-md-12">
+          <%= f.label :date_start, '期間' %>
+          <%= f.text_field :date_start, value: params[:date_start], class: ['form-control', 'duration'] %>
+
+          <%= f.label :date_end, '~' %>
+          <%= f.text_field :date_end, value: params[:date_end], class: ['form-control', 'duration'] %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-12">
+          <%= f.label :course, '競馬場' %>
+          <%= f.select :course, Course.all.pluck(:name, :id).to_h, {include_blank: '', selected: params[:course]} %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-12">
+          <%= f.label :number, '番号' %>
+          <%= f.select :number, (1..12).to_a, {include_blank: '', selected: params[:number]} %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-12">
+          <%= f.label :race_class, '格付' %>
+          <%= f.collection_check_boxes :race_class, RaceClass.all, :id, :name, checked: params[:race_class], include_hidden: false do |b| %>
+            <%= b.label { b.check_box + b.text } %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-6">
+          <%= f.label :certainty, 'Certainty' %>
+          <%= f.text_field :certainty, value: params[:certainty], class: ['form-control', 'proposer_param'] %>
+        </div>
+        <div class="col-md-6">
+          <%= f.label :minimum_hit, 'Minimum hit' %>
+          <%= f.text_field :minimum_hit, value: params[:minimum_hit], class: ['form-control', 'proposer_param'] %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-12">
+          <%= f.submit '検索', class: 'btn btn-dark btn-block blank' %>
+          <%= button_tag type: 'button', onclick: 'clearForms();', class: 'btn btn-dark btn-block blank' do %>
+            <%= 'クリア' %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-2"></div>
+</div>
+
+<%= javascript_include_tag 'clear_form' %>
+<script>
+  function clearForms() {
+    clearTextInputs(['date_start', 'date_end', 'certainty', 'minimum_hit']);
+    clearSelectBox(['course', 'number']);
+    clearCheckBox(['race_class[]'])
+  }
+</script>

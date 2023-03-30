@@ -1,0 +1,28 @@
+// app/views/stats用のCSS
+
+div.stats{
+    display: block;
+    div{
+        padding: 3px 5px;
+    }
+}
+
+div.stats_form{
+    display: flex;
+    padding: 10px 20px;
+    div{
+        padding: 5px 10px;
+    }
+    div.form-group{
+        display: flex;
+        input.duration{
+            display: inline-block;
+            width: 40%;
+            margin: 5px 10px;
+        }
+        input.proposer_param{
+            display: inline-block;
+            width: 70%;
+        }
+    }
+}
