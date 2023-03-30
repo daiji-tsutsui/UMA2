@@ -29,43 +29,9 @@
           <td></td>
         </tr>
 
-        <tr>
-          <td> base strategy </td>
-          <% proposer.base_strategy.each do |value| %>
-            <td><%= display_float value %></td>
-          <% end %>
-          <% [proposer.base_expected_gain, nil, actual_gain(proposer.base_strategy)].each do |val| %>
-            <%= tag.td class: gain_css(val) do %>
-              <%= display_float val %>
-            <% end %>
-          <% end %>
-        </tr>
-
-        <tr>
-          <td> gain strategy </td>
-          <% strategy = proposer.gain_strategy %>
-          <% strategy.each do |value| %>
-            <td class="<%= strategy_css(value) %>">
-              <%= value %>
-            </td>
-          <% end %>
-          <%= td_expected_gain(strategy) %>
-          <%= td_probability(strategy) %>
-          <%= td_actual_gain(strategy) %>
-        </tr>
-
-        <tr>
-          <td> hit strategy </td>
-          <% strategy = proposer.hit_strategy %>
-          <% strategy.each do |value| %>
-            <td class="<%= strategy_css(value) %>">
-              <%= value %>
-            </td>
-          <% end %>
-          <%= td_expected_gain(strategy) %>
-          <%= td_probability(strategy) %>
-          <%= td_actual_gain(strategy) %>
-        </tr>
+        <%= render 'strategy_detail', name: 'base strategy', strategy: proposer.base_strategy %>
+        <%= render 'strategy_detail', name: 'gain strategy', strategy: proposer.gain_strategy %>
+        <%= render 'strategy_detail', name: 'hit strategy', strategy: proposer.hit_strategy %>
 
       </tbody>
     </table>

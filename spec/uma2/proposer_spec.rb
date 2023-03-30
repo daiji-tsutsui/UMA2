@@ -34,7 +34,7 @@ RSpec.describe 'Uma2::Proposer' do
     let(:bet) { 10 }
 
     it 'gives a strategy as Probability' do
-      is_expected.to be_a Uma2::Probability
+      is_expected.to be_a Uma2::Proposer::Distribution
       expect(@strategy[2]).to be > @strategy[0]
       expect(@strategy[2]).to be > @strategy[1]
     end

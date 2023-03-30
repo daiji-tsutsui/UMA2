@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'uma2/optimizer/model'
-require 'uma2/proposer/strategy'
 
 module Uma2
   # Proposer for optimized strategy
@@ -18,7 +17,7 @@ module Uma2
     end
 
     def gain_strategy
-      @gain_strategy ||= discrete_base_strategy(@bet)
+      @gain_strategy ||= build_gain_strategy
     end
 
     def hit_strategy
@@ -26,19 +25,10 @@ module Uma2
     end
 
     def base_strategy
-      @base_strategy ||= Optimizer::Model.new.strategy(@odds, @b, @t)
-    end
-
-    def base_expected_gain
-      base_expectation - 1.0
+      @base_strategy ||= build_base_strategy
     end
 
     private
-
-    def base_expectation
-      f = base_strategy.schur(@odds)
-      @t.expectation(f)
-    end
 
     def extract(params)
       b = params['b'] || params[:b]
@@ -46,15 +36,13 @@ module Uma2
       [b[-1], Probability.new(t)]
     end
 
-    def discrete_base_strategy(bet)
-      strategy = strategy_from(base_strategy.map { |w| w * bet })
-      strategy.redistribute!(bet, base_strategy_order)
-      strategy
+    def build_base_strategy
+      model_strategy = Optimizer::Model.new.strategy(@odds, @b, @t)
+      Distribution.new(model_strategy, @t, @odds)
     end
 
-    def base_strategy_order
-      size = base_strategy.size - 1
-      (0..size).sort { |i, j| base_strategy[j] <=> base_strategy[i] }
+    def build_gain_strategy
+      discrete_base_strategy(@bet)
     end
 
     def build_hit_strategy
@@ -68,6 +56,17 @@ module Uma2
         hit_probability += @t[index]
       end
       strategy + discrete_base_strategy(@bet - strategy.sum)
+    end
+
+    def discrete_base_strategy(bet)
+      strategy = strategy_from(base_strategy.map { |w| w * bet })
+      strategy.redistribute!(bet, base_strategy_order)
+      strategy
+    end
+
+    def base_strategy_order
+      size = base_strategy.size - 1
+      (0..size).sort { |i, j| base_strategy[j] <=> base_strategy[i] }
     end
 
     def t_order

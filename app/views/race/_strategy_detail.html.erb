@@ -1,0 +1,10 @@
+
+<tr>
+  <%= content_tag :td, name %>
+  <% strategy.each do |value| %>
+    <%= content_tag :td, display_float(value), class: strategy_css(value) %>
+  <% end %>
+  <%= content_tag :td, display_float(strategy.expected_gain), class: gain_css(strategy.expected_gain) %>
+  <%= content_tag :td, display_float(strategy.probability) %>
+  <%= content_tag :td, display_float(actual_gain(strategy)), class: gain_css(actual_gain(strategy)) %>
+</tr>

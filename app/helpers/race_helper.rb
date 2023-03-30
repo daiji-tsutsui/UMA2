@@ -65,18 +65,6 @@ module RaceHelper
     race_horse.nil? ? '' : race_horse.horse.name
   end
 
-  def td_expected_gain(strategy)
-    content_tag(:td, display_float(strategy.expected_gain), class: gain_css(strategy.expected_gain))
-  end
-
-  def td_probability(strategy)
-    content_tag(:td, display_float(strategy.probability))
-  end
-
-  def td_actual_gain(strategy)
-    content_tag(:td, display_float(actual_gain(strategy)), class: gain_css(actual_gain(strategy)))
-  end
-
   def actual_gain(strategy)
     return unless @race.race_result.present?
 

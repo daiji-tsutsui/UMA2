@@ -12,7 +12,7 @@ module Uma2
       end
 
       def expectation
-        @t.expectation(gain)
+        @t.expectation(earnings_each)
       end
 
       def expected_gain
@@ -50,7 +50,7 @@ module Uma2
         map! { |s_i| [s_i.to_i, 0].max }
       end
 
-      def gain
+      def earnings_each
         map.with_index { |s_i, i| s_i * @odds[i] }
       end
 
