@@ -4,8 +4,6 @@
 class RaceController < ApplicationController
   ERROR_MESSAGE_NO_SUCH_RACE = 'No such a race...'
 
-  before_action :fetch_settings, only: [:show]
-
   def index
     @races = Race.search(search_params)
                  .sort_by_date
@@ -31,8 +29,8 @@ class RaceController < ApplicationController
     params.permit(:name, :date, :course, :number, race_class: [])
   end
 
-  def fetch_settings
-    @settings = Settings.app.race
+  def settings
+    @settings ||= Settings.app.race
   end
 
   def optimized_parameters
@@ -51,7 +49,11 @@ class RaceController < ApplicationController
     return if process.nil?
 
     odds = @race.odds_histories.first.data
-    process.proposer(odds, @settings.bet)
+    process.proposer(odds, bet)
+  end
+
+  def bet
+    settings.bet
   end
 
   def empty_parameters

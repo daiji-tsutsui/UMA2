@@ -15,6 +15,16 @@
 <script type="text/javascript">
   function setApiUrl() {
     let url = new URL('/stats/api', location.href);
+    <% %i(course number race_class date_start date_end certainty minimum_hit).each do |key| %>
+      <% if params[key].is_a?(Array) %>
+        <% params[key].each do |elem| %>
+          url.searchParams.append('<%= key.to_s + '[]' %>', '<%= elem %>');
+        <% end %>
+      <% else %>
+        url.searchParams.append('<%= key.to_s %>', '<%= params[key] %>');
+      <% end %>
+    <% end %>
+    console.log(url);
     return url;
   }
 

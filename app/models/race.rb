@@ -13,12 +13,14 @@ class Race < ApplicationRecord
   scope :sort_by_date, -> { order(race_date_id: :DESC, course_id: :ASC, number: :ASC) }
 
   def self.search(params)
+    date_ids = RaceDate.in(params[:duration]).map(&:id) if params[:duration].present?
     # TODO: dateに対応したい．2023-01とかで検索できるように
     result = Race.all
-    result.where!('name LIKE ?', "%#{params[:name]}%") unless params[:name].blank?
-    result.where!(course_id: params[:course])          unless params[:course].blank?
-    result.where!(number: params[:number])             unless params[:number].blank?
-    result.where!(race_class_id: params[:race_class])  unless params[:race_class].blank?
+    result.where!('name LIKE ?', "%#{params[:name]}%") if params[:name].present?
+    result.where!(course_id: params[:course])          if params[:course].present?
+    result.where!(number: params[:number])             if params[:number].present?
+    result.where!(race_class_id: params[:race_class])  if params[:race_class].present?
+    result.where!(race_date_id: date_ids)              if params[:duration].present?
     result
   end
 end
