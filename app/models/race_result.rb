@@ -18,6 +18,10 @@ class RaceResult < ApplicationRecord
     @odds ||= JSON.parse(odds_json)
   end
 
+  def actual_gain(strategy)
+    earnings(strategy) - strategy.sum
+  end
+
   def earnings(strategy)
     number = won_number.to_i
     strategy[number - 1] * odds[number - 1]

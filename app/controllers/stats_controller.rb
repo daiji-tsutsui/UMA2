@@ -5,22 +5,32 @@ class StatsController < ApplicationController
   def index; end
 
   def api
-    @races = Race.search(search_params)
-    Rails.logger.debug("Daiji log: #{@races.map(&:attributes)}")
+    races = Race.search(search_params)
+                .preload(:odds_histories, :optimization_process, :race_result)
+    dates = RaceDate.in(@start..@end)
+    sequence = dates.map do |date|
+      targets = races.select { |race| race.race_date.id == date.id }
+      trim!(targets)
+      tally_result = tally(targets)
+      [date.value, tally_result]
+    end
 
-    test_data = [
-      { datetime: '2023/03/29 18:00:00', test1: 100, test2: 200, test3: 400 },
-      { datetime: '2023/03/29 19:30:00', test1: 200, test2: 200, test3: 600 },
-      { datetime: '2023/03/29 21:00:00', test1: 300, test2: 200, test3: 100 },
-      { datetime: '2023/03/29 22:30:00', test1: 200, test2: 200, test3: 200 },
-      { datetime: '2023/03/30 01:30:00', test1: 100, test2: 200, test3: 300 },
-      { datetime: '2023/03/30 03:00:00', test1: 200, test2: 200, test3: 500 },
-      { datetime: '2023/03/30 04:30:00', test1: 300, test2: 200, test3: 800 },
-    ]
-    render json: test_data
+    render json: format(sequence)
   end
 
   private
+
+  def format(sequence)
+    sequence.map do |row|
+      {
+        date:          row[0].strftime('%m/%d'),
+        gain_actual:   row[1][0],
+        gain_expected: row[1][1],
+        hit_actual:    row[1][2],
+        hit_expected:  row[1][3],
+      }
+    end
+  end
 
   def search_params
     build_duration
@@ -31,20 +41,58 @@ class StatsController < ApplicationController
   def build_duration
     build_duration_start
     build_duration_end
-    if @end <= @start
-      @start = @end - 1.month
-    end
+    @start = @end - 1.month if @end <= @start
   end
 
   def build_duration_start
     @start = Date.parse(params[:date_start])
-  rescue
+  rescue Date::Error
     @start = Date.today - 1.month
   end
 
   def build_duration_end
     @end = Date.parse(params[:date_end])
-  rescue
+  rescue Date::Error
     @end = Date.today
+  end
+
+  def bet
+    # TODO: betパラメータ
+    params[:bet].present? ? params[:bet].to_i : Settings.app.race.bet
+  end
+
+  def trim!(targets)
+    targets.select! do |race|
+      race.last_odds.present? && race.optimization_process.present? && race.race_result.present?
+    end
+  end
+
+  def tally(targets)
+    values = targets.map { |race| tally_each_race(race) }
+    average(values)
+  end
+
+  def tally_each_race(race)
+    odds = race.last_odds.data
+    proposer = race.optimization_process.proposer(odds, bet)
+    race_result = race.race_result
+
+    gain_actual, gain_expected = tally_stragety(race_result, proposer.gain_strategy)
+    hit_actual, hit_expected = tally_stragety(race_result, proposer.hit_strategy)
+    [gain_actual, gain_expected, hit_actual, hit_expected]
+  end
+
+  def tally_stragety(race_result, strategy)
+    actual_gain = race_result.actual_gain(strategy)
+    expected_gain = strategy.expected_gain
+    [actual_gain, expected_gain]
+  end
+
+  def average(values)
+    return Array.new(4, 0.0) if values.empty?
+
+    size = values.size
+    sums = values.transpose.map(&:sum)
+    sums.map { |val| val / size }
   end
 end

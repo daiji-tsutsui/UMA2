@@ -68,7 +68,7 @@ module RaceHelper
   def actual_gain(strategy)
     return unless @race.race_result.present?
 
-    @race.race_result.earnings(strategy) - strategy.sum
+    @race.race_result.actual_gain(strategy)
   end
 
   private

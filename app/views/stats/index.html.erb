@@ -16,6 +16,7 @@
   function setApiUrl() {
     let url = new URL('/stats/api', location.href);
     <% %i(course number race_class date_start date_end certainty minimum_hit).each do |key| %>
+      <% next if params[key].blank? %>
       <% if params[key].is_a?(Array) %>
         <% params[key].each do |elem| %>
           url.searchParams.append('<%= key.to_s + '[]' %>', '<%= elem %>');
@@ -33,18 +34,18 @@
   }
 
   function drawGainChart(xhr) {
-    var res = [['日時', 'test1', 'test2', 'test3']];
+    var res = [['日時', 'gain_actual', 'gain_expected', 'hit_actual', 'hit_expected']];
     if (xhr.status != 200) return;
 
     xhr.response.forEach((x) => {
-      res.push([new Date(x.datetime), x.test1, x.test2, x.test3]);
+      res.push([new Date(x.date), x.gain_actual, x.gain_expected, x.hit_actual, x.hit_expected]);
     });
     console.log(res);
     var data = new google.visualization.arrayToDataTable(res);
     var options = {
         legend: { position: 'right' },
-        vAxis: { minValue: 0, maxValue: 1000, gridlines: { count: 5 } },
-        hAxis: { format: 'MM/dd HH:mm', gridlines: { count: 20 } },
+        vAxis: { minValue: 0, maxValue: 10, gridlines: { count: 5 } },
+        hAxis: { format: 'MM/dd', gridlines: { count: 20 } },
     };
     var chart = new google.visualization.SteppedAreaChart(document.getElementById('gain_chart'));
     chart.draw(data, options);

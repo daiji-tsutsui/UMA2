@@ -3,5 +3,5 @@
 class RaceDate < ApplicationRecord
   has_many :races
 
-  scope :in, ->(duration) { where(value: duration) }
+  scope :in, ->(duration) { where(value: duration).order(id: :ASC) }
 end
