@@ -2,7 +2,9 @@
 
 # Stats information Controller
 class StatsController < ApplicationController
-  def index; end
+  def index
+    build_duration
+  end
 
   def api
     races = Race.search(search_params)
@@ -38,24 +40,6 @@ class StatsController < ApplicationController
           .merge(duration: @start..@end)
   end
 
-  def build_duration
-    build_duration_start
-    build_duration_end
-    @start = @end - 1.month if @end <= @start
-  end
-
-  def build_duration_start
-    @start = Date.parse(params[:date_start])
-  rescue Date::Error
-    @start = Date.today - 1.month
-  end
-
-  def build_duration_end
-    @end = Date.parse(params[:date_end])
-  rescue Date::Error
-    @end = Date.today
-  end
-
   def bet
     # TODO: betパラメータ
     params[:bet].present? ? params[:bet].to_i : Settings.app.race.bet
@@ -63,7 +47,9 @@ class StatsController < ApplicationController
 
   def trim!(targets)
     targets.select! do |race|
-      race.last_odds.present? && race.optimization_process.present? && race.race_result.present?
+      race.last_odds.present? \
+      && race.optimization_process.present? \
+      && race.race_result.present?
     end
   end
 
@@ -94,5 +80,23 @@ class StatsController < ApplicationController
     size = values.size
     sums = values.transpose.map(&:sum)
     sums.map { |val| val / size }
+  end
+
+  def build_duration
+    build_duration_start
+    build_duration_end
+    @start = @end - 1.month if @end <= @start
+  end
+
+  def build_duration_start
+    @start = Date.parse(params[:date_start])
+  rescue Date::Error, TypeError
+    @start = Date.today - 1.month
+  end
+
+  def build_duration_end
+    @end = Date.parse(params[:date_end])
+  rescue Date::Error, TypeError
+    @end = Date.today
   end
 end
