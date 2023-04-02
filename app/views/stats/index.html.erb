@@ -34,20 +34,21 @@
   }
 
   function drawGainChart(xhr) {
-    var res = [['日時', 'gain_actual', 'gain_expected', 'hit_actual', 'hit_expected']];
+    var res = [['日時', 'gain actual', 'gain expected', 'hit actual', 'hit expected']];
     if (xhr.status != 200) return;
 
     xhr.response.forEach((x) => {
-      res.push([new Date(x.date), x.gain_actual, x.gain_expected, x.hit_actual, x.hit_expected]);
+      res.push([x.date, x.gain_actual, x.gain_expected, x.hit_actual, x.hit_expected]);
     });
     console.log(res);
     var data = new google.visualization.arrayToDataTable(res);
     var options = {
-        legend: { position: 'right' },
-        vAxis: { minValue: 0, maxValue: 10, gridlines: { count: 5 } },
+        legend: { position: 'right', textStyle: {fontSize: 12} },
+        chartArea: { width: "75%" },
+        vAxis: { gridlines: { count: 5 } },
         hAxis: { format: 'MM/dd', gridlines: { count: 20 } },
     };
-    var chart = new google.visualization.SteppedAreaChart(document.getElementById('gain_chart'));
+    var chart = new google.visualization.LineChart(document.getElementById('gain_chart'));
     chart.draw(data, options);
   }
 </script>
