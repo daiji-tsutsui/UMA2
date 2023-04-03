@@ -14,8 +14,6 @@ uma2:
   initial_certainty: <%= ENV.fetch('UMA2_INITIAL_CERTAINTY'){ '1.0' }.to_f %>
   proposer:
     hit_probability_min: <%= ENV.fetch('UMA2_PROPOSER_HIT_PROBABILITY_MIN'){ '0.8' }.to_f %>
+    default_bet: <%= ENV.fetch('UMA2_PROPOSER_DEFAULT_BET'){ '10' }.to_i %>
   scheduler:
     after_wait_minutes: <%= ENV.fetch('UMA2_SCHEDULER_AFTER_WAIT_MINUTES'){ '30' }.to_i %>
-app:
-  race:
-    bet: <%= ENV.fetch('APP_RACE_PROPOSER_BET'){ '10' }.to_i %>

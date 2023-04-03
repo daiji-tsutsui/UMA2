@@ -3,23 +3,20 @@
 module Stats
   # Service object class which tallies race results
   class TallyService
-    def initialize(races, dates)
+    def initialize(races, dates, params)
       @races = races
       @dates = dates
+      @params = params
     end
 
     def call
-      @dates.map do |date|
+      @dates.to_h do |date|
         targets = targets(date)
         [date.id, tally(targets)]
-      end.to_h
+      end
     end
 
     private
-
-    def bet
-      Settings.app.race.bet
-    end
 
     def targets(date)
       @races.select do |race|
@@ -39,7 +36,7 @@ module Stats
 
     def tally_each_race(race)
       odds = race.last_odds.data
-      proposer = race.optimization_process.proposer(odds, bet)
+      proposer = race.optimization_process.proposer(odds, option: @params)
       race_result = race.race_result
 
       gain_actual, gain_expected = tally_stragety(race_result, proposer.gain_strategy)

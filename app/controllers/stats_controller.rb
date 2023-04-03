@@ -2,6 +2,8 @@
 
 # Stats information Controller
 class StatsController < ApplicationController
+  DEFAULT_INTERVAL = 1.month
+
   def index
     build_duration
   end
@@ -10,7 +12,7 @@ class StatsController < ApplicationController
     races = Race.search(search_params)
                 .preload(:odds_histories, :optimization_process, :race_result)
     dates = RaceDate.in(@start..@end)
-    tally_result = Stats::TallyService.new(races, dates).call
+    tally_result = Stats::TallyService.new(races, dates, strategy_params).call
 
     render json: reconcile(dates, [tally_result])
   end
@@ -21,6 +23,10 @@ class StatsController < ApplicationController
     build_duration
     params.permit(:course, :number, race_class: [])
           .merge(duration: @start..@end)
+  end
+
+  def strategy_params
+    params.permit(:certainty, :minimum_hit)
   end
 
   def reconcile(dates, tally_results)
@@ -36,13 +42,13 @@ class StatsController < ApplicationController
   def build_duration
     build_duration_start
     build_duration_end
-    @start = @end - 1.month if @end <= @start
+    @start = @end - DEFAULT_INTERVAL if @end <= @start
   end
 
   def build_duration_start
     @start = Date.parse(params[:date_start])
   rescue Date::Error, TypeError
-    @start = Date.today - 1.month
+    @start = Date.today - DEFAULT_INTERVAL
   end
 
   def build_duration_end

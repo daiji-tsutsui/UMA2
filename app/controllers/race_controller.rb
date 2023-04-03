@@ -29,10 +29,6 @@ class RaceController < ApplicationController
     params.permit(:name, :date, :course, :number, race_class: [])
   end
 
-  def settings
-    @settings ||= Settings.app.race
-  end
-
   def optimized_parameters
     process = @race.optimization_process
     return empty_parameters if process.nil? || process.params.empty?
@@ -49,11 +45,7 @@ class RaceController < ApplicationController
     return if process.nil?
 
     odds = @race.last_odds.data
-    process.proposer(odds, bet)
-  end
-
-  def bet
-    settings.bet
+    process.proposer(odds)
   end
 
   def empty_parameters

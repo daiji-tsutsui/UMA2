@@ -8,7 +8,7 @@ class OptimizationProcess < ApplicationRecord
     @params ||= params_json.nil? ? {} : JSON.parse(params_json)
   end
 
-  def proposer(odds, bet)
-    Uma2::Proposer.new(params, odds, bet)
+  def proposer(odds, option: nil)
+    Uma2::Proposer.new(params, odds, option: option)
   end
 end

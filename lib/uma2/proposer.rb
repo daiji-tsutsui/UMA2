@@ -7,13 +7,13 @@ module Uma2
   class Proposer
     attr_reader :t
 
-    def initialize(params, odds, bet)
-      raise 'Only integer bet is permitted' unless bet.is_a?(Integer)
-
+    def initialize(params, odds, option: nil)
+      @settings = Settings.uma2.proposer
       @b, @t = extract(params)
       @odds = odds
-      @bet = bet
-      @settings = Settings.uma2.proposer
+      @bet = @settings.default_bet
+      @min_hit = @settings.hit_probability_min
+      customize_params!(option) if option.present?
     end
 
     def gain_strategy
@@ -36,6 +36,12 @@ module Uma2
       [b[-1], Probability.new(t)]
     end
 
+    def customize_params!(params)
+      @bet     = params[:bet].to_i         if params[:bet].present?
+      @b       = params[:certainty].to_f   if params[:certainty].present?
+      @min_hit = params[:minimum_hit].to_f if params[:minimum_hit].present?
+    end
+
     def build_base_strategy
       model_strategy = Optimizer::Model.new.strategy(@odds, @b, @t)
       Distribution.new(model_strategy, @t, @odds)
@@ -49,7 +55,7 @@ module Uma2
       strategy = strategy_from(Array.new(@odds.size, 0))
       hit_probability = 0.0
       t_order.size.times do |i|
-        break if hit_probability >= @settings.hit_probability_min
+        break if hit_probability >= @min_hit
 
         index = t_order[i]
         strategy[index] += 1
