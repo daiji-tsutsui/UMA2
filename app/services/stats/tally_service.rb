@@ -29,9 +29,9 @@ module Stats
 
     def tally(targets)
       matrix = targets.map { |race| tally_each_race(race) }
-      return format(Array.new(4, 0.0)) if matrix.empty?
+      return format(Array.new(9, 0.0)) if matrix.empty?
 
-      average(matrix)
+      calculate(matrix)
     end
 
     def tally_each_race(race)
@@ -50,10 +50,11 @@ module Stats
       [actual_gain, expected_gain]
     end
 
-    def average(values)
-      size = values.size
-      sums = values.transpose.map(&:sum)
-      format(sums.map { |val| val / size })
+    def calculate(matrix)
+      size = matrix.size
+      sums = matrix.transpose.map(&:sum)
+      averages = sums.map { |val| val / size }
+      format([averages, sums, size].flatten)
     end
 
     def format(result)
@@ -62,6 +63,9 @@ module Stats
         gain_expected: result[1],
         hit_actual:    result[2],
         hit_expected:  result[3],
+        gain_total:    result[4],
+        hit_total:     result[6],
+        target_size:   result[8],
       }
     end
   end

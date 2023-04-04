@@ -14,7 +14,7 @@ class StatsController < ApplicationController
     dates = RaceDate.in(@start..@end)
     tally_result = Stats::TallyService.new(races, dates, strategy_params).call
 
-    render json: reconcile(dates, [tally_result])
+    render json: format_response(dates, [tally_result])
   end
 
   private
@@ -27,6 +27,26 @@ class StatsController < ApplicationController
 
   def strategy_params
     params.permit(:certainty, :minimum_hit)
+  end
+
+  def format_response(dates, tally_results)
+    {
+      averages: average_overall(tally_results.map(&:values)),
+      time_seq: reconcile(dates, tally_results),
+    }
+  end
+
+  def average_overall(tally_results)
+    results = tally_results.map do |tally_result|
+      data_num = tally_result.sum { |row| row[:target_size] }
+      total_keys = tally_result.first.keys.select { |key| /_total\z/ =~ key.to_s }
+      total_keys.to_h do |key|
+        average = tally_result.sum { |row| row[key] } / data_num
+        new_key = key.to_s.gsub(/_total\z/, '_average')
+        [new_key, average]
+      end
+    end
+    results.reduce({}, :merge)
   end
 
   def reconcile(dates, tally_results)

@@ -3,8 +3,16 @@
 
 <div class="container stats">
   <div class="col-md-12">
+    <div class="row average">
+      <span id="gain_average">Averaged gain of Gain Strategy: </span>
+    </div>
+    <div class="row average">
+      <span id="hit_average">Averaged gain of Hit Strategy: </span>
+    </div>
+  </div>
+  <div class="col-md-12">
     <div class="row">
-      <div id="gain_chart"></div>
+      <div id="chart"></div>
     </div>
   </div>
 </div>
@@ -31,16 +39,16 @@
 
   function drawChartOnLoad(xhr) {
     drawGainChart(xhr);
+    setAverageOverall(xhr);
   }
 
   function drawGainChart(xhr) {
     var res = [['日時', 'gain actual', 'gain expected', 'hit actual', 'hit expected']];
     if (xhr.status != 200) return;
 
-    xhr.response.forEach((x) => {
+    xhr.response.time_seq.forEach((x) => {
       res.push([x.date, x.gain_actual, x.gain_expected, x.hit_actual, x.hit_expected]);
     });
-    console.log(res);
     var data = new google.visualization.arrayToDataTable(res);
     var options = {
         legend: { position: 'right', textStyle: {fontSize: 12} },
@@ -48,7 +56,16 @@
         vAxis: { gridlines: { count: 5 } },
         hAxis: { format: 'MM/dd', gridlines: { count: 20 } },
     };
-    var chart = new google.visualization.LineChart(document.getElementById('gain_chart'));
+    var chart = new google.visualization.LineChart(document.getElementById('chart'));
     chart.draw(data, options);
+  }
+
+  function setAverageOverall(xhr) {
+    let data = xhr.response.averages;
+    let round_base = 1000;
+    let gainAverage = document.getElementById("gain_average");
+    let hitAverage = document.getElementById("hit_average");
+    gainAverage.textContent += Math.round(data.gain_average * round_base) / round_base;
+    hitAverage.textContent += Math.round(data.hit_average * round_base) / round_base;
   }
 </script>

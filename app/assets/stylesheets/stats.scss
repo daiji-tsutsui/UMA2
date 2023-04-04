@@ -5,6 +5,28 @@ div.stats{
     div{
         padding: 3px 5px;
     }
+    div.average{
+        text-align: right;
+    }
+    span:before{
+        content: "";
+        display: inline-block;
+        width: 3px;
+        height: 16px;
+        position: relative;
+        top: 3px;
+        left: -3px;
+    }
+    #gain_average{
+        &:before{
+            background-color: #3366cc;
+        }
+    }
+    #hit_average{
+        &:before{
+            background-color: #ff9900;
+        }
+    }
 }
 
 div.stats_form{

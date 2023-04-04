@@ -12,7 +12,9 @@ RSpec.describe 'Stats', type: :request do
 
     it 'should have chart element' do
       subject
-      expect(response.body).to include('<div id="gain_chart"></div>')
+      expect(response.body).to include('<div id="chart"></div>')
+      expect(response.body).to include('<span id="gain_average">')
+      expect(response.body).to include('<span id="hit_average">')
     end
 
     it 'renders form for statistics' do
