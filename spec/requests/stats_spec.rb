@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'json'
 
 RSpec.describe 'Stats', type: :request do
   describe 'GET /stats' do
@@ -19,6 +20,26 @@ RSpec.describe 'Stats', type: :request do
 
     it 'renders form for statistics' do
       is_expected.to render_template('_form')
+    end
+  end
+
+  describe 'GET /stats/api' do
+    subject { get '/stats/api' }
+
+    it 'should response success' do
+      is_expected.to eq 200
+    end
+
+    it 'should have desired structure' do
+      subject
+      res = JSON.parse(response.body)
+      expect(res).to include('averages')
+      expect(res).to include('time_seq')
+      expect(res['averages']).to include('gain_average')
+      expect(res['averages']).to include('hit_average')
+      expect(res['time_seq']).to be_a Array
+      expect(res['time_seq'].first).to include('gain_actual')
+      expect(res['time_seq'].first).to include('hit_expected')
     end
   end
 end
