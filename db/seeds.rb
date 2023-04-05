@@ -18,10 +18,12 @@ RACE_CLASS_ID_G3 = 3
 
 if %w[development test].include? Rails.env
   RaceDate.find_or_create_by(value: '2022/10/22')
+  RaceDate.find_or_create_by(value: '2023/3/21')
+  RaceDate.find_or_create_by(value: '2023/3/29')
   Race.create([
     {
       name:          'Test1', # has odds_history
-      race_date_id:  RaceDate.first.id,
+      race_date_id:  RaceDate.find(1).id,
       course_id:     COURSE_ID_SAPPORO,
       number:        11,
       race_class_id: RACE_CLASS_ID_G1,
@@ -32,7 +34,7 @@ if %w[development test].include? Rails.env
     },
     {
       name:          'Test2', # has nothing
-      race_date_id:  RaceDate.first.id,
+      race_date_id:  RaceDate.find(1).id,
       course_id:     COURSE_ID_NAKAYAMA,
       number:        3,
       race_class_id: RACE_CLASS_ID_G2,
@@ -43,7 +45,7 @@ if %w[development test].include? Rails.env
     },
     {
       name:          'Test3', # has odds_history and optimization
-      race_date_id:  RaceDate.first.id,
+      race_date_id:  RaceDate.find(2).id,
       course_id:     COURSE_ID_KYOTO,
       number:        8,
       race_class_id: RACE_CLASS_ID_G3,
@@ -54,7 +56,7 @@ if %w[development test].include? Rails.env
     },
     {
       name:          'Test4', # has odds_history, optimization, and result
-      race_date_id:  RaceDate.first.id,
+      race_date_id:  RaceDate.find(3).id,
       course_id:     COURSE_ID_HANSHIN,
       number:        12,
       race_class_id: RACE_CLASS_ID_G1,

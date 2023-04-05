@@ -39,7 +39,7 @@ RSpec.describe 'ScheduleUmaByRaceJob' do
       race = Race.find_by(name: 'テスト大賞典')
       expect(race[:name]).to          eq 'テスト大賞典'
       expect(race[:number]).to        eq race_num
-      expect(race[:race_date_id]).to  eq 2
+      expect(race[:race_date_id]).to  eq RaceDate.last.id
       expect(race[:course_id]).to     eq SCHEDULE_UMA_BY_RACE_JOB_COURSE_TOKYO
       expect(race[:race_class_id]).to eq SCHEDULE_UMA_BY_RACE_JOB_RACE_CLASS_G1
       expect(race[:distance]).to      eq 2000
