@@ -17,12 +17,12 @@ div.stats{
         top: 3px;
         left: -3px;
     }
-    #gain_average{
+    #gain_average, #pp_gain_average{
         &:before{
             background-color: #3366cc;
         }
     }
-    #hit_average{
+    #hit_average, #pp_hit_average{
         &:before{
             background-color: #ff9900;
         }

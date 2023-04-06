@@ -12,9 +12,13 @@ class StatsController < ApplicationController
     races = Race.search(search_params)
                 .preload(:odds_histories, :optimization_process, :race_result)
     dates = RaceDate.in(@start..@end)
-    tally_result = Stats::TallyService.new(races, dates, strategy_params).call
+    tally_results = [
+      Stats::TallyService.new(races, dates, strategy_params).call,
+      Stats::TallyProspectivePolicyService.new(races, dates, strategy_params).call,
+    ]
+    Rails.logger.debug("Daiji log: #{tally_results}")
 
-    render json: format_response(dates, [tally_result])
+    render json: format_response(dates, tally_results)
   end
 
   private

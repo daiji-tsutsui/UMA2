@@ -35,13 +35,17 @@ module Stats
     end
 
     def tally_each_race(race)
-      odds = race.last_odds.data
-      proposer = race.optimization_process.proposer(odds, option: @params)
+      proposer = proposer(race)
       race_result = race.race_result
 
       gain_actual, gain_expected = tally_stragety(race_result, proposer.gain_strategy)
       hit_actual, hit_expected = tally_stragety(race_result, proposer.hit_strategy)
       [gain_actual, gain_expected, hit_actual, hit_expected]
+    end
+
+    def proposer(race)
+      odds = race.last_odds.data
+      race.optimization_process.proposer(odds, option: @params)
     end
 
     def tally_stragety(race_result, strategy)

@@ -9,10 +9,20 @@
     <div class="row average">
       <span id="hit_average">Averaged gain of Hit Strategy: </span>
     </div>
-  </div>
-  <div class="col-md-12">
     <div class="row">
-      <div id="chart"></div>
+      <div id="gain_chart"></div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="row average">
+      <span id="pp_gain_average">Averaged gain of Gain Strategy: </span>
+    </div>
+    <div class="row average">
+      <span id="pp_hit_average">Averaged gain of Hit Strategy: </span>
+    </div>
+    <div class="row">
+      <div id="policy_chart"></div>
     </div>
   </div>
 </div>
@@ -21,6 +31,7 @@
 <%= javascript_include_tag 'draw_chart' %>
 
 <script type="text/javascript">
+  // override
   function setApiUrl() {
     let url = new URL('/stats/api', location.href);
     <% %i(course number race_class date_start date_end certainty minimum_hit).each do |key| %>
@@ -37,8 +48,10 @@
     return url;
   }
 
+  // override
   function drawChartOnLoad(xhr) {
     drawGainChart(xhr);
+    drawPolicyChart(xhr);
     setAverageOverall(xhr);
   }
 
@@ -56,7 +69,25 @@
         vAxis: { gridlines: { count: 5 } },
         hAxis: { format: 'MM/dd', gridlines: { count: 20 } },
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart'));
+    var chart = new google.visualization.LineChart(document.getElementById('gain_chart'));
+    chart.draw(data, options);
+  }
+
+  function drawPolicyChart(xhr) {
+    var res = [['日時', 'gain actual', 'gain expected', 'hit actual', 'hit expected']];
+    if (xhr.status != 200) return;
+
+    xhr.response.time_seq.forEach((x) => {
+      res.push([x.date, x.pp_gain_actual, x.pp_gain_expected, x.pp_hit_actual, x.pp_hit_expected]);
+    });
+    var data = new google.visualization.arrayToDataTable(res);
+    var options = {
+        legend: { position: 'right', textStyle: {fontSize: 12} },
+        chartArea: { width: "75%" },
+        vAxis: { gridlines: { count: 5 } },
+        hAxis: { format: 'MM/dd', gridlines: { count: 20 } },
+    };
+    var chart = new google.visualization.LineChart(document.getElementById('policy_chart'));
     chart.draw(data, options);
   }
 
@@ -65,7 +96,15 @@
     let round_base = 1000;
     let gainAverage = document.getElementById("gain_average");
     let hitAverage = document.getElementById("hit_average");
-    gainAverage.textContent += Math.round(data.gain_average * round_base) / round_base;
-    hitAverage.textContent += Math.round(data.hit_average * round_base) / round_base;
+    let ppGainAverage = document.getElementById("pp_gain_average");
+    let ppHitAverage = document.getElementById("pp_hit_average");
+    gainAverage.textContent += roundWithPrecision(data.gain_average, round_base);
+    hitAverage.textContent += roundWithPrecision(data.hit_average, round_base);
+    ppGainAverage.textContent += roundWithPrecision(data.pp_gain_average, round_base);
+    ppHitAverage.textContent += roundWithPrecision(data.pp_hit_average, round_base);
+  }
+
+  function roundWithPrecision(value, base) {
+    return Math.round(value * base) / base;
   }
 </script>
