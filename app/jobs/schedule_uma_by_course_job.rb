@@ -32,7 +32,7 @@ class ScheduleUmaByCourseJob < ApplicationJob
 
   # パフォーマンス等の様子見も兼ねて，いくつかのレース以外はスキップする
   def skip_this_num?(num)
-    valid_race_num = [9, 10, 11]
+    valid_race_num = [7, 8, 9, 10, 11, 12]
     !valid_race_num.include?(num)
   end
 end
