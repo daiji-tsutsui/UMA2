@@ -17,13 +17,8 @@ RSpec.describe 'Stats::TallyService' do
     it 'gives formatted data for each race_date' do
       subject
       data = @res.values.first
-      expect(data).to include :gain_actual
-      expect(data).to include :gain_expected
-      expect(data).to include :gain_total
-      expect(data).to include :hit_actual
-      expect(data).to include :hit_expected
-      expect(data).to include :hit_total
-      expect(data).to include :target_size
+      expected_keys = %i[gain_actual gain_expected gain_total hit_actual hit_expected hit_total target_size]
+      expect(data.keys).to match_array expected_keys
     end
 
     it 'gives zeros for race_date without odds_history and optimization' do
