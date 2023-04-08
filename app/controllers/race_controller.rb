@@ -44,7 +44,7 @@ class RaceController < ApplicationController
     process = @race.optimization_process
     return if process.nil?
 
-    odds = @race.last_odds.data
+    odds = @race.last_odds.data_for_display
     process.proposer(odds)
   end
 

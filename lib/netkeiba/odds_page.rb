@@ -13,7 +13,7 @@ module Netkeiba
     element :odds_update_button, 'button#act-manual_update'
     element :last_odds_update_date, 'span#official_time'
 
-    ODDS_PAGE_SINGLE_ODDS_CSS = 'span[id^="odds-1_"]'
+    ODDS_PAGE_SINGLE_ODDS_CSS = 'td.Odds'
 
     def single_odds
       select_single_odds_table!

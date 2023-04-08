@@ -20,7 +20,7 @@
           <tr>
             <td><%= i %></td>
             <td><%= odds.created_at.strftime('%H:%M:%S') %></td>
-            <% odds.data.each do |value| %>
+            <% odds.data_for_display.each do |value| %>
               <td class="<%= odds_css(value) %>">
                 <%= value %>
               </td>

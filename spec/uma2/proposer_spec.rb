@@ -26,7 +26,9 @@ RSpec.describe 'Uma2::Proposer' do
       is_expected.to be_a Uma2::Proposer::Distribution
       expect(@strategy[2]).to be > @strategy[0]
       expect(@strategy[2]).to be > @strategy[1]
-      expect(@strategy[2]).to be < 0.5
+      expect(@strategy[2]).to be > @strategy[3]
+      expect(@strategy[2]).to be > @strategy[4]
+      expect(@strategy[2]).to be < 0.6
     end
 
     context 'with small certainty' do
@@ -78,7 +80,7 @@ RSpec.describe 'Uma2::Proposer' do
         subject
         default_min_hit = Settings.uma2.proposer.hit_probability_min
         expect(@strategy.probability).to be > default_min_hit
-        expect(@strategy.probability).to be < 0.9
+        expect(@strategy.probability).to be < 0.98
       end
     end
 
@@ -94,11 +96,11 @@ RSpec.describe 'Uma2::Proposer' do
   def params_data
     {
       'b' => [1.0, 1.5, 1.25],
-      't' => [0.1, 0.3, 0.6],
+      't' => [0.005, 0.025, 0.17, 0.2, 0.6],
     }
   end
 
   def odds_data
-    [4.0, 2.67, 1.6]
+    [80.0, 26.7, 11.4, 2.67, 1.3]
   end
 end

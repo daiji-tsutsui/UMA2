@@ -8,8 +8,14 @@ class OddsHistory < ApplicationRecord
 
   scope :until_now, ->(race_id, last_id) { where(race_id: race_id, id: ..last_id).order(id: :ASC) }
 
+  # Array of Float (for optimization)
   def data
-    # Array of Float
-    @data ||= JSON.parse(data_json)
+    return @data if @data.present?
+
+    @data = data_for_display.reject(&:zero?)
+  end
+
+  def data_for_display
+    @data_for_display ||= JSON.parse(data_json)
   end
 end

@@ -13,7 +13,7 @@ class RaceResult < ApplicationRecord
     data.sort { |h1, h2| h1['number'] <=> h2['number'] }
   end
 
-  # Array
+  # Array (only for display)
   def odds
     @odds ||= JSON.parse(odds_json)
   end
