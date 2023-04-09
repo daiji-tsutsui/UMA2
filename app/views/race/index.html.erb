@@ -7,10 +7,10 @@
   <div class="col-md-8">
     <div class="row">
       <div class="col-md-5"><strong>レース名</strong></div>
-      <div class="col-md-4"><strong>出走日時</strong></div>
+      <div class="col-md-3"><strong>出走日時</strong></div>
       <div class="col-md-1"><strong>競馬場</strong></div>
       <div class="col-md-1"><strong>番号</strong></div>
-      <div class="col-md-1"><strong>種別</strong></div>
+      <div class="col-md-2"><strong>種別</strong></div>
     </div>
 
     <% @races.each do |race| %>
@@ -18,13 +18,13 @@
         <div class="col-md-5">
           <%= link_to race.name, race, class: "break" %>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <%= race.race_date.value %>
           <%= race.starting_time %>
         </div>
         <div class="col-md-1"><%= race.course.name %></div>
         <div class="col-md-1"><%= race.number %>R    </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
           <%= race.distance %>
           <%= race.course_type %>
         </div>
